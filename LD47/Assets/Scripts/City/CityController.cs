@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.WaveSpawner.Implementation;
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -35,8 +36,9 @@ namespace City {
         [Tooltip("Text to display upgrade cost")]
         public TextMeshProUGUI upgradeCostText;
 
-        private void Start() {
-            // TODO: 'start of building phase' action += AddMoney;
+        private void Awake() {
+            var spawner = FindObjectOfType<BuildBattleSpawner>();
+            spawner.AddOnBuildPhaseStart(AddMoney);
             UpdateUI();
         }
 
@@ -45,7 +47,7 @@ namespace City {
         /// Upgrade income if possible.
         /// </summary>
         public void UpgradeIncome() {
-            if (CanBuy(upgradeCost)) {
+            if (Buy(upgradeCost)) {
                 moneyIncome += upgradeIncomeIncrease;
                 UpdateUI();
             }
@@ -68,7 +70,7 @@ namespace City {
         /// </summary>
         /// <param name="moneyCost"></param>
         /// <returns></returns>
-        public bool CanBuy(int moneyCost) => money > moneyCost;
+        public bool CanBuy(int moneyCost) => money >= moneyCost;
         /// <summary>
         /// Damages the city with given amount.
         /// </summary>

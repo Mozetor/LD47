@@ -22,7 +22,7 @@ MonoBehaviour:
     minSimultaneousSpawns: 1
     maxSimultaneousSpawns: 1
     timeBetweenSpawns: 0
-    spawnDelay: 10
+    spawnDelay: 1
   - name: Yes Rico. BOOM!
     spawnGroups:
     - name: Jihadi
@@ -32,7 +32,7 @@ MonoBehaviour:
     minSimultaneousSpawns: 1
     maxSimultaneousSpawns: 1
     timeBetweenSpawns: 0.1
-    spawnDelay: 10
+    spawnDelay: 1
   - name: Archers Attack
     spawnGroups:
     - name: Archer Squad
@@ -42,4 +42,4 @@ MonoBehaviour:
     minSimultaneousSpawns: 1
     maxSimultaneousSpawns: 1
     timeBetweenSpawns: 0.1
-    spawnDelay: 10
+    spawnDelay: 1
