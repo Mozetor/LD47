@@ -31,8 +31,12 @@ namespace Assets.Enemies {
 
         private void OnCollisionEnter2D(Collision2D collision) {
             var city = collision.gameObject.GetComponent<CityController>();
+            var enemy = collision.gameObject.GetComponent<Enemy>();
             if (city != null) {
                 city.Damage(damage);
+            }
+            if (enemy != null) {
+                enemy.TakeDamage(damage);
             }
             Destroy(this.gameObject);
         }
