@@ -79,7 +79,9 @@ public class TowerSpawner : MonoBehaviour {
     /// <summary> Places tower into map </summary>
     /// <returns></returns>
     private void PlaceTower() {
-        towers.Add(new TowerPlaceholder(towerInformation.cost, Instantiate(towerInformation.goTower, towerSilhouette.transform.position, Quaternion.identity)));
+        Vector3 newPos = new Vector3(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y, 0);
+        occupiedPositions.Add(new Vector2(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y));
+        towers.Add(new TowerPlaceholder(towerInformation.cost, Instantiate(towerInformation.goTower, newPos, Quaternion.identity)));
     }
 
     /// <summary> Tests if position is viable for turret placement </summary>
@@ -87,7 +89,7 @@ public class TowerSpawner : MonoBehaviour {
     private bool TestPosition(Vector3 screenPosition) {
         Vector3 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         if (/*!worldMap.IsPath(mousePosition.x, mousePosition.y)*/ true) {
-            Vector2 cursorTile = new Vector2((int)screenPosition.x, (int)screenPosition.y);
+            Vector2 cursorTile = new Vector2(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y));
             for (int i = 0; i < occupiedPositions.Count; i++) {
                 Debug.Log("cursorTile:" + cursorTile);
                 if (occupiedPositions[i] == cursorTile) {
@@ -109,14 +111,14 @@ public class TowerSpawner : MonoBehaviour {
 
     /// <summary> changes turret silhouette position to curser position </summary>
     private void MoveSilhouette(Vector3 screenPosition) {
-        towerSilhouette.transform.position = new Vector3((int)screenPosition.x, (int)screenPosition.y, 0);
+        towerSilhouette.transform.position = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), -0.05f);
     }
 
     /// <summary> put a silhouette of given tower on curser position </summary>
     public void StartTowerPlacement(TowerPlaceholder toPlaceTower) {
         placingActive = true;
         towerInformation = toPlaceTower;
-        towerSilhouette = Instantiate(towerInformation.goTower, Camera.main.ScreenToViewportPoint(Input.mousePosition), Quaternion.identity);
+        towerSilhouette = Instantiate(towerInformation.goTower, Vector3.zero, Quaternion.identity);
     }
 
     /// <summary> cancels placement and removes tower silhouette from curser </summary>
