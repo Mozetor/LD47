@@ -23,12 +23,13 @@ namespace Worldgeneration {
         /// <summary> List of all layer types. </summary>
         private List<PixelType[,]> pixelTypes;
 
+        // Measure time needed to generate the world in ms.
         private void Start() {
             Stopwatch stopwatch = Stopwatch.StartNew();
             stopwatch.Start();
             GenerateWorld();
             stopwatch.Stop();
-            Debug.Log($"Time: {stopwatch.ElapsedMilliseconds}ms");
+            //Debug.Log($"Time: {stopwatch.ElapsedMilliseconds}ms");
         }
 
 

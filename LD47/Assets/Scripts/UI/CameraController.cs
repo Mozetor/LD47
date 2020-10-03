@@ -1,18 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
     [SerializeField]
     [Tooltip("Speed of camera")]
     private float cameraSpeed = 20;
-    /// <summary> Main camera reference </summary>
-    private Camera camera;
-
-    private void Start() {
-        camera = Camera.main;
-    }
 
     private void Update() {
         Vector3 pos = transform.position;
