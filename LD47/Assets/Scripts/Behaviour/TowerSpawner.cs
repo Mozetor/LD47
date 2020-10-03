@@ -21,9 +21,9 @@ public class TowerSpawner : MonoBehaviour {
     /// <summary> Percentage of what will be returned on turret selling, 1=100% </summary>
     public float refundOnSell;
 
-
+    // testing -->
     public GameObject testVisual;
-
+    // testing <--
 
     // Start is called before the first frame update
     void Start() {
@@ -101,7 +101,7 @@ public class TowerSpawner : MonoBehaviour {
     /// <returns></returns>
     private bool TestPosition(Vector3 screenPosition) {
         Vector3 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        if (/*!worldMap.IsPath(mousePosition.x, mousePosition.y)*/ true) {
+        if (/*!worldMap.IsPath(screenPosition.x, screenPosition.y)*/ true) {
             Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y),0);
             for (int i = 0; i < towers.Count; i++) {
                 if (towers[i].goTower.transform.position == cursorTile) {
