@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.WaveSpawner.Implementation;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,10 +16,12 @@ public class Tweening : MonoBehaviour {
         // buildPhaseUI:  build menu, upgrade menu, ...
         // battlePhaseUI: tower abilities, ...
 
-        // TODO: buildPhaseUI.ForEach((t) => 'start of building phase' action += () => StartCoroutine(Scale(t, true)));
-        //       buildPhaseUI.ForEach((t) => 'end of building phase' action += () => StartCoroutine(Scale(t, false)));
-        //       battlePhaseUI.ForEach((t) => 'start of battle phase' action += () => StartCoroutine(Scale(t, true)));
-        //       battlePhaseUI.ForEach((t) => 'end of battle phase' action += () => StartCoroutine(Scale(t, false)));
+        var spawner = FindObjectOfType<BuildBattleSpawner>();
+
+        buildPhaseUI.ForEach(t => spawner.AddOnBuildPhaseStart(() => StartCoroutine(Scale(t, true))));
+        buildPhaseUI.ForEach(t => spawner.AddOnBuildPhaseEnd(() => StartCoroutine(Scale(t, false))));
+        battlePhaseUI.ForEach(t => spawner.AddOnBattlePhaseStart(() => StartCoroutine(Scale(t, true))));
+        battlePhaseUI.ForEach(t => spawner.AddOnBattlePhaseEnd(() => StartCoroutine(Scale(t, false))));
     }
 
     private IEnumerator Scale(Transform transform, bool expand) {
