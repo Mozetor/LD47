@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using City;
 
 public class TowerSpawner : MonoBehaviour {
-
+    // !!! PLACEHOLDER REPLACE !!!
     /// <summary> Main city </summary>
     private CityController city = new CityController();
     /// <summary> Information of to placed tower </summary>
@@ -18,8 +17,9 @@ public class TowerSpawner : MonoBehaviour {
     private bool placingActive;
     /// <summary> towers on map </summary>
     private List<TowerPlaceholder> towers = new List<TowerPlaceholder>();
-    /// <summary> postions already used by towers </summary>
-    private List<Vector2> occupiedPositions = new List<Vector2>();
+
+    /// <summary> Percentage of what will be returned on turret selling, 1=100% </summary>
+    public float refundOnSell;
 
 
     public GameObject testVisual;
@@ -27,8 +27,7 @@ public class TowerSpawner : MonoBehaviour {
 
     // Start is called before the first frame update
     void Start() {
-        // City Position
-        occupiedPositions.Add(new Vector2(0, 0));
+        towers.Add(new TowerPlaceholder(0, Instantiate(testVisual, Vector3.zero, Quaternion.identity)));
         cam = Camera.main;
         // !!! PLACEHOLDER !!!
         // get city
@@ -80,8 +79,22 @@ public class TowerSpawner : MonoBehaviour {
     /// <returns></returns>
     private void PlaceTower() {
         Vector3 newPos = new Vector3(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y, 0);
-        occupiedPositions.Add(new Vector2(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y));
         towers.Add(new TowerPlaceholder(towerInformation.cost, Instantiate(towerInformation.goTower, newPos, Quaternion.identity)));
+    }
+
+    /// <summary> deconstructs turret, returns a part of its cost </summary>
+    private void SellTurret(Vector3 targetPosition) {
+        if (!(targetPosition == Vector3.zero)) {
+            for (int i = 0; i < towers.Count; i++) {
+                if (towers[i].transform.position == targetPosition) {
+                    city.Buy((int)Mathf.Round(-(float)towers[i].cost * refundOnSell));
+                    TowerPlaceholder towerToRemove = towers[i];
+                    towers.Remove(towerToRemove);
+                    Destroy(towerToRemove);
+                    break;
+                }
+            }
+        }
     }
 
     /// <summary> Tests if position is viable for turret placement </summary>
@@ -89,10 +102,9 @@ public class TowerSpawner : MonoBehaviour {
     private bool TestPosition(Vector3 screenPosition) {
         Vector3 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         if (/*!worldMap.IsPath(mousePosition.x, mousePosition.y)*/ true) {
-            Vector2 cursorTile = new Vector2(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y));
-            for (int i = 0; i < occupiedPositions.Count; i++) {
-                Debug.Log("cursorTile:" + cursorTile);
-                if (occupiedPositions[i] == cursorTile) {
+            Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y),0);
+            for (int i = 0; i < towers.Count; i++) {
+                if (towers[i].goTower.transform.position == cursorTile) {
                     return false;
                 }
             }
