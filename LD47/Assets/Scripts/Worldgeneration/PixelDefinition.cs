@@ -8,6 +8,8 @@ namespace Worldgeneration {
     /// </summary>
     [System.Serializable]
     public class PixelDefinition {
+        /// <summary> Name of the pixel definition. </summary>
+        public string name;
         /// <summary> Color </summary>
         public Color color;
         /// <summary> Pixel type </summary>

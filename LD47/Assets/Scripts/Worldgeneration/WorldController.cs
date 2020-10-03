@@ -1,7 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Debug = UnityEngine.Debug;
+using static Utils.ColorUtils;
+
 
 namespace Worldgeneration {
 
@@ -11,30 +15,40 @@ namespace Worldgeneration {
         public GameObject tilePrefab;
         [Tooltip("The world data to generate world with")]
         public WorldData currentWorld;
+
         /// <summary> Dictionary of pixel definitions of current world. </summary>
-        private Dictionary<Color, (List<Sprite> sprites, PixelType type)> dic;
+        private Dictionary<Color, PixelType> dic;
+        /// <summary> Dictionary of type to sprites. </summary>
+        private Dictionary<PixelType, List<Sprite>> typeSpritesDic;
+        /// <summary> List of all layer types. </summary>
+        private List<PixelType[,]> pixelTypes;
 
         private void Start() {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
             GenerateWorld();
+            stopwatch.Stop();
+            Debug.Log($"Time: {stopwatch.ElapsedMilliseconds}ms");
         }
+
 
         /// <summary>
         /// Whether the tile at a given position is a path.
         /// </summary>
         /// <param name="x"> X position of tile </param>
         /// <param name="y"> Y position of tile </param>
-        /// <returns></returns>
+        /// <returns> Whether tile is path </returns>
         public bool IsPath(int x, int y) {
-            return GetPixelType(x,y) == PixelType.Path;
+            return GetPixelType(x, y) == PixelType.Path;
         }
         /// <summary>
         /// Returns the pixel type at a given position.
         /// </summary>
         /// <param name="x"> X position of tile </param>
         /// <param name="y"> Y position of tile </param>
-        /// <returns></returns>
+        /// <returns> Type of the tile on lowest layer </returns>
         public PixelType GetPixelType(int x, int y) {
-            return dic[currentWorld.textures[0].GetPixel(x, y)].type;
+            return pixelTypes[0][x, y];
         }
 
 
@@ -42,44 +56,88 @@ namespace Worldgeneration {
         /// Generate the world from textures.
         /// </summary>
         private void GenerateWorld() {
+            typeSpritesDic = currentWorld.GetTypeSpriteDictionary();
             dic = currentWorld.GetPixelDefDictionary();
-            int layer = -10;
+            pixelTypes = new List<PixelType[,]>();
+
+            // Calculate the types for all layers.
             foreach (var tex in currentWorld.textures) {
-                GenerateSlice(tex, layer);
-                layer++;
+                GenerateTypeArray(tex);
+            }
+
+            // Spawn all tile layers based on type.
+            for (int i = 0; i < pixelTypes.Count; i++) {
+                SpawnLayer(pixelTypes[i], i);
             }
         }
         /// <summary>
-        /// Generates all sprites for a single texture.
+        /// Calculate all pixel types of a layer.
         /// </summary>
-        /// <param name="texture"> Texture of the map </param>
-        /// <param name="layer"> Order in layer </param>
-        private void GenerateSlice(Texture2D texture, int layer) {
-            for (int x = 0; x < texture.width; x++) {
-                for (int y = 0; y < texture.height; y++) {
-                    SpawnPixel(texture.GetPixel(x, y), new Vector3(x, y), layer);
+        /// <param name="texture"> Texture to generate types from </param>
+        private void GenerateTypeArray(Texture2D texture) {
+            var t = new PixelType[currentWorld.worldSize.x, currentWorld.worldSize.y];
+            for (int x = 0; x < currentWorld.worldSize.x; x++) {
+                for (int y = 0; y < currentWorld.worldSize.y; y++) {
+                    t[x, y] = dic[ToNiceColor(texture.GetPixel(x, y))];
+                }
+            }
+            pixelTypes.Add(t);
+        }
+        /// <summary>
+        /// Spawns a complete layer of tiles.
+        /// </summary>
+        /// <param name="types"> Tile types of the layer </param>
+        /// <param name="layer"> Layer number </param>
+        private void SpawnLayer(PixelType[,] types, int layer) {
+            for (int x = 0; x < currentWorld.worldSize.x; x++) {
+                for (int y = 0; y < currentWorld.worldSize.y; y++) {
+                    var p = new Vector3Int(x - currentWorld.worldSize.x / 2+1, y - currentWorld.worldSize.y / 2+1, 0);
+                    SpawnPixel(types[x, y], p, layer);
                 }
             }
         }
         /// <summary>
-        /// Spawns a sprite for a pixel.
+        /// Spawns a new tile.
         /// </summary>
-        /// <param name="color"> Color of pixel </param>
-        /// <param name="pos"> Position of pixel </param>
-        /// <param name="layer"> Order in layer </param>
-        private void SpawnPixel(Color color, Vector3 pos, int layer) {
-            var rend = Instantiate(tilePrefab, pos, Quaternion.identity, transform).GetComponent<SpriteRenderer>();
-            if (!dic.ContainsKey(color)) {
-                Debug.LogWarning($"Doesn't contain pixel definition to color {color}");
-                return;
+        /// <param name="type"> Type of the tile </param>
+        /// <param name="pos"> Position of the tile </param>
+        /// <param name="layer"> Layer number </param>
+        private void SpawnPixel(PixelType type, Vector3Int pos, int layer) {
+            switch (type) {
+                case PixelType.Empty:
+                    return;
+                case PixelType.Grass:
+                case PixelType.Path:
+                    InstantiateRandomTile(typeSpritesDic[type], pos, layer);
+                    break;
+                case PixelType.GrassDirt0:
+                case PixelType.GrassDirt1:
+                case PixelType.GrassDirt2:
+                case PixelType.GrassDirt3:
+                case PixelType.GrassDirt4:
+                case PixelType.GrassDirt5:
+                case PixelType.GrassDirt6:
+                case PixelType.GrassDirt7:
+                case PixelType.GrassDirt8:
+                case PixelType.GrassDirt9:
+                case PixelType.GrassDirt10:
+                case PixelType.GrassDirt11:
+                    InstantiateTile(typeSpritesDic[type][0], pos, layer);
+                    break;
+                default:
+                    throw new NotImplementedException("Type not implemented!");
             }
-            var sprites = dic[color].sprites;
-            if (sprites.Count == 0) {
-                throw new ArgumentException("There exists no sprite with existing color!");
-            }
+        }
+
+        private void InstantiateRandomTile(List<Sprite> sprites, Vector3 pos, int layer) {
             int i = Random.Range(0, sprites.Count);
-            rend.sprite = sprites[i];
-            rend.sortingOrder = layer;
+            InstantiateTile(sprites[i], pos, layer);
+        }
+
+        private void InstantiateTile(Sprite sprite, Vector3 pos, int layer) {
+            var rend = Instantiate(tilePrefab, pos, Quaternion.identity, transform).GetComponent<SpriteRenderer>();
+            rend.sprite = sprite;
+            rend.sortingOrder = layer - 10;
         }
     }
 }
