@@ -9,6 +9,7 @@ namespace Assets.WaveSpawner {
         /// <summary> The callback called on death. </summary>
         protected Action<Spawnable> onDeath;
 
+
         /// <summary>
         /// Adds a callback, that the spawnable executes on death/destruction.
         /// </summary>
@@ -24,6 +25,12 @@ namespace Assets.WaveSpawner {
         public void AddOnDeath(Action<Spawnable> action) {
             this.onDeath += action;
         }
+
+        /// <summary>
+        /// Sets up the behaviour, depending on the spawnpoint used.
+        /// </summary>
+        /// <param name="spawnIndex"> The index of the spawnpoint this entity was spawned at. </param>
+        public virtual void SetUp(int spawnIndex) { }
 
         /// <summary>
         /// This is called when the spawnable dies.
