@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c26666b3e029c04dad4842392c98aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyName: ranged
   maxHealth: 10
   range: 5
   enemyType: 0

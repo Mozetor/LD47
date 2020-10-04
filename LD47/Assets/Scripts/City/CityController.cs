@@ -1,7 +1,9 @@
 ﻿using Assets.WaveSpawner.Implementation;
+using Stats;
 using System;
 using TMPro;
 using UnityEngine;
+using Utils;
 
 namespace City {
 
@@ -39,7 +41,9 @@ namespace City {
         private void Awake() {
             var spawner = FindObjectOfType<BuildBattleSpawner>();
             spawner.AddOnBuildPhaseStart(AddMoney);
+            spawner.AddOnBuildPhaseStart(() => StatsController.stats.roundsSurvived++);
             UpdateUI();
+            StatsController.ResetStats();
         }
 
 
@@ -48,6 +52,7 @@ namespace City {
         /// </summary>
         public void UpgradeIncome() {
             if (Buy(upgradeCost)) {
+                StatsController.stats.moneyUsedForIncome += upgradeCost;
                 moneyIncome += upgradeIncomeIncrease;
                 UpdateUI();
             }
@@ -79,7 +84,7 @@ namespace City {
             health -= damage;
             UpdateUI();
             if (health <= 0) {
-                // TODO: Game Over
+                FindObjectOfType<SceneController>().ChangeScene("GameOver");
             }
         }
 
@@ -89,6 +94,7 @@ namespace City {
         /// </summary>
         private void AddMoney() {
             money += moneyIncome;
+            StatsController.stats.allMoneyMade += moneyIncome;
             UpdateUI();
         }
         /// <summary>

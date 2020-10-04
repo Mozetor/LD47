@@ -3,6 +3,7 @@ using UnityEngine;
 using City;
 using Assets.WaveSpawner.Implementation;
 using System.Linq;
+using Stats;
 
 public class TowerPlacer : MonoBehaviour {
 
@@ -89,6 +90,7 @@ public class TowerPlacer : MonoBehaviour {
     private void PlaceTower() {
         Vector3 newPos = new Vector3(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y, 0);
         towers.Add(Instantiate(towerToPlace, newPos, Quaternion.identity));
+        StatsController.stats.moneyUsedForTurret += towerToPlace.cost;
         city.Buy(towerToPlace.cost);
     }
 

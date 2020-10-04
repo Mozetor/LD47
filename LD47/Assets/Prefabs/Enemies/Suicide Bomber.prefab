@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c7242098397c5b44bbc3de55ff36791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyName: suicide
   maxHealth: 4
   range: 0.5
   enemyType: 0

@@ -10,6 +10,7 @@ namespace Assets.Enemies {
         private const int GROUNDED = 10;
         private const int AIRBORNE = 11;
 
+        public string enemyName;
         public int maxHealth;
         public float range;
         public EnemyType enemyType;
