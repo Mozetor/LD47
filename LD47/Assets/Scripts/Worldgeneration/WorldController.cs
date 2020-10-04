@@ -128,6 +128,7 @@ namespace Worldgeneration {
                 for (int y = 0; y < currentWorld.worldSize.y; y++) {
                     if (!colorTypeDic.ContainsKey(ToNiceColor(texture.GetPixel(x, y)))) {
                         Debug.LogError("Texture '" + texture.name + "' contains color: " + ToNiceColor(texture.GetPixel(x, y)) + " at pos: " + (x, y));
+                        continue;
                     }
                     t[x, y] = colorTypeDic[ToNiceColor(texture.GetPixel(x, y))];
                 }
@@ -154,36 +155,13 @@ namespace Worldgeneration {
         /// <param name="pos"> Position of the tile </param>
         /// <param name="layer"> Layer number </param>
         private void SpawnPixel(PixelType type, Vector3Int pos, int layer) {
-            switch (type) {
-                case PixelType.Empty:
-                    return;
-                case PixelType.Grass:
-                case PixelType.Path:
-                case PixelType.Stone:
-                case PixelType.Bush:
-                case PixelType.Tree:
-                    InstantiateRandomTile(typeSpritesDic[type], pos, layer);
-                    break;
-                case PixelType.GrassDirt0:
-                case PixelType.GrassDirt1:
-                case PixelType.GrassDirt2:
-                case PixelType.GrassDirt3:
-                case PixelType.GrassDirt4:
-                case PixelType.GrassDirt5:
-                case PixelType.GrassDirt6:
-                case PixelType.GrassDirt7:
-                case PixelType.GrassDirt8:
-                case PixelType.GrassDirt9:
-                case PixelType.GrassDirt10:
-                case PixelType.GrassDirt11:
-                    InstantiateTile(typeSpritesDic[type][0], pos, layer);
-                    break;
-                default:
-                    throw new NotImplementedException("Type not implemented!");
-            }
+            InstantiateRandomTile(typeSpritesDic[type], pos, layer);
         }
 
         private void InstantiateRandomTile(List<Sprite> sprites, Vector3 pos, int layer) {
+            if(sprites.Count == 0) {
+                return;
+            }
             int i = Random.Range(0, sprites.Count);
             InstantiateTile(sprites[i], pos, layer);
         }
