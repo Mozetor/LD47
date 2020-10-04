@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56f62a95208d8254fbf116fe07634dd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: Rocket Launcher
   cost: 400
   damage: 10
   range: 7

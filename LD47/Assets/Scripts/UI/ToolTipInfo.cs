@@ -10,9 +10,9 @@ namespace Assets.ToolTip {
     public abstract class ToolTipInfo : MonoBehaviour {
 
         /// <summary> The number of pixels per line in the tool tip text. </summary>
-        private const int PIXELS_PER_LINE = 15;
+        private const int PIXELS_PER_LINE = 20;
         /// <summary> The pixels per char in the longest line.  </summary>
-        private const int PIXELS_PER_CHAR = 6;
+        private const int PIXELS_PER_CHAR = 12;
 
         /// <summary>
         /// <p> This function creates the text, that is shown in the tool tip.</p>
