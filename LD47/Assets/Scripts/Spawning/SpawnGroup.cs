@@ -32,8 +32,7 @@ namespace Assets.WaveSpawner {
         /// <param name="factor"> The factou by which the group is scaled. </param>
         /// <returns> The scaled group. </returns>
         public static SpawnGroup operator *(SpawnGroup group, int factor) {
-            var name = string.Format("{0} (Scale: {1})", group.name, factor);
-            return new SpawnGroup(name, group.spawnable, group.amount * factor);
+            return new SpawnGroup(group.name, group.spawnable, group.amount * factor);
         }
 
         /// <summary>

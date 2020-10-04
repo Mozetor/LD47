@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.WaveSpawner.Implementation {
@@ -58,6 +59,19 @@ namespace Assets.WaveSpawner.Implementation {
             }
             onBuildTimeChange?.Invoke(timeInBuild);
         }
+
+        protected override Wave GetInfiniteAdjustedWave(Wave wave, int repetition) =>
+            new Wave(
+                wave.name,
+                wave.spawnGroups
+                    .Select(g => g * repetition)
+                    .ToArray(),
+                wave.minSimultaneousSpawns,
+                wave.maxSimultaneousSpawns,
+                wave.timeBetweenSpawns,
+                wave.spawnDelay
+            );
+
 
         protected override void RegisterCallbacks() {
             AddOnWaveEnded(StartBuildTime);
