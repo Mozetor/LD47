@@ -7,16 +7,11 @@ using UnityEngine;
 
 public class WaveInformation : MonoBehaviour {
 
-    public GameObject enemyWaveInfoUi;
-
-    private TextMeshProUGUI EnemyTypeTxt;
-    private TextMeshProUGUI EnemyAmountTxt;
+    public TextMeshProUGUI EnemyTypeTxt;
+    public TextMeshProUGUI EnemyAmountTxt;
 
 
     private void Awake() {
-
-        EnemyTypeTxt = enemyWaveInfoUi.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        EnemyAmountTxt = enemyWaveInfoUi.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         var spawner = FindObjectOfType<BuildBattleSpawner>();
         UpdateUi(spawner.waves.waves[0]);
         spawner.AddOnWaveEnded(UpdateUi);
