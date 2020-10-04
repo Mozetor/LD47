@@ -7,6 +7,9 @@ using UnityEngine;
 namespace Assets.Enemies {
     public class Enemy : Spawnable {
 
+        private const int GROUNDED = 10;
+        private const int AIRBORNE = 11;
+
         public int maxHealth;
         public float range;
         public EnemyType enemyType;
@@ -26,6 +29,7 @@ namespace Assets.Enemies {
         public void Start() {
             health = maxHealth;
             cityController = FindObjectOfType<CityController>();
+            gameObject.layer = enemyType == EnemyType.GROUNDED ? GROUNDED : AIRBORNE;
         }
 
         // Update is called once per frame

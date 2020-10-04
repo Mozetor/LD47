@@ -44,7 +44,7 @@ public class TowerPlacer : MonoBehaviour {
     // Update is called once per frame
     private void Update() {
         // testing -->
-        if (Input.GetMouseButtonDown(0) && !placingActive) {
+        if (Input.GetMouseButtonDown(0) && !placingActive && inBuildPhase) {
             StartTowerPlacement(test, testIcon);
             return;
         }
