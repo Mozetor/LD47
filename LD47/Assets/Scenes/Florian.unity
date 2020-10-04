@@ -1156,7 +1156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1c94b4ad3624ca4fb4045cc78b5cfe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  money: 100
+  money: 900
   health: 100
   moneyIncome: 100
   upgradeIncomeIncrease: 10
@@ -3392,8 +3392,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89e75f4c2273be4aba382c897e95668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: {fileID: 5096150346730417313, guid: 6f67078c5f75fcf439a7b840a66d1c61, type: 3}
-  testIcon: {fileID: 6600290358205818348, guid: bf694d25f3ce4ce429bacd45d4a42b4d,
+  test: {fileID: 3388861179212404585, guid: 5c95a8f22d86f564cbbf0825d4fe68a7, type: 3}
+  testIcon: {fileID: 6600290358205818348, guid: 53c0f9bd16941fc4c98df0ce943936d0,
     type: 3}
   refundOnSell: 0.7
 --- !u!4 &1331759646

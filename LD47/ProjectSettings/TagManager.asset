@@ -14,11 +14,11 @@ TagManager:
   - UI
   - 
   - 
-  - Projectile
+  - GroundProjectile
+  - AirborneProjectile
+  - Grounded
+  - Airborne
   - Tower
-  - 
-  - 
-  - 
   - 
   - 
   - 
