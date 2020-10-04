@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1124729191564016882}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.0191565, y: -0.6104186, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1124729191901116133}
@@ -52,7 +52,7 @@ MonoBehaviour:
   range: 8
   attackCooldown: 0.8
   targets: 01000000
-  projectile: {fileID: 8319754320604176883, guid: 5c8f303e81e9afc439fbc554aba0039b,
+  projectile: {fileID: 8319754320604176883, guid: 7dbb3409a7bee934581806806f3ed47d,
     type: 3}
   turretHead: {fileID: 1124729192236122854}
 --- !u!61 &-917783269243652628
