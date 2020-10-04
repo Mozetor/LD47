@@ -11,6 +11,7 @@ public class Tower : MonoBehaviour {
     private const int GROUNDED = 8;
     private const int AIRBORNE = 9;
 
+    public new string name;
     public int cost;
     public int damage;
     public float range;

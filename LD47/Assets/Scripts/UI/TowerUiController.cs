@@ -1,5 +1,6 @@
 ﻿using Assets.WaveSpawner.Implementation;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TowerUiController : MonoBehaviour {
 
@@ -42,8 +43,8 @@ public class TowerUiController : MonoBehaviour {
     public void SelectTurret() {
         Ray mousePosition = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit;
-        if (hit = Physics2D.Raycast(mousePosition.origin, mousePosition.direction, 50, (LayerMask.GetMask("Tower")))) {
-            if (hit.transform.tag == "Tower") {
+        if (!EventSystem.current.IsPointerOverGameObject() && (hit = Physics2D.Raycast(mousePosition.origin, mousePosition.direction, 50, LayerMask.GetMask("Tower")))) {
+            if (hit.transform.CompareTag("Tower")) {
                 if (selectedTurret != null) {
                     UnSelectTurret();
                 }
@@ -136,6 +137,7 @@ public class TowerUiController : MonoBehaviour {
     /// <summary> Starts placing of a new tower </summary>
     /// <param name="newTower"></param>
     public void StartTowerPlacement(GameObject silhouette) {
+        Debug.LogFormat("Started placing turret {0}", silhouette);
         towerPlacer.StartTowerPlacement(silhouette.GetComponent<Tower>(), silhouette);
     }
 

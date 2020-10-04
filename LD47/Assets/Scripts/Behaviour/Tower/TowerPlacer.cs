@@ -3,6 +3,7 @@ using UnityEngine;
 using City;
 using Assets.WaveSpawner.Implementation;
 using System.Linq;
+using UnityEngine.EventSystems;
 using Stats;
 
 public class TowerPlacer : MonoBehaviour {
@@ -46,21 +47,20 @@ public class TowerPlacer : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-
-
         if (!inBuildPhase) {
             return;
         }
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if (SellingActive && inBuildPhase && Input.GetMouseButton(0) && !placingActive) {
+        Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+
+        if (!EventSystem.current.IsPointerOverGameObject() && SellingActive && Input.GetMouseButton(0) && !placingActive) {
             Vector3 cursorTile = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), 0);
             SellTurret(cursorTile);
         }
 
-        if (placingActive && inBuildPhase && !SellingActive) {
+        if (placingActive && !SellingActive) {
             MoveSilhouette(mousePosition);
-            if (CanPlaceTower(mousePosition) && Input.GetMouseButtonDown(0)) {
+            if (!EventSystem.current.IsPointerOverGameObject() && CanPlaceTower(mousePosition) && Input.GetMouseButtonDown(0)) {
                 PlaceTower();
             }
         }
