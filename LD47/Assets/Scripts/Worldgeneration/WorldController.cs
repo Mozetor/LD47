@@ -160,6 +160,8 @@ namespace Worldgeneration {
                 case PixelType.Grass:
                 case PixelType.Path:
                 case PixelType.Stone:
+                case PixelType.Bush:
+                case PixelType.Tree:
                     InstantiateRandomTile(typeSpritesDic[type], pos, layer);
                     break;
                 case PixelType.GrassDirt0:
