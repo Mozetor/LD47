@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
         spawner.AddOnBattlePhaseEnd(() => Debug.Log("Battle Phase Ended"));
         spawner.AddOnWaveStarted(() => Debug.Log("Wave started"));
         spawner.AddOnWaveEnded(() => Debug.Log("Wave ended"));
+        spawner.AddOnEntitySpawned(s => Debug.LogFormat("'{0}' was spawned", s.name));
     }
 
     // Update is called once per frame
