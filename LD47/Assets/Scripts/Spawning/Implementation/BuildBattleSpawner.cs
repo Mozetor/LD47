@@ -34,6 +34,10 @@ namespace Assets.WaveSpawner.Implementation {
             onBattlePhaseEnd += onEnd;
         }
 
+        public void EndBuildPhase() {
+            timeInBuild = 0;
+        }
+
         protected override void StartInternal() {
             timeInBuild = buildPhaseTime;
             stopped = true;

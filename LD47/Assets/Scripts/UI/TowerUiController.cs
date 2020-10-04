@@ -11,8 +11,6 @@ public class TowerUiController : MonoBehaviour {
 
     /// <summary> Ui of building placement selection </summary>
     public GameObject canvasTurretBuildMenue;
-    /// <summary> Ui of selected turret </summary>
-    public GameObject canvasTurretTurretUi;
 
     /// <summary> Activeley selected turret </summary>
     private GameObject selectedTurret;
@@ -41,32 +39,26 @@ public class TowerUiController : MonoBehaviour {
 
 
     public void SelectTurret() {
-        Ray mousePosition = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (selectedTurret != null) {
+            UnSelectTurret();
+        }
+        Ray mouseRay = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit;
-        if (!EventSystem.current.IsPointerOverGameObject() && (hit = Physics2D.Raycast(mousePosition.origin, mousePosition.direction, 50, LayerMask.GetMask("Tower")))) {
+        Vector3 positionOnZ0 = mouseRay.origin - Camera.main.transform.position.z * mouseRay.direction / mouseRay.direction.z;
+        if (!EventSystem.current.IsPointerOverGameObject() && (hit = Physics2D.Linecast(positionOnZ0, positionOnZ0, LayerMask.GetMask("Tower")))) {
             if (hit.transform.CompareTag("Tower")) {
-                if (selectedTurret != null) {
-                    UnSelectTurret();
-                }
                 selectedTurret = hit.transform.gameObject;
                 Tower selecedTurretInformation = selectedTurret.GetComponent<Tower>();
                 // Range indicator
                 SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.range, 0.15f, Color.green);
                 // Turret highlight
                 SetCircleHighlight(hit.transform.GetChild(0).gameObject, hit.transform.lossyScale.x / 2, 0.2f, Color.yellow);
-                UpdateTurretUi(selecedTurretInformation);
-            }
-        }
-        else {
-            if (selectedTurret != null) {
-                UnSelectTurret();
             }
         }
     }
 
 
     private void UnSelectTurret() {
-        canvasTurretTurretUi.SetActive(false);
         if (selectedTurret.GetComponent<LineRenderer>() != null) {
             selectedTurret.GetComponent<LineRenderer>().enabled = false;
         }
@@ -74,11 +66,6 @@ public class TowerUiController : MonoBehaviour {
             selectedTurret.transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
         }
         selectedTurret = null;
-    }
-
-    private void UpdateTurretUi(Tower selecedTurretInformation) {
-        // add stuff !!!
-        canvasTurretTurretUi.SetActive(true);
     }
 
     private void SetCircleHighlight(GameObject go, float radius, float lineWidth, Color color) {
@@ -114,18 +101,12 @@ public class TowerUiController : MonoBehaviour {
     #region UiInteractions
     /// <summary> Expands build menue </summary>
     public void ExpandBuildUi() {
-        canvasTurretBuildMenue.transform.GetChild(0).gameObject.SetActive(false);
-        canvasTurretBuildMenue.transform.GetChild(1).gameObject.SetActive(true);
-        canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(false);
-        canvasTurretBuildMenue.transform.GetChild(3).gameObject.SetActive(true);
+        BuildUI(true);
     }
 
     /// <summary> Closes build menue and cancels building prozess </summary>
     public void CloseBuildUi() {
-        canvasTurretBuildMenue.transform.GetChild(0).gameObject.SetActive(true);
-        canvasTurretBuildMenue.transform.GetChild(1).gameObject.SetActive(false);
-        canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(true);
-        canvasTurretBuildMenue.transform.GetChild(3).gameObject.SetActive(false);
+        BuildUI(false);
         if (towerPlacer.GetTurretPlaceStatus()) {
             towerPlacer.CancelTowerPlacement();
         }
@@ -134,10 +115,16 @@ public class TowerUiController : MonoBehaviour {
         }
     }
 
+    private void BuildUI(bool expand) {
+        canvasTurretBuildMenue.transform.GetChild(0).gameObject.SetActive(!expand);
+        canvasTurretBuildMenue.transform.GetChild(1).gameObject.SetActive(expand);
+        canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(!expand);
+        canvasTurretBuildMenue.transform.GetChild(3).gameObject.SetActive(expand);
+    }
+
     /// <summary> Starts placing of a new tower </summary>
     /// <param name="newTower"></param>
     public void StartTowerPlacement(GameObject silhouette) {
-        Debug.LogFormat("Started placing turret {0}", silhouette);
         towerPlacer.StartTowerPlacement(silhouette.GetComponent<Tower>(), silhouette);
     }
 

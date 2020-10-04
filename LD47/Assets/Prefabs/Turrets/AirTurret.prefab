@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1124729191564016883}
   - component: {fileID: 3388861179212404585}
   - component: {fileID: -917783269243652628}
+  - component: {fileID: 2098659359059827254}
   m_Layer: 12
   m_Name: AirTurret
   m_TagString: Tower

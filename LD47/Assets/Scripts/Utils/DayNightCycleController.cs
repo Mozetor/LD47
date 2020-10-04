@@ -12,8 +12,10 @@ namespace Utils {
         public List<Light2D> dayLights = new List<Light2D>();
         public List<Light2D> nightLights = new List<Light2D>();
 
+        private BuildBattleSpawner spawner;
+
         private void Start() {
-            var spawner = FindObjectOfType<BuildBattleSpawner>();
+            spawner = FindObjectOfType<BuildBattleSpawner>();
 
             dayLights.ForEach((l) => spawner.AddOnBuildPhaseStart(() => StartCoroutine(Cycle(l, true))));
             dayLights.ForEach((l) => spawner.AddOnBattlePhaseStart(() => StartCoroutine(Cycle(l, false))));
@@ -34,6 +36,10 @@ namespace Utils {
             }
         }
 
+        public void AddNightLight(Light2D l) {
+            spawner.AddOnBuildPhaseEnd(() => StartCoroutine(Cycle(l, true)));
+            spawner.AddOnBattlePhaseEnd(() => StartCoroutine(Cycle(l, false)));
+        }
 
     }
 }

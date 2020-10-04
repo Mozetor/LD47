@@ -5,6 +5,7 @@ using Assets.WaveSpawner.Implementation;
 using System.Linq;
 using UnityEngine.EventSystems;
 using Stats;
+using Worldgeneration;
 
 public class TowerPlacer : MonoBehaviour {
 
@@ -14,6 +15,8 @@ public class TowerPlacer : MonoBehaviour {
 
     /// <summary> Main city </summary>
     private CityController city;
+    /// <summary> World </summary>
+    private WorldController worldController;
     /// <summary> Information of to placed tower </summary>
     private Tower towerToPlace;
     /// <summary> Main Camera </summary>
@@ -43,6 +46,7 @@ public class TowerPlacer : MonoBehaviour {
     private void Start() {
         mainCamera = Camera.main;
         city = FindObjectOfType<CityController>();
+        worldController = FindObjectOfType<WorldController>();
     }
 
     // Update is called once per frame
@@ -51,7 +55,7 @@ public class TowerPlacer : MonoBehaviour {
             return;
         }
 
-        Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 25));
 
         if (!EventSystem.current.IsPointerOverGameObject() && SellingActive && Input.GetMouseButton(0) && !placingActive) {
             Vector3 cursorTile = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), 0);
@@ -112,8 +116,7 @@ public class TowerPlacer : MonoBehaviour {
     /// <summary> Tests if position is viable for turret placement </summary>
     /// <returns></returns>
     private bool TestPosition(Vector3 screenPosition) {
-        if (/*!worldMap.IsPath(screenPosition.x, screenPosition.y)*/ true) {
-            Debug.LogWarning("turret placer is mising worldMap checks");
+        if (!worldController.IsPath(Mathf.RoundToInt(screenPosition.x), Mathf.RoundToInt(screenPosition.y))) {
             Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
             for (int i = 0; i < towers.Count; i++) {
                 if (towers[i].transform.position == cursorTile) {

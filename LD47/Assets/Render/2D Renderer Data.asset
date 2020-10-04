@@ -32,7 +32,7 @@ MonoBehaviour:
     renderTextureScale: 1
     blendMode: 99
     customBlendFactors:
-      multiplicative: 0.2
+      multiplicative: 0.1
       additive: 0
   - enabled: 0
     name: Blend Style 2
