@@ -5475,8 +5475,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyWaveInfoUi: {fileID: 200378314}
-  EnemyTypeTxt: {fileID: 0}
-  EnemyAmountTxt: {fileID: 0}
 --- !u!1 &2036114627
 GameObject:
   m_ObjectHideFlags: 0

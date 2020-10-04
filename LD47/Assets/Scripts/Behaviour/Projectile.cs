@@ -9,7 +9,7 @@ public abstract class Projectile : MonoBehaviour {
 
     private void Start() {
         rigidbody = GetComponent<Rigidbody2D>();
-        this.transform.rotation = Quaternion.FromToRotation(Vector3.right, direction);
+        this.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
     }
 
     private void Update() {
