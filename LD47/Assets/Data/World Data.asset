@@ -121,3 +121,10 @@ MonoBehaviour:
     - {fileID: -7357922426693696371, guid: 28d3163ff7eecd5458ddbb02591b669c, type: 3}
     - {fileID: -1978118650525188057, guid: 28d3163ff7eecd5458ddbb02591b669c, type: 3}
     - {fileID: -2981534202909301288, guid: 28d3163ff7eecd5458ddbb02591b669c, type: 3}
+  - name: Tree
+    color: {r: 0.11764706, g: 0.7, b: 0, a: 1}
+    type: 17
+    sprites:
+    - {fileID: 2572236292851511218, guid: 5e9ea7f3d3b80cd468099c0f306164ac, type: 3}
+    - {fileID: 6224024930817484846, guid: 5e9ea7f3d3b80cd468099c0f306164ac, type: 3}
+    - {fileID: -8911251428918342384, guid: 5e9ea7f3d3b80cd468099c0f306164ac, type: 3}
