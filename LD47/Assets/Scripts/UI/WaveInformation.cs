@@ -14,13 +14,12 @@ public class WaveInformation : MonoBehaviour {
 
 
     private void Awake() {
-        var spawner = FindObjectOfType<BuildBattleSpawner>();
-        spawner.AddOnWaveEnded(UpdateUi);
-    }
 
-    private void Start() {
         EnemyTypeTxt = enemyWaveInfoUi.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         EnemyAmountTxt = enemyWaveInfoUi.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        var spawner = FindObjectOfType<BuildBattleSpawner>();
+        UpdateUi(spawner.waves.waves[0]);
+        spawner.AddOnWaveEnded(UpdateUi);
     }
 
     void UpdateUi(Wave wave) {
