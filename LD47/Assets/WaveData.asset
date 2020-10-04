@@ -57,7 +57,7 @@ MonoBehaviour:
     maxSimultaneousSpawns: 0
     timeBetweenSpawns: 0.3
     spawnDelay: 0
-  - name: Surveillance
+  - name: Air Surveillance
     spawnGroups:
     - name: Drone
       spawnable: {fileID: 0}
@@ -66,33 +66,73 @@ MonoBehaviour:
     maxSimultaneousSpawns: 0
     timeBetweenSpawns: 0
     spawnDelay: 0
-  - name: 
-    spawnGroups: []
-    minSimultaneousSpawns: 0
-    maxSimultaneousSpawns: 0
-    timeBetweenSpawns: 0
+  - name: Air Support
+    spawnGroups:
+    - name: Infantery
+      spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
+        type: 3}
+      amount: 12
+    - name: Air Support
+      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+        type: 3}
+      amount: 3
+    minSimultaneousSpawns: 1
+    maxSimultaneousSpawns: 2
+    timeBetweenSpawns: 0.3
     spawnDelay: 0
-  - name: 
-    spawnGroups: []
-    minSimultaneousSpawns: 0
-    maxSimultaneousSpawns: 0
-    timeBetweenSpawns: 0
+  - name: Yes Rico. BOOM!
+    spawnGroups:
+    - name: Suicide Squad
+      spawnable: {fileID: 7939490381341572151, guid: 727f3a35ad21ba54ca8bff8833db50f3,
+        type: 3}
+      amount: 13
+    minSimultaneousSpawns: 1
+    maxSimultaneousSpawns: 2
+    timeBetweenSpawns: 0.25
     spawnDelay: 0
-  - name: 
-    spawnGroups: []
-    minSimultaneousSpawns: 0
-    maxSimultaneousSpawns: 0
-    timeBetweenSpawns: 0
+  - name: Frontal Attack
+    spawnGroups:
+    - name: Infantery
+      spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
+        type: 3}
+      amount: 15
+    - name: Artillery
+      spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
+        type: 3}
+      amount: 10
+    minSimultaneousSpawns: 1
+    maxSimultaneousSpawns: 2
+    timeBetweenSpawns: 0.25
     spawnDelay: 0
-  - name: 
-    spawnGroups: []
-    minSimultaneousSpawns: 0
-    maxSimultaneousSpawns: 0
-    timeBetweenSpawns: 0
+  - name: Full Loadout
+    spawnGroups:
+    - name: Infantery
+      spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
+        type: 3}
+      amount: 8
+    - name: Artillery
+      spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
+        type: 3}
+      amount: 5
+    - name: Bomber
+      spawnable: {fileID: 7939490381341572151, guid: 727f3a35ad21ba54ca8bff8833db50f3,
+        type: 3}
+      amount: 4
+    - name: Air Support
+      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+        type: 3}
+      amount: 6
+    minSimultaneousSpawns: 1
+    maxSimultaneousSpawns: 2
+    timeBetweenSpawns: 0.3
     spawnDelay: 0
-  - name: 
-    spawnGroups: []
-    minSimultaneousSpawns: 0
-    maxSimultaneousSpawns: 0
-    timeBetweenSpawns: 0
+  - name: Drone Strike
+    spawnGroups:
+    - name: Drones
+      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+        type: 3}
+      amount: 12
+    minSimultaneousSpawns: 1
+    maxSimultaneousSpawns: 2
+    timeBetweenSpawns: 0.3
     spawnDelay: 0

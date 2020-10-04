@@ -18,16 +18,18 @@ namespace Assets.Enemies {
         public float attackCooldown;
         public CityController cityController;
         public Paths paths;
+        public Transform graphics;
         public float pathContinueDistance;
 
         private int health;
-        private Action<int, int> onDamageTaken;
+        private Action<int, int, int> onHealthUpdated;
         private float currentAttackCooldown;
         private Path path;
         private int pathIndex;
 
         public void Start() {
             health = maxHealth;
+            onHealthUpdated?.Invoke(health, maxHealth, 0);
             cityController = FindObjectOfType<CityController>();
             gameObject.layer = enemyType == EnemyType.GROUNDED ? GROUNDED : AIRBORNE;
         }
@@ -52,22 +54,22 @@ namespace Assets.Enemies {
             } else {
                 var direction = (target - this.transform.position).normalized;
                 this.transform.position += direction * speed * Time.deltaTime;
-                this.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
+                graphics.rotation = Quaternion.FromToRotation(Vector3.up, direction);
             }
         }
 
-        public void AddOnDamageTaken(Action<int, int> onDamageTaken) {
-            this.onDamageTaken += onDamageTaken;
+        public void AddOnHealthUpdated(Action<int, int, int> onHealthUpdated) {
+            this.onHealthUpdated += onHealthUpdated;
         }
 
         public void TakeDamage(int damage) {
             health -= damage;
             if (health <= 0) {
                 health = 0;
-                onDamageTaken?.Invoke(health, damage);
+                onHealthUpdated?.Invoke(health, maxHealth, damage);
                 Die();
             } else {
-                onDamageTaken?.Invoke(health, damage);
+                onHealthUpdated?.Invoke(health, maxHealth, damage);
             }
         }
 
