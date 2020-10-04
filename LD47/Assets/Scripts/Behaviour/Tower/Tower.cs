@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class Tower : MonoBehaviour {
 
+    private const int GROUNDED = 8;
+    private const int AIRBORNE = 9;
+
     public int cost;
     public int damage;
     public float range;
@@ -43,11 +46,11 @@ public class Tower : MonoBehaviour {
         currentAttackCooldown = attackCooldown;
         var forward = target.transform.position - this.transform.position;
 
-        var startQuat = this.transform.rotation;
+        var startQuat = this.turretHead.rotation;
         var targetQuat = Quaternion.FromToRotation(Vector3.down, forward);
 
         for (int i = 0; i < 10; i++) {
-            this.transform.rotation = Quaternion.Lerp(startQuat, targetQuat, (i + 1) / 9f);
+            this.turretHead.rotation = Quaternion.Lerp(startQuat, targetQuat, (i + 1) / 9f);
             yield return new WaitForSeconds(0.001f);
         }
 
@@ -58,5 +61,6 @@ public class Tower : MonoBehaviour {
         proj.damage = damage;
         proj.lifeTime = lifetime;
         proj.enemyTypes = this.targets;
+        proj.gameObject.layer = targets.Contains(EnemyType.GROUNDED) ? GROUNDED : AIRBORNE;
     }
 }
