@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Assets.Enemies {
     public class ProjectileEnemy : Enemy {
 
-        public Projectile projectile;
+        public EnemyProjectile projectile;
 
         protected override void Attack() {
             var forward = cityController.transform.position - this.transform.position;
