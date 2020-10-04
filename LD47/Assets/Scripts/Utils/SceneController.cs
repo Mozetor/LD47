@@ -32,16 +32,13 @@ namespace Utils {
         }
 
         IEnumerator DelayedSceneChange(string sceneName) {
-            crossfadeAnimator.gameObject.SetActive(true);
             if (crossfadeAnimator == null) {
                 throw new System.ArgumentNullException("Animator was null.");
             }
+            crossfadeAnimator.gameObject.SetActive(true);
             crossfadeAnimator.SetTrigger("Start");
             if (musicFadeAnimator) {
                 musicFadeAnimator.SetTrigger("Start");
-            }
-            else {
-                Debug.LogWarning("no music animator was set");
             }
             //OptionsController.instance.isUiBlocking = true;
             yield return new WaitForSeconds(1);

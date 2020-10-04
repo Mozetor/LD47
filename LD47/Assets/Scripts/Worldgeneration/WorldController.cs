@@ -48,7 +48,7 @@ namespace Worldgeneration {
             }
 
             paths.paths = CalculatePaths();
-            if(renderPaths) {
+            if (renderPaths) {
                 ShowPaths();
             }
 
@@ -115,6 +115,9 @@ namespace Worldgeneration {
             var t = new PixelType[currentWorld.worldSize.x, currentWorld.worldSize.y];
             for (int x = 0; x < currentWorld.worldSize.x; x++) {
                 for (int y = 0; y < currentWorld.worldSize.y; y++) {
+                    if (!dic.ContainsKey(ToNiceColor(texture.GetPixel(x, y)))) {
+                        Debug.LogError("Texture '" + texture.name + "' contains color: " + ToNiceColor(texture.GetPixel(x, y)) + " at pos: " + (x, y));
+                    }
                     t[x, y] = dic[ToNiceColor(texture.GetPixel(x, y))];
                 }
             }
@@ -145,6 +148,7 @@ namespace Worldgeneration {
                     return;
                 case PixelType.Grass:
                 case PixelType.Path:
+                case PixelType.Stone:
                     InstantiateRandomTile(typeSpritesDic[type], pos, layer);
                     break;
                 case PixelType.GrassDirt0:
