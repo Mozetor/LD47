@@ -22,10 +22,6 @@ public class OptionsController : MonoBehaviour {
         }
     }
 
-    private void Start() {
-        //FindObjectOfType<SceneController>().gameObject.SetActive(true);
-    }
-
     /// <summary>
     /// Changes value a setting in options to given value.
     /// </summary>
@@ -41,12 +37,6 @@ public class OptionsController : MonoBehaviour {
                 break;
             case "musicVolume":
                 options.musicVolume = value;
-                break;
-            case "sensitivity":
-                options.sensitivity = value;
-                break;
-            case "distance":
-                options.distance = value;
                 break;
             default:
                 throw new System.NotImplementedException("VariableName " + variableName + " not implemented.");
@@ -66,10 +56,6 @@ public class OptionsController : MonoBehaviour {
                 return options.sfxVolume;
             case "musicVolume":
                 return options.musicVolume;
-            case "sensitivity":
-                return options.sensitivity;
-            case "distance":
-                return options.distance;
             default:
                 throw new System.NotImplementedException("VariableName " + variableName + " not implemented.");
         }
@@ -82,8 +68,6 @@ public class OptionsController : MonoBehaviour {
         options.masterVolume = 1f;
         options.sfxVolume = 1f;
         options.musicVolume = 1f;
-        options.distance = 15f;
-        options.sensitivity = 1f;
         InputSliderController[] inputSliderControllers = (InputSliderController[])FindObjectsOfType(typeof(InputSliderController));
         for (int i = 0; i < inputSliderControllers.Length; i++) {
             inputSliderControllers[i].ReadValue();
