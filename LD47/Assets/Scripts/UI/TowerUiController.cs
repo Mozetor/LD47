@@ -50,7 +50,7 @@ public class TowerUiController : MonoBehaviour {
                 selectedTurret = hit.transform.gameObject;
                 Tower selecedTurretInformation = selectedTurret.GetComponent<Tower>();
                 // Range indicator
-                SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.range, 0.15f, Color.green);
+                SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.range, 0.15f, new Color32(65, 105, 225, 255));
                 // Turret highlight
                 SetCircleHighlight(hit.transform.GetChild(0).gameObject, hit.transform.lossyScale.x / 2, 0.2f, Color.yellow);
             }

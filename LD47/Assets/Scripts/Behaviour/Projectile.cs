@@ -12,9 +12,9 @@ public abstract class Projectile : MonoBehaviour {
         this.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
     }
 
-    private void Update() {
-        rigidbody.MovePosition(this.transform.position + direction.normalized * Time.deltaTime * speed);
-        lifeTime -= Time.deltaTime;
+    private void FixedUpdate() {
+        rigidbody.MovePosition(this.transform.position + direction.normalized * Time.fixedDeltaTime * speed);
+        lifeTime -= Time.fixedDeltaTime;
         if (lifeTime <= 0) {
             Destroy(this.gameObject);
         }
