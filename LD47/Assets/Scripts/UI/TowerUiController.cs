@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.WaveSpawner.Implementation;
 using UnityEngine;
 
 public class TowerUiController : MonoBehaviour {
@@ -16,6 +15,11 @@ public class TowerUiController : MonoBehaviour {
 
     /// <summary> Activeley selected turret </summary>
     private GameObject selectedTurret;
+
+    private void Awake() {
+        var spawner = FindObjectOfType<BuildBattleSpawner>();
+        spawner.AddOnBuildPhaseEnd(CloseBuildUi);
+    }
 
     // Start is called before the first frame update
     void Start() {
@@ -62,10 +66,10 @@ public class TowerUiController : MonoBehaviour {
 
     private void UnSelectTurret() {
         canvasTurretTurretUi.SetActive(false);
-        if (selectedTurret?.GetComponent<LineRenderer>() != null) {
+        if (selectedTurret.GetComponent<LineRenderer>() != null) {
             selectedTurret.GetComponent<LineRenderer>().enabled = false;
         }
-        if (selectedTurret?.transform.GetChild(0)?.GetComponent<LineRenderer>() != null) {
+        if (selectedTurret.transform.GetChild(0).GetComponent<LineRenderer>() != null) {
             selectedTurret.transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
         }
         selectedTurret = null;

@@ -94,13 +94,9 @@ public class TowerPlacer : MonoBehaviour {
 
     /// <summary> deconstructs turret, returns a part of its cost </summary>
     private void SellTurret(Vector3 targetPosition) {
-        Debug.Log("start selling");
         if (!(targetPosition == Vector3.zero)) {
-            Debug.Log("execute selling");
             for (int i = 0; i < towers.Count; i++) {
-                Debug.Log("start searching");
                 if (towers[i].transform.position == targetPosition) {
-                    Debug.Log("found");
                     city.Buy(Mathf.RoundToInt(-towers[i].cost * refundOnSell));
                     Tower towerToRemove = towers[i];
                     towers.Remove(towerToRemove);
