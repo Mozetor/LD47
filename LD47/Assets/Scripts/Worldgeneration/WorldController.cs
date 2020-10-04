@@ -5,7 +5,10 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using Debug = UnityEngine.Debug;
 using static Utils.ColorUtils;
-
+using Assets.Enemies.Behaviour;
+using System.Collections;
+using Assets.WaveSpawner;
+using Assets.WaveSpawner.Implementation;
 
 namespace Worldgeneration {
 
@@ -15,6 +18,15 @@ namespace Worldgeneration {
         public GameObject tilePrefab;
         [Tooltip("The world data to generate world with")]
         public WorldData currentWorld;
+        [Tooltip("Path data reference")]
+        public Paths paths;
+        [Tooltip("Wave data reference")]
+        public WaveData waveData;
+        [Header("Debug")]
+        [Tooltip("Whether to draw the calculated paths")]
+        public bool renderPaths;
+        [Tooltip("Whether to measure the time needed to generate world")]
+        public bool measureWorldGenerationTime;
 
         /// <summary> Dictionary of pixel definitions of current world. </summary>
         private Dictionary<Color, PixelType> dic;
@@ -23,15 +35,27 @@ namespace Worldgeneration {
         /// <summary> List of all layer types. </summary>
         private List<PixelType[,]> pixelTypes;
 
-        // Measure time needed to generate the world in ms.
-        private void Start() {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            stopwatch.Start();
-            GenerateWorld();
-            stopwatch.Stop();
-            //Debug.Log($"Time: {stopwatch.ElapsedMilliseconds}ms");
-        }
 
+        private void Start() {
+            var stopwatch = Stopwatch.StartNew();
+            if (measureWorldGenerationTime) {
+                stopwatch.Start();
+            }
+            GenerateWorld();
+            if (measureWorldGenerationTime) {
+                stopwatch.Stop();
+                Debug.Log($"Time: {stopwatch.ElapsedMilliseconds}ms");
+            }
+
+            paths.paths = CalculatePaths();
+            if (renderPaths) {
+                ShowPaths();
+            }
+
+            var spawns = FindObjectOfType<BuildBattleSpawner>().spawnPoints;
+            spawns.Clear();
+            paths.paths.ForEach((p) => spawns.Add(p.pathPoints[0]));
+        }
 
         /// <summary>
         /// Whether the tile at a given position is a path.
@@ -51,6 +75,18 @@ namespace Worldgeneration {
         public PixelType GetPixelType(int x, int y) {
             return pixelTypes[0][x, y];
         }
+
+        public List<Path> CalculatePaths() {
+            var paths = new List<Path>();
+
+            var starts = CalculatePathStarts();
+            foreach (var start in starts) {
+                paths.Add(CalculatePath(start));
+            }
+
+            return paths;
+        }
+
 
 
         /// <summary>
@@ -79,6 +115,9 @@ namespace Worldgeneration {
             var t = new PixelType[currentWorld.worldSize.x, currentWorld.worldSize.y];
             for (int x = 0; x < currentWorld.worldSize.x; x++) {
                 for (int y = 0; y < currentWorld.worldSize.y; y++) {
+                    if (!dic.ContainsKey(ToNiceColor(texture.GetPixel(x, y)))) {
+                        Debug.LogError("Texture '" + texture.name + "' contains color: " + ToNiceColor(texture.GetPixel(x, y)) + " at pos: " + (x, y));
+                    }
                     t[x, y] = dic[ToNiceColor(texture.GetPixel(x, y))];
                 }
             }
@@ -92,7 +131,7 @@ namespace Worldgeneration {
         private void SpawnLayer(PixelType[,] types, int layer) {
             for (int x = 0; x < currentWorld.worldSize.x; x++) {
                 for (int y = 0; y < currentWorld.worldSize.y; y++) {
-                    var p = new Vector3Int(x - currentWorld.worldSize.x / 2+1, y - currentWorld.worldSize.y / 2+1, 0);
+                    var p = new Vector3Int(x - currentWorld.worldSize.x / 2 + 1, y - currentWorld.worldSize.y / 2 + 1, 0);
                     SpawnPixel(types[x, y], p, layer);
                 }
             }
@@ -109,6 +148,7 @@ namespace Worldgeneration {
                     return;
                 case PixelType.Grass:
                 case PixelType.Path:
+                case PixelType.Stone:
                     InstantiateRandomTile(typeSpritesDic[type], pos, layer);
                     break;
                 case PixelType.GrassDirt0:
@@ -139,6 +179,59 @@ namespace Worldgeneration {
             var rend = Instantiate(tilePrefab, pos, Quaternion.identity, transform).GetComponent<SpriteRenderer>();
             rend.sprite = sprite;
             rend.sortingOrder = layer - 10;
+        }
+
+        private List<Vector3Int> CalculatePathStarts() {
+            var l = new List<Vector3Int>();
+            for (int x = 0; x < currentWorld.worldSize.x; x++) {
+                for (int y = 0; y < currentWorld.worldSize.y; y++) {
+                    if (x == 0 || x == currentWorld.worldSize.x - 1 || y == 0 || y == currentWorld.worldSize.y - 1) {
+                        if (pixelTypes[0][x, y] == PixelType.Path) {
+                            l.Add(new Vector3Int(x, y, 0));
+                        }
+                    }
+                }
+            }
+            return l;
+        }
+
+        private Path CalculatePath(Vector3Int pathStart) {
+            Path path = new Path();
+            path.pathPoints = new List<Vector3>();
+            SearchPath(path, pathStart);
+            path.pathPoints.Add(new Vector3(.5f, .5f));
+            return path;
+        }
+
+        private void SearchPath(Path path, Vector3Int p) {
+            var pn = new Vector3Int(p.x - currentWorld.worldSize.x / 2 + 1, p.y - currentWorld.worldSize.y / 2 + 1, 0);
+            if (p.x < 0 || p.y < 0 || p.x >= currentWorld.worldSize.x || p.y >= currentWorld.worldSize.y
+                || path.pathPoints.Contains(pn) || pixelTypes[0][p.x, p.y] != PixelType.Path) {
+                return;
+            }
+            path.pathPoints.Add(pn);
+            if (pn.x > -2 && pn.y > -2 && pn.x < 3 && pn.y < 3) {
+                return;
+            }
+            SearchPath(path, new Vector3Int(p.x + 1, p.y, 0));
+            SearchPath(path, new Vector3Int(p.x - 1, p.y, 0));
+            SearchPath(path, new Vector3Int(p.x, p.y + 1, 0));
+            SearchPath(path, new Vector3Int(p.x, p.y - 1, 0));
+        }
+        private void ShowPaths() {
+            if (paths.paths.Count == 0) {
+                return;
+            }
+            foreach (var path in paths.paths) {
+                StartCoroutine(PathShower(path));
+            }
+        }
+
+        IEnumerator PathShower(Path path) {
+            for (int i = 0; i < path.pathPoints.Count - 1; i++) {
+                Debug.DrawLine(path.pathPoints[i], path.pathPoints[i + 1], Color.black, 600);
+                yield return new WaitForSecondsRealtime(.1f);
+            }
         }
     }
 }
