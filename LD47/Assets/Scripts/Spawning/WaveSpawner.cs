@@ -151,7 +151,8 @@ namespace Assets.WaveSpawner {
             index = (index + 1) % waves.waves.Length;
             if (index == 0 && !infinite) {
                 index = -1;
-            } else {
+            }
+            else {
                 waveCooldown = waves.waves[index].spawnDelay;
             }
         }
@@ -160,16 +161,17 @@ namespace Assets.WaveSpawner {
         /// Ends a wave.
         /// </summary>
         private void EndWave() {
-            onWaveEnded?.Invoke(spawnWave);
+            if (index == 0) {
+                onWavesFinished?.Invoke();
+                factor++;
+            }
+
+            onWaveEnded?.Invoke(GetInfiniteAdjustedWave(waves.waves[index], factor));
+
             if (index == -1) {
                 onWavesFinished?.Invoke();
                 stopped = true;
                 return;
-            }
-
-            if (index == 0) {
-                onWavesFinished?.Invoke();
-                factor++;
             }
         }
 
