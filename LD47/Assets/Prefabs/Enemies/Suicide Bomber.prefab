@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: suicide
-  maxHealth: 4
+  maxHealth: 5
   range: 2
   enemyType: 0
   speed: 5

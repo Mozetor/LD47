@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 5096150346730417312}
   - component: {fileID: 5096150346730417313}
   - component: {fileID: -4573708949178956492}
+  - component: {fileID: -1405958160402452516}
   m_Layer: 12
   m_Name: GunTurret
   m_TagString: Tower
@@ -210,9 +211,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Gun Turret
   cost: 150
-  damage: 15
-  range: 6
-  attackCooldown: 0.7
+  damage: 3
+  range: 5
+  attackCooldown: 0.3
   targets: 00000000
   projectile: {fileID: 8319754320604176883, guid: 5c8f303e81e9afc439fbc554aba0039b,
     type: 3}

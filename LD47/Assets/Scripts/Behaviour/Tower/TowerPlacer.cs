@@ -93,7 +93,15 @@ public class TowerPlacer : MonoBehaviour {
     /// <returns></returns>
     private void PlaceTower() {
         Vector3 newPos = new Vector3(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y, 0);
-        towers.Add(Instantiate(towerToPlace, newPos, Quaternion.identity));
+        Tower newTower = Instantiate(towerToPlace, newPos, Quaternion.identity);
+        // Disable circle if it exists
+        if (newTower.gameObject.GetComponent<LineRenderer>() != null) {
+            newTower.gameObject.GetComponent<LineRenderer>().enabled = false;
+        }
+        if (newTower.gameObject.transform.GetChild(0).GetComponent<LineRenderer>() != null) {
+            newTower.gameObject.transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
+        }
+        towers.Add(newTower);
         StatsController.stats.moneyUsedForTurret += towerToPlace.cost;
         city.Buy(towerToPlace.cost);
     }
