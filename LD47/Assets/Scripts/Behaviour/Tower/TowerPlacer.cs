@@ -44,7 +44,7 @@ public class TowerPlacer : MonoBehaviour {
     // Update is called once per frame
     private void Update() {
         // testing -->
-        if (Input.GetMouseButtonDown(0) && !placingActive) {
+        if (Input.GetKey(KeyCode.B) && !placingActive) {
             StartTowerPlacement(test, testIcon);
             return;
         }
@@ -72,11 +72,13 @@ public class TowerPlacer : MonoBehaviour {
             if (city.CanBuy(towerToPlace.cost)) {
                 ChangeSilhouetteColour(Color.green);
                 return true;
-            } else {
+            }
+            else {
                 ChangeSilhouetteColour(Color.yellow);
                 return false;
             }
-        } else {
+        }
+        else {
             ChangeSilhouetteColour(Color.red);
             return false;
         }
@@ -117,7 +119,8 @@ public class TowerPlacer : MonoBehaviour {
                 }
             }
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -135,14 +138,26 @@ public class TowerPlacer : MonoBehaviour {
 
     /// <summary> put a silhouette of given tower on curser position </summary>
     public void StartTowerPlacement(Tower toPlaceTower, GameObject silhouette) {
-        placingActive = true;
-        towerToPlace = toPlaceTower;
-        towerSilhouette = Instantiate(silhouette, Vector3.zero, Quaternion.identity);
+        if (inBuildPhase) {
+            CancelTowerPlacement();
+            placingActive = true;
+            towerToPlace = toPlaceTower;
+            towerSilhouette = Instantiate(silhouette, Vector3.zero, Quaternion.identity);
+        }
     }
 
     /// <summary> cancels placement and removes tower silhouette from curser </summary>
     public void CancelTowerPlacement() {
         placingActive = false;
-        Destroy(towerSilhouette);
+        if (towerSilhouette != null) {
+            Destroy(towerSilhouette);
+        }
+        towerToPlace = null;
+    }
+
+    /// <summary> returns true if placing is active </summary>
+    /// <returns></returns>
+    public bool GetTurretPlaceStatus() {
+        return placingActive;
     }
 }
