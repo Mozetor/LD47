@@ -19,9 +19,13 @@ MonoBehaviour:
       spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
         type: 3}
       amount: 1
+    - name: Lone Eagle
+      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+        type: 3}
+      amount: 2
     minSimultaneousSpawns: 1
     maxSimultaneousSpawns: 1
-    timeBetweenSpawns: 0
+    timeBetweenSpawns: 0.25
     spawnDelay: 1
   - name: Yes Rico. BOOM!
     spawnGroups:

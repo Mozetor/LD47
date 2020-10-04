@@ -11,7 +11,7 @@ public class Tower : MonoBehaviour {
     public float range;
     public float attackCooldown;
     public List<EnemyType> targets;
-    public Projectile projectile;
+    public TowerProjectile projectile;
     public Transform turretHead;
 
     private float currentAttackCooldown = 0;
@@ -57,5 +57,6 @@ public class Tower : MonoBehaviour {
         proj.direction = forward;
         proj.damage = damage;
         proj.lifeTime = lifetime;
+        proj.enemyTypes = this.targets;
     }
 }

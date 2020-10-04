@@ -208,10 +208,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cost: 150
-  damage: 8
+  damage: 15
   range: 6
   attackCooldown: 0.7
-  targets: 00000000
-  projectile: {fileID: 3887119227284023445, guid: 90a36e0d71f77ed46b9ac881645a4728,
+  targets: 01000000
+  projectile: {fileID: -3842044217624081177, guid: 90a36e0d71f77ed46b9ac881645a4728,
     type: 3}
   turretHead: {fileID: 5096150346439533972}

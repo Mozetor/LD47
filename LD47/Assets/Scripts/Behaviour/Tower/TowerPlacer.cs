@@ -1,58 +1,67 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using City;
+using Assets.WaveSpawner.Implementation;
+using System.Linq;
 
-public class TowerSpawner : MonoBehaviour {
-    // !!! PLACEHOLDER REPLACE !!!
+public class TowerPlacer : MonoBehaviour {
+
+    public Tower test;
+
+    public GameObject testIcon;
+
     /// <summary> Main city </summary>
-    private CityController city = new CityController();
+    private CityController city;
     /// <summary> Information of to placed tower </summary>
-    // !!! PLACEHOLDER REPLACE !!!
-    private TowerPlaceholder towerInformation;
-    /// <summary> main cammera </summary>
-    private Camera cam;
+    private Tower towerToPlace;
+    /// <summary> Main Camera </summary>
+    private Camera mainCamera;
     /// <summary> Ghost blueprint to indicate placing position </summary>
     private GameObject towerSilhouette;
     /// <summary> Whenever turret silhouette should be active </summary>
     private bool placingActive;
+    /// <summary> Is the game in the build phase </summary>
+    private bool inBuildPhase;
     /// <summary> towers on map </summary>
-    private List<TowerPlaceholder> towers = new List<TowerPlaceholder>();
+    private readonly List<Tower> towers = new List<Tower>();
 
     /// <summary> Percentage of what will be returned on turret selling, 1=100% </summary>
+    [Tooltip("Percentage of what will be returned on turret selling, 1=100%")]
     public float refundOnSell;
 
-    // testing -->
-    public GameObject testVisual;
-    // testing <--
+    private void Awake() {
+        var spawner = FindObjectOfType<BuildBattleSpawner>();
+        spawner.AddOnBuildPhaseStart(() => inBuildPhase = true);
+        spawner.AddOnBuildPhaseEnd(() => { inBuildPhase = false; CancelTowerPlacement(); });
+    }
 
     // Start is called before the first frame update
-    void Start() {
-        towers.Add(new TowerPlaceholder(0, Instantiate(testVisual, Vector3.zero, Quaternion.identity)));
-        cam = Camera.main;
-        // !!! PLACEHOLDER !!!
-        // get city
-        // !!!
+    private void Start() {
+        mainCamera = Camera.main;
+        city = FindObjectOfType<CityController>();
     }
 
     // Update is called once per frame
-    void Update() {
+    private void Update() {
         // testing -->
         if (Input.GetMouseButtonDown(0) && !placingActive) {
-            StartTowerPlacement(new TowerPlaceholder(0, testVisual));
+            StartTowerPlacement(test, testIcon);
+            return;
         }
         if (Input.GetMouseButtonDown(1)) {
             CancelTowerPlacement();
         }
         // testing <--
-        var i = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10);
-        Vector3 mousePosition = cam.ScreenToWorldPoint(i);
-        if (placingActive) {
-            MoveSilhouette(mousePosition);
-            if (CanPlaceTower(mousePosition)) {
-                if (Input.GetMouseButtonDown(0)) {
-                    PlaceTower();
-                }
-            }
+
+        if (!placingActive || !inBuildPhase) {
+            return;
+        }
+
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        MoveSilhouette(mousePosition);
+        if (CanPlaceTower(mousePosition) && Input.GetMouseButtonDown(0)) {
+            PlaceTower();
         }
     }
 
@@ -60,16 +69,14 @@ public class TowerSpawner : MonoBehaviour {
     /// <returns></returns>
     private bool CanPlaceTower(Vector3 screenPosition) {
         if (TestPosition(screenPosition)) {
-            if (city.CanBuy(towerInformation.cost)) {
+            if (city.CanBuy(towerToPlace.cost)) {
                 ChangeSilhouetteColour(Color.green);
                 return true;
-            }
-            else {
+            } else {
                 ChangeSilhouetteColour(Color.yellow);
                 return false;
             }
-        }
-        else {
+        } else {
             ChangeSilhouetteColour(Color.red);
             return false;
         }
@@ -79,7 +86,8 @@ public class TowerSpawner : MonoBehaviour {
     /// <returns></returns>
     private void PlaceTower() {
         Vector3 newPos = new Vector3(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y, 0);
-        towers.Add(new TowerPlaceholder(towerInformation.cost, Instantiate(towerInformation.goTower, newPos, Quaternion.identity)));
+        towers.Add(Instantiate(towerToPlace, newPos, Quaternion.identity));
+        city.Buy(towerToPlace.cost);
     }
 
     /// <summary> deconstructs turret, returns a part of its cost </summary>
@@ -87,8 +95,8 @@ public class TowerSpawner : MonoBehaviour {
         if (!(targetPosition == Vector3.zero)) {
             for (int i = 0; i < towers.Count; i++) {
                 if (towers[i].transform.position == targetPosition) {
-                    city.Buy((int)Mathf.Round(-(float)towers[i].cost * refundOnSell));
-                    TowerPlaceholder towerToRemove = towers[i];
+                    city.Buy(Mathf.RoundToInt(-towers[i].cost * refundOnSell));
+                    Tower towerToRemove = towers[i];
                     towers.Remove(towerToRemove);
                     Destroy(towerToRemove);
                     break;
@@ -102,15 +110,14 @@ public class TowerSpawner : MonoBehaviour {
     private bool TestPosition(Vector3 screenPosition) {
         Vector3 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         if (/*!worldMap.IsPath(screenPosition.x, screenPosition.y)*/ true) {
-            Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y),0);
+            Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
             for (int i = 0; i < towers.Count; i++) {
-                if (towers[i].goTower.transform.position == cursorTile) {
+                if (towers[i].transform.position == cursorTile) {
                     return false;
                 }
             }
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -123,14 +130,14 @@ public class TowerSpawner : MonoBehaviour {
 
     /// <summary> changes turret silhouette position to curser position </summary>
     private void MoveSilhouette(Vector3 screenPosition) {
-        towerSilhouette.transform.position = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), -0.05f);
+        towerSilhouette.transform.position = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
     }
 
     /// <summary> put a silhouette of given tower on curser position </summary>
-    public void StartTowerPlacement(TowerPlaceholder toPlaceTower) {
+    public void StartTowerPlacement(Tower toPlaceTower, GameObject silhouette) {
         placingActive = true;
-        towerInformation = toPlaceTower;
-        towerSilhouette = Instantiate(towerInformation.goTower, Vector3.zero, Quaternion.identity);
+        towerToPlace = toPlaceTower;
+        towerSilhouette = Instantiate(silhouette, Vector3.zero, Quaternion.identity);
     }
 
     /// <summary> cancels placement and removes tower silhouette from curser </summary>
