@@ -15,5 +15,3 @@ MonoBehaviour:
   masterVolume: 1
   sfxVolume: 1
   musicVolume: 1
-  distance: 15
-  sensitivity: 1

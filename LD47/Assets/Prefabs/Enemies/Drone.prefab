@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1391985560743275863}
   - component: {fileID: 1479959517367776929}
   m_Layer: 0
-  m_Name: Enemy 1
+  m_Name: Drone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 15
-  range: 0.5
+  range: 2
   enemyType: 1
-  speed: 1
+  speed: 2
   damage: 1
   attackCooldown: 0.5
   cityController: {fileID: 0}
@@ -72,7 +72,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 88c864c5a2655104bb2e969d69df0867, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,8 +93,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0.2139678, g: 0, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 16d12126f309248d1b88a1461724d8ae, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

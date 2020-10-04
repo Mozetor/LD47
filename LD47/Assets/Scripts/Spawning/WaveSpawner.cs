@@ -122,7 +122,7 @@ namespace Assets.WaveSpawner {
             if (index != -1) {
                 waveCooldown = allSpawned && spawnedEnitities.Count == 0 ? waveCooldown - Time.deltaTime : waves.waves[index].spawnDelay;
 
-                if (waveCooldown <= 0) {
+                if (waveCooldown < 0) {
                     StartWave();
                 }
             }

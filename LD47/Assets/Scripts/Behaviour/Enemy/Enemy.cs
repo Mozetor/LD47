@@ -50,7 +50,9 @@ namespace Assets.Enemies {
                     Attack();
                 }
             } else {
-                this.transform.position += (target - this.transform.position).normalized * speed * Time.deltaTime;
+                var direction = (target - this.transform.position).normalized;
+                this.transform.position += direction * speed * Time.deltaTime;
+                this.transform.rotation = Quaternion.FromToRotation(Vector3.up, direction);
             }
         }
 
