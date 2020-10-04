@@ -3,6 +3,7 @@ using UnityEngine;
 using City;
 using Assets.WaveSpawner.Implementation;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 public class TowerPlacer : MonoBehaviour {
 
@@ -22,6 +23,8 @@ public class TowerPlacer : MonoBehaviour {
     private bool placingActive;
     /// <summary> Is the game in the build phase </summary>
     private bool inBuildPhase;
+    /// <summary> Is the game in the build phase </summary>
+    private bool SellingActive;
     /// <summary> towers on map </summary>
     private readonly List<Tower> towers = new List<Tower>();
 
@@ -43,25 +46,22 @@ public class TowerPlacer : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-        // testing -->
-        if (Input.GetMouseButtonDown(0) && !placingActive && inBuildPhase) {
-            StartTowerPlacement(test, testIcon);
-            return;
-        }
-        if (Input.GetMouseButtonDown(1)) {
-            CancelTowerPlacement();
-        }
-        // testing <--
-
-        if (!placingActive || !inBuildPhase) {
+        if (!inBuildPhase) {
             return;
         }
 
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
 
-        MoveSilhouette(mousePosition);
-        if (CanPlaceTower(mousePosition) && Input.GetMouseButtonDown(0)) {
-            PlaceTower();
+        if (!EventSystem.current.IsPointerOverGameObject() && SellingActive && Input.GetMouseButton(0) && !placingActive) {
+            Vector3 cursorTile = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), 0);
+            SellTurret(cursorTile);
+        }
+
+        if (placingActive && !SellingActive) {
+            MoveSilhouette(mousePosition);
+            if (!EventSystem.current.IsPointerOverGameObject() && CanPlaceTower(mousePosition) && Input.GetMouseButtonDown(0)) {
+                PlaceTower();
+            }
         }
     }
 
@@ -72,11 +72,13 @@ public class TowerPlacer : MonoBehaviour {
             if (city.CanBuy(towerToPlace.cost)) {
                 ChangeSilhouetteColour(Color.green);
                 return true;
-            } else {
+            }
+            else {
                 ChangeSilhouetteColour(Color.yellow);
                 return false;
             }
-        } else {
+        }
+        else {
             ChangeSilhouetteColour(Color.red);
             return false;
         }
@@ -98,7 +100,7 @@ public class TowerPlacer : MonoBehaviour {
                     city.Buy(Mathf.RoundToInt(-towers[i].cost * refundOnSell));
                     Tower towerToRemove = towers[i];
                     towers.Remove(towerToRemove);
-                    Destroy(towerToRemove);
+                    Destroy(towerToRemove.gameObject);
                     break;
                 }
             }
@@ -108,8 +110,8 @@ public class TowerPlacer : MonoBehaviour {
     /// <summary> Tests if position is viable for turret placement </summary>
     /// <returns></returns>
     private bool TestPosition(Vector3 screenPosition) {
-        Vector3 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         if (/*!worldMap.IsPath(screenPosition.x, screenPosition.y)*/ true) {
+            Debug.LogWarning("turret placer is mising worldMap checks");
             Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
             for (int i = 0; i < towers.Count; i++) {
                 if (towers[i].transform.position == cursorTile) {
@@ -117,7 +119,8 @@ public class TowerPlacer : MonoBehaviour {
                 }
             }
             return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
@@ -135,14 +138,40 @@ public class TowerPlacer : MonoBehaviour {
 
     /// <summary> put a silhouette of given tower on curser position </summary>
     public void StartTowerPlacement(Tower toPlaceTower, GameObject silhouette) {
-        placingActive = true;
-        towerToPlace = toPlaceTower;
-        towerSilhouette = Instantiate(silhouette, Vector3.zero, Quaternion.identity);
+        if (inBuildPhase) {
+            CancelTowerPlacement();
+            placingActive = true;
+            SellingActive = false;
+            towerToPlace = toPlaceTower;
+            towerSilhouette = Instantiate(silhouette, Vector3.zero, Quaternion.identity);
+        }
     }
 
     /// <summary> cancels placement and removes tower silhouette from curser </summary>
     public void CancelTowerPlacement() {
         placingActive = false;
-        Destroy(towerSilhouette);
+        if (towerSilhouette != null) {
+            Destroy(towerSilhouette);
+        }
+        towerToPlace = null;
+    }
+
+    public void StartSellMode() {
+        CancelTowerPlacement();
+        SellingActive = true;
+    }
+
+    public void CancelSellMode() {
+        SellingActive = false;
+    }
+
+    /// <summary> returns true if placing is active </summary>
+    /// <returns></returns>
+    public bool GetTurretPlaceStatus() {
+        return placingActive;
+    }
+
+    public bool GetSellStatus() {
+        return SellingActive;
     }
 }
