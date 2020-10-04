@@ -28,9 +28,10 @@ public class TowerUiController : MonoBehaviour {
         if (Input.GetMouseButtonDown(0) && !towerPlacer.GetTurretPlaceStatus()) {
             SelectTurret();
         }
-        if (Input.GetMouseButtonDown(1) && canvasTurretBuildMenue.transform.GetChild(2).gameObject.activeInHierarchy && towerPlacer.GetTurretPlaceStatus()) {
-            towerPlacer.CancelTowerPlacement();
+        if (Input.GetMouseButtonDown(1) && canvasTurretBuildMenue.transform.GetChild(1).gameObject.activeInHierarchy) {
+            CloseBuildUi();
         }
+
     }
 
 
@@ -42,11 +43,11 @@ public class TowerUiController : MonoBehaviour {
                 if (selectedTurret != null) {
                     UnSelectTurret();
                 }
-                Debug.Log("turret selected");
-
                 selectedTurret = hit.transform.gameObject;
                 Tower selecedTurretInformation = selectedTurret.GetComponent<Tower>();
+                // Range indicator
                 SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.range, 0.15f, Color.green);
+                // Turret highlight
                 SetCircleHighlight(hit.transform.GetChild(0).gameObject, hit.transform.lossyScale.x / 2, 0.2f, Color.yellow);
                 UpdateTurretUi(selecedTurretInformation);
             }
@@ -110,16 +111,21 @@ public class TowerUiController : MonoBehaviour {
     public void ExpandBuildUi() {
         canvasTurretBuildMenue.transform.GetChild(0).gameObject.SetActive(false);
         canvasTurretBuildMenue.transform.GetChild(1).gameObject.SetActive(true);
-        canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(true);
+        canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(false);
+        canvasTurretBuildMenue.transform.GetChild(3).gameObject.SetActive(true);
     }
 
     /// <summary> Closes build menue and cancels building prozess </summary>
     public void CloseBuildUi() {
         canvasTurretBuildMenue.transform.GetChild(0).gameObject.SetActive(true);
         canvasTurretBuildMenue.transform.GetChild(1).gameObject.SetActive(false);
-        canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(false);
+        canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(true);
+        canvasTurretBuildMenue.transform.GetChild(3).gameObject.SetActive(false);
         if (towerPlacer.GetTurretPlaceStatus()) {
             towerPlacer.CancelTowerPlacement();
+        }
+        if (towerPlacer.GetSellStatus()) {
+            towerPlacer.CancelSellMode();
         }
     }
 
@@ -127,6 +133,16 @@ public class TowerUiController : MonoBehaviour {
     /// <param name="newTower"></param>
     public void StartTowerPlacement(GameObject silhouette) {
         towerPlacer.StartTowerPlacement(silhouette.GetComponent<Tower>(), silhouette);
+    }
+
+    /// <summary> Starts placing of a new tower </summary>
+    /// <param name="newTower"></param>
+    public void StartTowerSelling() {
+        canvasTurretBuildMenue.transform.GetChild(0).gameObject.SetActive(false);
+        canvasTurretBuildMenue.transform.GetChild(1).gameObject.SetActive(true);
+        canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(false);
+        canvasTurretBuildMenue.transform.GetChild(3).gameObject.SetActive(false);
+        towerPlacer.StartSellMode();
     }
 
     #endregion

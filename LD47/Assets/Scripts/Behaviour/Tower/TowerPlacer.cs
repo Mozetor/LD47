@@ -22,6 +22,8 @@ public class TowerPlacer : MonoBehaviour {
     private bool placingActive;
     /// <summary> Is the game in the build phase </summary>
     private bool inBuildPhase;
+    /// <summary> Is the game in the build phase </summary>
+    private bool SellingActive;
     /// <summary> towers on map </summary>
     private readonly List<Tower> towers = new List<Tower>();
 
@@ -43,26 +45,23 @@ public class TowerPlacer : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-        // testing -->
-        if (Input.GetKey(KeyCode.B) && !placingActive && inBuildPhase) {
 
-            StartTowerPlacement(test, testIcon);
+
+        if (!inBuildPhase) {
             return;
         }
-        if (Input.GetMouseButtonDown(1)) {
-            CancelTowerPlacement();
-        }
-        // testing <--
-
-        if (!placingActive || !inBuildPhase) {
-            return;
-        }
-
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        MoveSilhouette(mousePosition);
-        if (CanPlaceTower(mousePosition) && Input.GetMouseButtonDown(0)) {
-            PlaceTower();
+        if (SellingActive && inBuildPhase && Input.GetMouseButton(0) && !placingActive) {
+            Vector3 cursorTile = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), 0);
+            SellTurret(cursorTile);
+        }
+
+        if (placingActive && inBuildPhase && !SellingActive) {
+            MoveSilhouette(mousePosition);
+            if (CanPlaceTower(mousePosition) && Input.GetMouseButtonDown(0)) {
+                PlaceTower();
+            }
         }
     }
 
@@ -95,13 +94,17 @@ public class TowerPlacer : MonoBehaviour {
 
     /// <summary> deconstructs turret, returns a part of its cost </summary>
     private void SellTurret(Vector3 targetPosition) {
+        Debug.Log("start selling");
         if (!(targetPosition == Vector3.zero)) {
+            Debug.Log("execute selling");
             for (int i = 0; i < towers.Count; i++) {
+                Debug.Log("start searching");
                 if (towers[i].transform.position == targetPosition) {
+                    Debug.Log("found");
                     city.Buy(Mathf.RoundToInt(-towers[i].cost * refundOnSell));
                     Tower towerToRemove = towers[i];
                     towers.Remove(towerToRemove);
-                    Destroy(towerToRemove);
+                    Destroy(towerToRemove.gameObject);
                     break;
                 }
             }
@@ -111,8 +114,8 @@ public class TowerPlacer : MonoBehaviour {
     /// <summary> Tests if position is viable for turret placement </summary>
     /// <returns></returns>
     private bool TestPosition(Vector3 screenPosition) {
-        Vector3 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
         if (/*!worldMap.IsPath(screenPosition.x, screenPosition.y)*/ true) {
+            Debug.LogWarning("turret placer is mising worldMap checks");
             Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
             for (int i = 0; i < towers.Count; i++) {
                 if (towers[i].transform.position == cursorTile) {
@@ -142,6 +145,7 @@ public class TowerPlacer : MonoBehaviour {
         if (inBuildPhase) {
             CancelTowerPlacement();
             placingActive = true;
+            SellingActive = false;
             towerToPlace = toPlaceTower;
             towerSilhouette = Instantiate(silhouette, Vector3.zero, Quaternion.identity);
         }
@@ -156,9 +160,22 @@ public class TowerPlacer : MonoBehaviour {
         towerToPlace = null;
     }
 
+    public void StartSellMode() {
+        CancelTowerPlacement();
+        SellingActive = true;
+    }
+
+    public void CancelSellMode() {
+        SellingActive = false;
+    }
+
     /// <summary> returns true if placing is active </summary>
     /// <returns></returns>
     public bool GetTurretPlaceStatus() {
         return placingActive;
+    }
+
+    public bool GetSellStatus() {
+        return SellingActive;
     }
 }
