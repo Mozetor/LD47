@@ -955,6 +955,10 @@ MonoBehaviour:
   tilePrefab: {fileID: 1477863280705776246, guid: cfb6ced8ba0007a42b4d1c138a75941a,
     type: 3}
   currentWorld: {fileID: 11400000, guid: 6afccd99113999a4291906155f0b4848, type: 2}
+  paths: {fileID: 11400000, guid: ca186a57f3ddbca47bf9c5f02750b146, type: 2}
+  waveData: {fileID: 11400000, guid: db6b6183ff325ef43a3fb7c9fff6c4ea, type: 2}
+  renderPaths: 0
+  measureWorldGenerationTime: 0
 --- !u!4 &452482476
 Transform:
   m_ObjectHideFlags: 0
