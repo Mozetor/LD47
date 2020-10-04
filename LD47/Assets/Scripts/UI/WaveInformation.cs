@@ -21,7 +21,6 @@ public class WaveInformation : MonoBehaviour {
     private void Start() {
         EnemyTypeTxt = enemyWaveInfoUi.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         EnemyAmountTxt = enemyWaveInfoUi.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        Debug.Log("found tmp:" + (EnemyTypeTxt != null) + (EnemyAmountTxt != null));
     }
 
     void UpdateUi(Wave wave) {
