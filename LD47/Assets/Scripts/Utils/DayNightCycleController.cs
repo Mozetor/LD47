@@ -23,12 +23,14 @@ namespace Utils {
         }
 
         IEnumerator Cycle(Light2D light, bool on) {
-            float currentDuration = 0;
-            while (currentDuration < duration) {
-                float value = Mathf.Lerp(0, 1, on ? currentDuration / duration : (duration - currentDuration) / duration);
-                light.intensity = value;
-                currentDuration += Time.deltaTime;
-                yield return null;
+            if (light != null) {
+                float currentDuration = 0;
+                while (currentDuration < duration) {
+                    float value = Mathf.Lerp(0, 1, on ? currentDuration / duration : (duration - currentDuration) / duration);
+                    light.intensity = Mathf.Clamp(value, .05f, 1f);
+                    currentDuration += Time.deltaTime;
+                    yield return null;
+                }
             }
         }
 

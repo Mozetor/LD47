@@ -7,15 +7,15 @@ namespace Sound {
 
         public AudioClip clipBeginning, clipEndless;
         public AudioMixerGroup mixerGroup;
-        public float fadeValue;
+        public float fadeValue = 1;
         private AudioSource source;
-        //private Options options;
+        private Options options;
 
         void Start() {
-            //options = OptionsController.instance.options;
+            options = OptionsController.instance.options;
             source = gameObject.AddComponent<AudioSource>();
             source.outputAudioMixerGroup = mixerGroup;
-            //source.volume = options.musicVolume * options.masterVolume;
+            source.volume = options.musicVolume * options.masterVolume;
             AudioUtils.SetAudioSource(source);
             if (clipBeginning != null) {
                 source.clip = clipBeginning;
@@ -24,7 +24,7 @@ namespace Sound {
         }
 
         void Update() {
-            //source.volume = options.musicVolume * options.masterVolume * fadeValue;
+            source.volume = options.musicVolume * options.masterVolume * fadeValue;
 
             if (!source.isPlaying) {
                 source.clip = clipEndless;

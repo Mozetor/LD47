@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
+using Utils;
 
 public class Tower : MonoBehaviour {
 
@@ -19,6 +21,13 @@ public class Tower : MonoBehaviour {
 
     private float currentAttackCooldown = 0;
 
+    private void Awake() {
+        FindObjectOfType<DayNightCycleController>().nightLights.Add(gameObject.GetComponent<Light2D>());
+    }
+
+    private void OnDestroy() {
+        FindObjectOfType<DayNightCycleController>().nightLights.Remove(gameObject.GetComponent<Light2D>());
+    }
 
     private void Update() {
         if (currentAttackCooldown > 0) {
