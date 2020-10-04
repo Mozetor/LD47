@@ -29,7 +29,7 @@ namespace Worldgeneration {
         public bool measureWorldGenerationTime;
 
         /// <summary> Dictionary of pixel definitions of current world. </summary>
-        private Dictionary<Color, PixelType> dic;
+        private Dictionary<Color, PixelType> colorTypeDic;
         /// <summary> Dictionary of type to sprites. </summary>
         private Dictionary<PixelType, List<Sprite>> typeSpritesDic;
         /// <summary> List of all layer types. </summary>
@@ -64,7 +64,7 @@ namespace Worldgeneration {
         /// <param name="y"> Y position of tile </param>
         /// <returns> Whether tile is path </returns>
         public bool IsPath(int x, int y) {
-            return GetPixelType(x, y) == PixelType.Path;
+            return GetPixelType(x, y) != PixelType.Grass;
         }
         /// <summary>
         /// Returns the pixel type at a given position.
@@ -73,9 +73,13 @@ namespace Worldgeneration {
         /// <param name="y"> Y position of tile </param>
         /// <returns> Type of the tile on lowest layer </returns>
         public PixelType GetPixelType(int x, int y) {
-            return pixelTypes[0][x, y];
+            var p = WorldToArrayPosition(x, y);
+            return pixelTypes[0][p.x, p.y];
         }
-
+        /// <summary>
+        /// Calculate all paths of the current world.
+        /// </summary>
+        /// <returns> All paths </returns>
         public List<Path> CalculatePaths() {
             var paths = new List<Path>();
 
@@ -86,15 +90,22 @@ namespace Worldgeneration {
 
             return paths;
         }
-
-
+        /// <summary>
+        /// Convertes a world position to a array position.
+        /// </summary>
+        /// <param name="x"> World position X </param>
+        /// <param name="y"> World position Y </param>
+        /// <returns></returns>
+        public (int x, int y) WorldToArrayPosition(int x, int y) {
+            return (x + currentWorld.worldSize.x / 2 - 1, y + currentWorld.worldSize.y / 2 - 1);
+        }
 
         /// <summary>
         /// Generate the world from textures.
         /// </summary>
         private void GenerateWorld() {
             typeSpritesDic = currentWorld.GetTypeSpriteDictionary();
-            dic = currentWorld.GetPixelDefDictionary();
+            colorTypeDic = currentWorld.GetPixelDefDictionary();
             pixelTypes = new List<PixelType[,]>();
 
             // Calculate the types for all layers.
@@ -115,10 +126,10 @@ namespace Worldgeneration {
             var t = new PixelType[currentWorld.worldSize.x, currentWorld.worldSize.y];
             for (int x = 0; x < currentWorld.worldSize.x; x++) {
                 for (int y = 0; y < currentWorld.worldSize.y; y++) {
-                    if (!dic.ContainsKey(ToNiceColor(texture.GetPixel(x, y)))) {
+                    if (!colorTypeDic.ContainsKey(ToNiceColor(texture.GetPixel(x, y)))) {
                         Debug.LogError("Texture '" + texture.name + "' contains color: " + ToNiceColor(texture.GetPixel(x, y)) + " at pos: " + (x, y));
                     }
-                    t[x, y] = dic[ToNiceColor(texture.GetPixel(x, y))];
+                    t[x, y] = colorTypeDic[ToNiceColor(texture.GetPixel(x, y))];
                 }
             }
             pixelTypes.Add(t);
