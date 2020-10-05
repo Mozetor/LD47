@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour {
         pos += ScreenSideScrolling();
         pos.x = Mathf.Clamp(pos.x + Input.GetAxis("Horizontal") * Time.deltaTime * cameraSpeed, -25, 25);
         pos.y = Mathf.Clamp(pos.y + Input.GetAxis("Vertical") * Time.deltaTime * cameraSpeed, -25, 25);
-        pos.z = Mathf.Clamp(pos.z + Input.mouseScrollDelta.y * Time.deltaTime * depthSidescrollSpeed, depthSidescrollLimit.x, depthSidescrollLimit.y);
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - Input.mouseScrollDelta.y * Time.deltaTime * depthSidescrollSpeed, depthSidescrollLimit.x, depthSidescrollLimit.y);
 
         transform.position = pos;
     }
