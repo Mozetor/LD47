@@ -98,9 +98,6 @@ public class TowerPlacer : MonoBehaviour {
         if (newTower.gameObject.GetComponent<LineRenderer>() != null) {
             newTower.gameObject.GetComponent<LineRenderer>().enabled = false;
         }
-        if (newTower.gameObject.transform.GetChild(0).GetComponent<LineRenderer>() != null) {
-            newTower.gameObject.transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
-        }
         towers.Add(newTower);
         StatsController.stats.moneyUsedForTurret += towerToPlace.cost;
         city.Buy(towerToPlace.cost);
