@@ -255,6 +255,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CityLight (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 5692529752942340004, guid: d3afdb3f8620d3a49bb7e65ae274362f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 8424842461428221806, guid: d3afdb3f8620d3a49bb7e65ae274362f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2509,6 +2514,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CityLight (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5692529752942340004, guid: d3afdb3f8620d3a49bb7e65ae274362f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 8424842461428221806, guid: d3afdb3f8620d3a49bb7e65ae274362f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3174,6 +3184,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CityLight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5692529752942340004, guid: d3afdb3f8620d3a49bb7e65ae274362f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 8424842461428221806, guid: d3afdb3f8620d3a49bb7e65ae274362f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3688,6 +3703,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CityLight (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692529752942340004, guid: d3afdb3f8620d3a49bb7e65ae274362f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8424842461428221806, guid: d3afdb3f8620d3a49bb7e65ae274362f,
         type: 3}
@@ -5375,7 +5395,7 @@ GameObject:
   - component: {fileID: 1562461168}
   - component: {fileID: 1562461167}
   - component: {fileID: 1562461166}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: City
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5822,6 +5842,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CityLight (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5692529752942340004, guid: d3afdb3f8620d3a49bb7e65ae274362f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 8424842461428221806, guid: d3afdb3f8620d3a49bb7e65ae274362f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5890,6 +5915,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CityLight (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692529752942340004, guid: d3afdb3f8620d3a49bb7e65ae274362f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8424842461428221806, guid: d3afdb3f8620d3a49bb7e65ae274362f,
         type: 3}
@@ -6541,6 +6571,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CityLight (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5692529752942340004, guid: d3afdb3f8620d3a49bb7e65ae274362f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     - target: {fileID: 8424842461428221806, guid: d3afdb3f8620d3a49bb7e65ae274362f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6764,7 +6799,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2003115646}
   - component: {fileID: 2003115647}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Lights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6895,6 +6930,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CityLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692529752942340004, guid: d3afdb3f8620d3a49bb7e65ae274362f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8424842461428221806, guid: d3afdb3f8620d3a49bb7e65ae274362f,
         type: 3}
