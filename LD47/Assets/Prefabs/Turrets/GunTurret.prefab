@@ -214,7 +214,7 @@ MonoBehaviour:
   cost: 150
   damage: 3
   range: 6
-  attackCooldown: 0.3
+  attackCooldown: 0.2
   targets: 00000000
   projectile: {fileID: 8319754320604176883, guid: 5c8f303e81e9afc439fbc554aba0039b,
     type: 3}
