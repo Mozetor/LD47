@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Gun Turret
-  cost: 150
+  cost: 120
   damage: 3
   range: 6
   attackCooldown: 0.2
