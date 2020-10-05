@@ -48,9 +48,19 @@ public class Tower : MonoBehaviour {
 
     private bool IsInRange(Enemy enemy) => Vector3.Distance(enemy.transform.position, this.transform.position) <= range;
 
+    private Vector3 GetPositionInFrontOfChildWithName(Enemy enemy, string name) {
+        for (int i = 0; i < enemy.transform.childCount; i++) {
+            if (enemy.transform.GetChild(i).name == name) {
+                var tran = enemy.transform.GetChild(i);
+                return tran.position + 0.5f * tran.up;
+            }
+        }
+        return enemy.transform.position;
+    }
+
     private IEnumerator Attack(Enemy target) {
         currentAttackCooldown = attackCooldown;
-        var forward = target.transform.position - this.transform.position;
+        var forward = GetPositionInFrontOfChildWithName(target, "Graphics") - this.transform.position;
 
         var startQuat = this.turretHead.rotation;
         var targetQuat = Quaternion.FromToRotation(Vector3.down, forward);
