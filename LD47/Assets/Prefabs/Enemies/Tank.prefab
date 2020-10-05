@@ -122,11 +122,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: ranged
   maxHealth: 20
-  range: 7.5
+  range: 6
   enemyType: 0
   speed: 2.5
   damage: 3
-  attackCooldown: 0.7
+  attackCooldown: 2
   cityController: {fileID: 0}
   paths: {fileID: 11400000, guid: ca186a57f3ddbca47bf9c5f02750b146, type: 2}
   graphics: {fileID: 8190565160991403675}

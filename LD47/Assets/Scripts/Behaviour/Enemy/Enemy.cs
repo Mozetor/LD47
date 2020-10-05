@@ -37,9 +37,10 @@ namespace Assets.Enemies {
 
         // Update is called once per frame
         public void Update() {
+#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.K))
                 Die();
-
+#endif
             if (Vector3.Distance(this.transform.position, path[pathIndex]) < pathContinueDistance && pathIndex + 1 < path.pathPoints.Count) {
                 pathIndex++;
             }
@@ -52,7 +53,8 @@ namespace Assets.Enemies {
                     currentAttackCooldown = attackCooldown;
                     Attack();
                 }
-            } else {
+            }
+            else {
                 var direction = (target - this.transform.position).normalized;
                 this.transform.position += direction * speed * Time.deltaTime;
                 graphics.rotation = Quaternion.FromToRotation(Vector3.up, direction);
@@ -69,7 +71,8 @@ namespace Assets.Enemies {
                 health = 0;
                 onHealthUpdated?.Invoke(health, maxHealth, damage);
                 Die();
-            } else {
+            }
+            else {
                 onHealthUpdated?.Invoke(health, maxHealth, damage);
             }
         }
