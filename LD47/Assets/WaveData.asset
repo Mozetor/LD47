@@ -23,48 +23,49 @@ MonoBehaviour:
     maxSimultaneousSpawns: 1
     timeBetweenSpawns: 0.25
     spawnDelay: 0
-  - name: BREACH THE WALLS
+  - name: Ranged Attack
     spawnGroups:
-    - name: Suicide Bomber
-      spawnable: {fileID: 7939490381341572151, guid: 727f3a35ad21ba54ca8bff8833db50f3,
+    - name: Tanks
+      spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
         type: 3}
-      amount: 6
+      amount: 4
     minSimultaneousSpawns: 1
     maxSimultaneousSpawns: 1
-    timeBetweenSpawns: 0.25
+    timeBetweenSpawns: 0.5
     spawnDelay: 0
   - name: Combined Power
     spawnGroups:
     - name: Infantery
       spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
         type: 3}
-      amount: 5
-    - name: Bomb Squad
+      amount: 6
+    - name: Tanks
+      spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
+        type: 3}
+      amount: 4
+    minSimultaneousSpawns: 1
+    maxSimultaneousSpawns: 2
+    timeBetweenSpawns: 0.4
+    spawnDelay: 0
+  - name: BREACH THE WALLS
+    spawnGroups:
+    - name: Suicide Squad
       spawnable: {fileID: 7939490381341572151, guid: 727f3a35ad21ba54ca8bff8833db50f3,
         type: 3}
       amount: 6
     minSimultaneousSpawns: 1
-    maxSimultaneousSpawns: 2
-    timeBetweenSpawns: 0.25
-    spawnDelay: 0
-  - name: Ranged Attack
-    spawnGroups:
-    - name: Tanks
-      spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
-        type: 3}
-      amount: 5
-    minSimultaneousSpawns: 1
-    maxSimultaneousSpawns: 0
+    maxSimultaneousSpawns: 3
     timeBetweenSpawns: 0.3
     spawnDelay: 0
   - name: Air Surveillance
     spawnGroups:
     - name: Drone
-      spawnable: {fileID: 0}
-      amount: 0
-    minSimultaneousSpawns: 0
-    maxSimultaneousSpawns: 0
-    timeBetweenSpawns: 0
+      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+        type: 3}
+      amount: 3
+    minSimultaneousSpawns: 1
+    maxSimultaneousSpawns: 2
+    timeBetweenSpawns: 0.5
     spawnDelay: 0
   - name: Air Support
     spawnGroups:
@@ -113,7 +114,7 @@ MonoBehaviour:
     - name: Artillery
       spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
         type: 3}
-      amount: 5
+      amount: 6
     - name: Bomber
       spawnable: {fileID: 7939490381341572151, guid: 727f3a35ad21ba54ca8bff8833db50f3,
         type: 3}
