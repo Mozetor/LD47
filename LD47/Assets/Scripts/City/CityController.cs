@@ -69,6 +69,9 @@ namespace City {
         public bool Buy(int moneyCost) {
             if (CanBuy(moneyCost)) {
                 money -= moneyCost;
+                if(moneyCost > 0) {
+                    StatsController.stats.allMoneyUsed += moneyCost;
+                }
                 UpdateUI();
                 return true;
             }
