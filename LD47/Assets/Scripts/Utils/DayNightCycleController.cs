@@ -16,7 +16,6 @@ namespace Utils {
 
         private void Start() {
             spawner = FindObjectOfType<BuildBattleSpawner>();
-
             dayLights.ForEach((l) => spawner.AddOnBuildPhaseStart(() => StartCoroutine(Cycle(l, true))));
             dayLights.ForEach((l) => spawner.AddOnBattlePhaseStart(() => StartCoroutine(Cycle(l, false))));
 

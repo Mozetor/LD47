@@ -120,11 +120,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c26666b3e029c04dad4842392c98aab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  enemyName: ranged
+  maxHealth: 20
   range: 7.5
   enemyType: 0
-  speed: 3
-  damage: 5
+  speed: 2.5
+  damage: 3
   attackCooldown: 0.7
   cityController: {fileID: 0}
   paths: {fileID: 11400000, guid: ca186a57f3ddbca47bf9c5f02750b146, type: 2}

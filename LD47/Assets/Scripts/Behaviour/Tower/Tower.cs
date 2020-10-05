@@ -60,7 +60,7 @@ public class Tower : MonoBehaviour {
             yield return new WaitForSeconds(0.001f);
         }
 
-        var lifetime = range / projectile.speed * 2;
+        var lifetime = 1.5f * range / projectile.speed;
 
         var proj = Instantiate(projectile, this.transform.position, Quaternion.identity);
         proj.direction = forward;

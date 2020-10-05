@@ -358,11 +358,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyName: suicide
-  maxHealth: 4
+  maxHealth: 5
   range: 2
   enemyType: 0
-  speed: 6
-  damage: 50
+  speed: 5
+  damage: 20
   attackCooldown: 0
   cityController: {fileID: 0}
   paths: {fileID: 11400000, guid: ca186a57f3ddbca47bf9c5f02750b146, type: 2}

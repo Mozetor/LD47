@@ -25,6 +25,9 @@ namespace City {
         [SerializeField]
         [Tooltip("Money cost to upgrade income")]
         private int upgradeCost = 50;
+        [SerializeField]
+        [Tooltip("Money cost increase on upgrade income")]
+        private int upgradeCostIncrease = 5;
 
         [Header("UI")]
         [Tooltip("Text to display money")]
@@ -54,6 +57,7 @@ namespace City {
             if (Buy(upgradeCost)) {
                 StatsController.stats.moneyUsedForIncome += upgradeCost;
                 moneyIncome += upgradeIncomeIncrease;
+                upgradeCost += upgradeCostIncrease;
                 UpdateUI();
             }
         }

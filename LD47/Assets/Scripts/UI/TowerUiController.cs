@@ -50,7 +50,7 @@ public class TowerUiController : MonoBehaviour {
                 selectedTurret = hit.transform.gameObject;
                 Tower selecedTurretInformation = selectedTurret.GetComponent<Tower>();
                 // Range indicator
-                SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.range, 0.15f, Color.green);
+                SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.range, 0.15f, new Color32(0, 191, 255, 255));
                 // Turret highlight
                 SetCircleHighlight(hit.transform.GetChild(0).gameObject, hit.transform.lossyScale.x / 2, 0.2f, Color.yellow);
             }
@@ -76,6 +76,8 @@ public class TowerUiController : MonoBehaviour {
             line.useWorldSpace = false;
             line.loop = true;
             line.positionCount = 180;
+        }
+        if (line.sharedMaterial == null) {
             line.material = new Material(Shader.Find("Sprites/Default"));
         }
         // check if radius or lineWidth have changed
@@ -125,6 +127,8 @@ public class TowerUiController : MonoBehaviour {
     /// <summary> Starts placing of a new tower </summary>
     /// <param name="newTower"></param>
     public void StartTowerPlacement(GameObject silhouette) {
+        // Range indicator
+        SetCircleHighlight(silhouette, silhouette.GetComponent<Tower>().range, 0.15f, new Color32(0, 191, 255, 255));
         towerPlacer.StartTowerPlacement(silhouette.GetComponent<Tower>(), silhouette);
     }
 
