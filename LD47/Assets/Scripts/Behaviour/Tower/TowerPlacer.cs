@@ -2,33 +2,31 @@
 using UnityEngine;
 using City;
 using Assets.WaveSpawner.Implementation;
-using System.Linq;
 using UnityEngine.EventSystems;
 using Stats;
 using Worldgeneration;
 
 public class TowerPlacer : MonoBehaviour {
 
-    public Tower test;
-
-    public GameObject testIcon;
-
     /// <summary> Main city </summary>
     private CityController city;
     /// <summary> World </summary>
     private WorldController worldController;
     /// <summary> Information of to placed tower </summary>
-    private Tower towerToPlace;
+    private IPlaceable objectToPlace;
     /// <summary> Main Camera </summary>
     private Camera mainCamera;
     /// <summary> Ghost blueprint to indicate placing position </summary>
     private GameObject towerSilhouette;
+    /// <summary>  </summary>
+    private GameObject prefab;
     /// <summary> Whenever turret silhouette should be active </summary>
     private bool placingActive;
     /// <summary> Is the game in the build phase </summary>
     private bool inBuildPhase;
     /// <summary> Is the game in the build phase </summary>
     private bool SellingActive;
+    // !!! TODO: remove !!!
     /// <summary> towers on map </summary>
     private readonly List<Tower> towers = new List<Tower>();
 
@@ -74,7 +72,7 @@ public class TowerPlacer : MonoBehaviour {
     /// <returns></returns>
     private bool CanPlaceTower(Vector3 screenPosition) {
         if (TestPosition(screenPosition)) {
-            if (city.CanBuy(towerToPlace.cost)) {
+            if (city.CanBuy(objectToPlace.GetCost())) {
                 ChangeSilhouetteColour(Color.green);
                 return true;
             }
@@ -93,14 +91,16 @@ public class TowerPlacer : MonoBehaviour {
     /// <returns></returns>
     private void PlaceTower() {
         Vector3 newPos = new Vector3(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y, 0);
-        Tower newTower = Instantiate(towerToPlace, newPos, Quaternion.identity);
+        GameObject newObject = Instantiate(objectToPlace.GetObject(), newPos, Quaternion.identity);
+        // !!! TODO: improve, move to IPlaceable !!! ->
         // Disable circle if it exists
-        if (newTower.gameObject.GetComponent<LineRenderer>() != null) {
-            newTower.gameObject.GetComponent<LineRenderer>().enabled = false;
+        if (newObject.GetComponent<LineRenderer>() != null) {
+            newObject.GetComponent<LineRenderer>().enabled = false;
         }
-        towers.Add(newTower);
-        StatsController.stats.moneyUsedForTurret += towerToPlace.cost;
-        city.Buy(towerToPlace.cost);
+        // towers.Add(newTower);
+        StatsController.stats.moneyUsedForTurret += objectToPlace.GetCost();
+        // <- !!!
+        city.Buy(objectToPlace.GetCost());
     }
 
     /// <summary> deconstructs turret, returns a part of its cost </summary>
@@ -147,12 +147,12 @@ public class TowerPlacer : MonoBehaviour {
     }
 
     /// <summary> put a silhouette of given tower on curser position </summary>
-    public void StartTowerPlacement(Tower toPlaceTower, GameObject silhouette) {
+    public void StartTowerPlacement(IPlaceable toPlaceObject, GameObject silhouette) {
         if (inBuildPhase) {
             CancelTowerPlacement();
             placingActive = true;
             SellingActive = false;
-            towerToPlace = toPlaceTower;
+            objectToPlace = toPlaceObject;
             towerSilhouette = Instantiate(silhouette, Vector3.zero, Quaternion.identity);
         }
     }
@@ -163,7 +163,7 @@ public class TowerPlacer : MonoBehaviour {
         if (towerSilhouette != null) {
             Destroy(towerSilhouette);
         }
-        towerToPlace = null;
+        objectToPlace = null;
     }
 
     public void StartSellMode() {

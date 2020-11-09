@@ -129,7 +129,7 @@ public class TowerUiController : MonoBehaviour {
     public void StartTowerPlacement(GameObject silhouette) {
         // Range indicator
         SetCircleHighlight(silhouette, silhouette.GetComponent<Tower>().range, 0.15f, new Color32(0, 191, 255, 255));
-        towerPlacer.StartTowerPlacement(silhouette.GetComponent<Tower>(), silhouette);
+        towerPlacer.StartTowerPlacement(silhouette.GetComponent<IPlaceable>(), silhouette);
     }
 
     /// <summary> Starts placing of a new tower </summary>
