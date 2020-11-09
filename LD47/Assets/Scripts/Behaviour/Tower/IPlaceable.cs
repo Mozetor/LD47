@@ -6,5 +6,5 @@ using UnityEngine;
 public interface IPlaceable {
     public int GetCost();
     public GameObject GetObject();
-    public void FinishPlacement(GameObject PlacedObject);
+    public void FinishPlacement(GameObject placedObject);
 }
