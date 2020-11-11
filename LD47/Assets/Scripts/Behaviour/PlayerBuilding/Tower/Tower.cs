@@ -90,7 +90,7 @@ namespace PlayerBuilding.Tower {
         }
 
         public void FinishPlacement(GameObject placedObject) {
-            PlayerBuildingPlacer.AddBuilding(this.gameObject);
+            PlayerBuildingPlacer.AddBuilding(placedObject);
         }
     }
 }
