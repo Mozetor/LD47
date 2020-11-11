@@ -6,77 +6,91 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using Utils;
 
-public class Tower : MonoBehaviour {
+namespace PlayerBuilding.Tower {
+    public class Tower : MonoBehaviour, IPlaceable {
 
-    private const int GROUNDED = 8;
-    private const int AIRBORNE = 9;
+        private const int GROUNDED = 8;
+        private const int AIRBORNE = 9;
 
-    public new string name;
-    public int cost;
-    public int damage;
-    public float range;
-    public float attackCooldown;
-    public List<EnemyType> targets;
-    public TowerProjectile projectile;
-    public Transform turretHead;
+        public new string name;
+        public int cost;
+        public int damage;
+        public float range;
+        public float attackCooldown;
+        public List<EnemyType> targets;
+        public TowerProjectile projectile;
+        public Transform turretHead;
 
-    private float currentAttackCooldown = 0;
+        private float currentAttackCooldown = 0;
 
-    private void Awake() {
-        FindObjectOfType<DayNightCycleController>().AddNightLight(gameObject.GetComponent<Light2D>());
-    }
-
-    private void Update() {
-        if (currentAttackCooldown > 0) {
-            currentAttackCooldown -= Time.deltaTime;
-            return;
+        private void Awake() {
+            FindObjectOfType<DayNightCycleController>().AddNightLight(gameObject.GetComponent<Light2D>());
         }
 
-        var enemies = FindObjectsOfType<Enemy>()
-            .Where(HasValidType)
-            .Where(IsInRange)
-            .ToList();
-
-        if (enemies.Count == 0)
-            return;
-
-        var target = enemies[0];
-        StartCoroutine(Attack(target));
-    }
-
-    private bool HasValidType(Enemy enemy) => targets.Contains(enemy.enemyType);
-
-    private bool IsInRange(Enemy enemy) => Vector3.Distance(enemy.transform.position, this.transform.position) <= range;
-
-    private Vector3 GetPositionInFrontOfChildWithName(Enemy enemy, string name) {
-        for (int i = 0; i < enemy.transform.childCount; i++) {
-            if (enemy.transform.GetChild(i).name == name) {
-                var tran = enemy.transform.GetChild(i);
-                return tran.position + 0.5f * tran.up;
+        private void Update() {
+            if (currentAttackCooldown > 0) {
+                currentAttackCooldown -= Time.deltaTime;
+                return;
             }
-        }
-        return enemy.transform.position;
-    }
 
-    private IEnumerator Attack(Enemy target) {
-        currentAttackCooldown = attackCooldown;
-        var forward = GetPositionInFrontOfChildWithName(target, "Graphics") - this.transform.position;
+            var enemies = FindObjectsOfType<Enemy>()
+                .Where(HasValidType)
+                .Where(IsInRange)
+                .ToList();
 
-        var startQuat = this.turretHead.rotation;
-        var targetQuat = Quaternion.FromToRotation(Vector3.down, forward);
+            if (enemies.Count == 0)
+                return;
 
-        for (int i = 0; i < 10; i++) {
-            this.turretHead.rotation = Quaternion.Lerp(startQuat, targetQuat, (i + 1) / 9f);
-            yield return new WaitForSeconds(0.001f);
+            var target = enemies[0];
+            StartCoroutine(Attack(target));
         }
 
-        var lifetime = 1.5f * range / projectile.speed;
+        private bool HasValidType(Enemy enemy) => targets.Contains(enemy.enemyType);
 
-        var proj = Instantiate(projectile, this.transform.position, Quaternion.identity);
-        proj.direction = forward;
-        proj.damage = damage;
-        proj.lifeTime = lifetime;
-        proj.enemyTypes = this.targets;
-        proj.gameObject.layer = targets.Contains(EnemyType.GROUNDED) ? GROUNDED : AIRBORNE;
+        private bool IsInRange(Enemy enemy) => Vector3.Distance(enemy.transform.position, this.transform.position) <= range;
+
+        private Vector3 GetPositionInFrontOfChildWithName(Enemy enemy, string name) {
+            for (int i = 0; i < enemy.transform.childCount; i++) {
+                if (enemy.transform.GetChild(i).name == name) {
+                    var tran = enemy.transform.GetChild(i);
+                    return tran.position + 0.5f * tran.up;
+                }
+            }
+            return enemy.transform.position;
+        }
+
+        private IEnumerator Attack(Enemy target) {
+            currentAttackCooldown = attackCooldown;
+            var forward = GetPositionInFrontOfChildWithName(target, "Graphics") - this.transform.position;
+
+            var startQuat = this.turretHead.rotation;
+            var targetQuat = Quaternion.FromToRotation(Vector3.down, forward);
+
+            for (int i = 0; i < 10; i++) {
+                this.turretHead.rotation = Quaternion.Lerp(startQuat, targetQuat, (i + 1) / 9f);
+                yield return new WaitForSeconds(0.001f);
+            }
+
+            var lifetime = 1.5f * range / projectile.speed;
+
+            var proj = Instantiate(projectile, this.transform.position, Quaternion.identity);
+            proj.direction = forward;
+            proj.damage = damage;
+            proj.lifeTime = lifetime;
+            proj.enemyTypes = this.targets;
+            proj.gameObject.layer = targets.Contains(EnemyType.GROUNDED) ? GROUNDED : AIRBORNE;
+        }
+
+        public int GetCost() {
+            return cost;
+        }
+
+        public GameObject GetObject() {
+            return this.gameObject;
+        }
+
+        public void FinishPlacement(GameObject placedObject) {
+            PlayerBuildingPlacer.AddBuilding(this.gameObject);
+        }
     }
 }

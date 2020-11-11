@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Assets.ToolTip.Implementation {
     public class TowerTooltipInfo : ToolTipInfo {
 
-        public Tower tower;
+        public PlayerBuilding.Tower.Tower tower;
 
 
         public override Color GetColor() => Color.white;
@@ -31,7 +31,8 @@ namespace Assets.ToolTip.Implementation {
                     1 / tower.attackCooldown,
                     rocket.explosionRange
                 );
-            } else {
+            }
+            else {
                 return string.Format(
                     "<b>{0}</b>\n" +
                     "cost:  {1}\n" +
@@ -52,7 +53,7 @@ namespace Assets.ToolTip.Implementation {
 
         public override bool ShowToolTip() => tower != null;
 
-        private string TargetsAsString(List<EnemyType> targets) => 
+        private string TargetsAsString(List<EnemyType> targets) =>
             targets
                 .Distinct()
                 .Select(TypeToString)

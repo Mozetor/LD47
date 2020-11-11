@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public interface IPlaceable {
-    public int GetCost();
-    public GameObject GetObject();
-    public void FinishPlacement(GameObject placedObject);
+namespace PlayerBuilding {
+    public interface IPlaceable {
+        int GetCost();
+        GameObject GetObject();
+        void FinishPlacement(GameObject placedObject);
+    }
 }
