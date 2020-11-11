@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -447,7 +447,7 @@ MonoBehaviour:
     spaceCount: 0
     wordCount: 1
     linkCount: 0
-    lineCount: 2
+    lineCount: 1
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -698,7 +698,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 18
+  m_fontSize: 31.75
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1298,7 +1298,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 12.85
+  m_fontSize: 22.65
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4293,9 +4293,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89e75f4c2273be4aba382c897e95668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: {fileID: 3388861179212404585, guid: 5c95a8f22d86f564cbbf0825d4fe68a7, type: 3}
-  testIcon: {fileID: 6600290358205818348, guid: 53c0f9bd16941fc4c98df0ce943936d0,
-    type: 3}
   refundOnSell: 0.7
 --- !u!4 &960924443
 Transform:
@@ -4779,7 +4776,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 10.9
+  m_fontSize: 19.25
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5009,7 +5006,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 12.3
+  m_fontSize: 21.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5840,7 +5837,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 9.5
+  m_fontSize: 16.75
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5926,7 +5923,7 @@ GameObject:
   - component: {fileID: 1461096900}
   - component: {fileID: 1461096899}
   m_Layer: 5
-  m_Name: ButtonAirTurret
+  m_Name: ButtonCivilBuilding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5960,10 +5957,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1461096897}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc375f677b77c6d4a833bee23359e75c, type: 3}
+  m_Script: {fileID: 11500000, guid: f258f177f587a17428bf4b322ca08cdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tower: {fileID: 3388861179212404585, guid: 5c95a8f22d86f564cbbf0825d4fe68a7, type: 3}
+  building: {fileID: 6875826029171155473, guid: 267aba3912ce3e946ae41ef77e8c7c19,
+    type: 3}
 --- !u!114 &1461096900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6011,7 +6009,7 @@ MonoBehaviour:
         m_MethodName: StartTowerPlacement
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 1124729191564016882, guid: 5c95a8f22d86f564cbbf0825d4fe68a7,
+          m_ObjectArgument: {fileID: 5096150346730417314, guid: 267aba3912ce3e946ae41ef77e8c7c19,
             type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
@@ -6038,7 +6036,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 00b2ccf709929418ebb9475b88fe3de1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 01f5028a8175e854785b38bafcda0bba, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -6978,7 +6976,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 6.15
+  m_fontSize: 10.9
   m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7134,7 +7132,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 12.3
+  m_fontSize: 21.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7633,7 +7631,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 7.2
+  m_fontSize: 12.7
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
