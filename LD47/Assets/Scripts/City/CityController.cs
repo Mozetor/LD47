@@ -20,14 +20,6 @@ namespace City {
         [Tooltip("Current money income")]
         private int moneyIncome = 100;
         [SerializeField]
-        [Tooltip("Money increase of upgrade")]
-        private int upgradeIncomeIncrease = 10;
-        [SerializeField]
-        [Tooltip("Money cost to upgrade income")]
-        private int upgradeCost = 50;
-        [SerializeField]
-        [Tooltip("Money cost increase on upgrade income")]
-        private int upgradeCostIncrease = 5;
 
         [Header("UI")]
         [Tooltip("Text to display money")]
@@ -51,16 +43,13 @@ namespace City {
 
 
         /// <summary>
-        /// Upgrade income if possible.
+        /// Upgrades income if possible.
         /// </summary>
-        public void UpgradeIncome() {
-            if (Buy(upgradeCost)) {
-                StatsController.stats.moneyUsedForIncome += upgradeCost;
-                moneyIncome += upgradeIncomeIncrease;
-                upgradeCost += upgradeCostIncrease;
-                UpdateUI();
-            }
+        public void UpgradeIncome(int increaseIncome) {
+            moneyIncome += increaseIncome;
+            UpdateUI();
         }
+
         /// <summary>
         /// Buy something for given amount if possible.
         /// </summary>
@@ -69,7 +58,7 @@ namespace City {
         public bool Buy(int moneyCost) {
             if (CanBuy(moneyCost)) {
                 money -= moneyCost;
-                if(moneyCost > 0) {
+                if (moneyCost > 0) {
                     StatsController.stats.allMoneyUsed += moneyCost;
                 }
                 UpdateUI();
@@ -108,14 +97,12 @@ namespace City {
         /// Update all values displayed in the UI.
         /// </summary>
         private void UpdateUI() {
-            if (!moneyText || !incomeText || !healthText || !upgradeIncomeIncreaseText || !upgradeCostText) {
+            if (!moneyText || !incomeText || !healthText) {
                 throw new ArgumentNullException("Some UI text components are not assigned!");
             }
             moneyText.text = money.ToString();
             incomeText.text = moneyIncome.ToString();
             healthText.text = health.ToString();
-            upgradeIncomeIncreaseText.text = upgradeIncomeIncrease.ToString();
-            upgradeCostText.text = upgradeCost.ToString();
         }
     }
 }

@@ -13,23 +13,23 @@ namespace PlayerBuilding {
         private CityController city;
         /// <summary> World </summary>
         private WorldController worldController;
-        /// <summary> Information of to placed tower </summary>
+        /// <summary> Information of to placed building </summary>
         private IPlaceable objectToPlace;
-        /// <summary> Main Camera </summary>
+        /// <summary> Main camera </summary>
         private Camera mainCamera;
         /// <summary> Ghost blueprint to indicate placing position </summary>
-        private GameObject towerSilhouette;
-        /// <summary> Whenever turret silhouette should be active </summary>
+        private GameObject buildingSilhouette;
+        /// <summary> Whenever building silhouette should be active </summary>
         private bool placingActive;
         /// <summary> Is the game in the build phase </summary>
         private bool inBuildPhase;
-        /// <summary> Is the game in the build phase </summary>
+        /// <summary> Is sell selected </summary>
         private bool SellingActive;
         // !!! TODO: remove !!!
-        /// <summary> towers on map </summary>
+        /// <summary> towers on map, !!! THIS SHOULDNT BE IN THE PLACER, REMOVE !!! </summary>
         private static readonly List<GameObject> playerBuildings = new List<GameObject>();
 
-        /// <summary> Percentage of what will be returned on turret selling, 1=100% </summary>
+        /// <summary> Percentage of money, that will be returned on building selling, 1=100% </summary>
         [Tooltip("Percentage of what will be returned on turret selling, 1=100%")]
         public float refundOnSell;
 
@@ -39,40 +39,45 @@ namespace PlayerBuilding {
             spawner.AddOnBuildPhaseEnd(() => { inBuildPhase = false; CancelTowerPlacement(); });
         }
 
-        // Start is called before the first frame update
         private void Start() {
             mainCamera = Camera.main;
             city = FindObjectOfType<CityController>();
             worldController = FindObjectOfType<WorldController>();
         }
 
-        // Update is called once per frame
         private void Update() {
             if (!inBuildPhase) {
                 return;
             }
 
             Vector3 mousePosition = mainCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 25));
-
+            // Checks if selling is active
             if (!EventSystem.current.IsPointerOverGameObject() && SellingActive && Input.GetMouseButton(0) && !placingActive) {
                 Vector3 cursorTile = new Vector3(Mathf.Round(mousePosition.x), Mathf.Round(mousePosition.y), 0);
                 SellTurret(cursorTile);
             }
-
+            // Checks if placing is active
             if (placingActive && !SellingActive) {
                 MoveSilhouette(mousePosition);
                 if (!EventSystem.current.IsPointerOverGameObject() && CanPlaceTower(mousePosition) && Input.GetMouseButtonDown(0)) {
-                    PlaceTower();
+                    PlaceBuilding();
                 }
             }
         }
 
+        /// <summary>
+        /// Add building to building list !!! THIS SHOULDNT BE IN THE PLACER, REMOVE !!! 
+        /// </summary>
+        /// <param name="newBuilding"></param>
         public static void AddBuilding(GameObject newBuilding) {
             playerBuildings.Add(newBuilding);
         }
 
-        /// <summary> Checks if tower can be placed </summary>
-        /// <returns></returns>
+        /// <summary>
+        /// Checks If building can be placedm, also changes colour accordingly
+        /// </summary>
+        /// <param name="screenPosition"></param>
+        /// <returns> If building ca be placed</returns>
         private bool CanPlaceTower(Vector3 screenPosition) {
             if (TestPosition(screenPosition)) {
                 if (city.CanBuy(objectToPlace.GetCost())) {
@@ -90,10 +95,11 @@ namespace PlayerBuilding {
             }
         }
 
-        /// <summary> Places tower into map </summary>
-        /// <returns></returns>
-        private void PlaceTower() {
-            Vector3 newPos = new Vector3(towerSilhouette.transform.position.x, towerSilhouette.transform.position.y, 0);
+        /// <summary>
+        /// Places building into map
+        /// </summary>
+        private void PlaceBuilding() {
+            Vector3 newPos = new Vector3(buildingSilhouette.transform.position.x, buildingSilhouette.transform.position.y, 0);
             GameObject newObject = Instantiate(objectToPlace.GetObject(), newPos, Quaternion.identity);
             if (newObject.GetComponent<LineRenderer>() != null) {
                 newObject.GetComponent<LineRenderer>().enabled = false;
@@ -102,12 +108,17 @@ namespace PlayerBuilding {
             city.Buy(objectToPlace.GetCost());
         }
 
-        /// <summary> deconstructs turret, returns a part of its cost </summary>
+        /// <summary>
+        /// Sell building and add part of its cost to city
+        /// </summary>
+        /// <param name="targetPosition"></param>
         private void SellTurret(Vector3 targetPosition) {
             if (!(targetPosition == Vector3.zero)) {
                 for (int i = 0; i < playerBuildings.Count; i++) {
                     if (playerBuildings[i].transform.position == targetPosition) {
-                        city.Buy(Mathf.RoundToInt(-playerBuildings[i].GetComponent<IPlaceable>().GetCost() * refundOnSell));
+                        IPlaceable buildingToSell = playerBuildings[i].GetComponent<IPlaceable>();
+                        city.Buy(Mathf.RoundToInt(-buildingToSell.GetCost() * refundOnSell));
+                        buildingToSell.PrepareRemoval();
                         GameObject buildingToRemove = playerBuildings[i];
                         playerBuildings.Remove(buildingToRemove);
                         Destroy(buildingToRemove.gameObject);
@@ -117,8 +128,11 @@ namespace PlayerBuilding {
             }
         }
 
-        /// <summary> Tests if position is viable for turret placement </summary>
-        /// <returns></returns>
+        /// <summary>
+        /// Tests if position is viable for buidling placement
+        /// </summary>
+        /// <param name="screenPosition"></param>
+        /// <returns> Position is viable</returns>
         private bool TestPosition(Vector3 screenPosition) {
             if (!worldController.IsPath(Mathf.RoundToInt(screenPosition.x), Mathf.RoundToInt(screenPosition.y))) {
                 Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
@@ -134,52 +148,74 @@ namespace PlayerBuilding {
             }
         }
 
-        /// <summary> Sets turret silhouette sprite colour </summary>
+        /// <summary>
+        /// Sets building silhouette sprite colour
+        /// </summary>
         /// <param name="color"></param>
         private void ChangeSilhouetteColour(Color color) {
-            towerSilhouette.transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
+            buildingSilhouette.transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
         }
 
-        /// <summary> changes turret silhouette position to curser position </summary>
+        /// <summary>
+        /// Moves building silhouette to curser position
+        /// </summary>
+        /// <param name="screenPosition"></param>
         private void MoveSilhouette(Vector3 screenPosition) {
-            towerSilhouette.transform.position = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
+            buildingSilhouette.transform.position = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
         }
 
-        /// <summary> put a silhouette of given tower on curser position </summary>
+        /// <summary>
+        /// Creates building Silhouette and starts placement
+        /// </summary>
+        /// <param name="toPlaceObject"></param>
         public void StartTowerPlacement(IPlaceable toPlaceObject) {
             if (inBuildPhase) {
                 CancelTowerPlacement();
                 placingActive = true;
                 SellingActive = false;
                 objectToPlace = toPlaceObject;
-                towerSilhouette = Instantiate(toPlaceObject.GetObject(), Vector3.zero, Quaternion.identity);
+                buildingSilhouette = Instantiate(toPlaceObject.GetObject(), Vector3.zero, Quaternion.identity);
             }
         }
 
-        /// <summary> cancels placement and removes tower silhouette from curser </summary>
+        /// <summary>
+        /// Cancels building placement and removes silhouette from curser
+        /// </summary>
         public void CancelTowerPlacement() {
             placingActive = false;
-            if (towerSilhouette != null) {
-                Destroy(towerSilhouette);
+            if (buildingSilhouette != null) {
+                Destroy(buildingSilhouette);
             }
             objectToPlace = null;
         }
 
+        /// <summary>
+        /// Start sell mode and cancels placement if enabeled
+        /// </summary>
         public void StartSellMode() {
             CancelTowerPlacement();
             SellingActive = true;
         }
 
+        /// <summary>
+        /// Stops sellmode
+        /// </summary>
         public void CancelSellMode() {
             SellingActive = false;
         }
 
-        /// <summary> returns true if placing is active </summary>
+        /// <summary>
+        /// Returns if placer is in place mode
+        /// </summary>
         /// <returns></returns>
         public bool GetTurretPlaceStatus() {
             return placingActive;
         }
 
+        /// <summary>
+        /// Returns if placer is in sell mode
+        /// </summary>
+        /// <returns></returns>
         public bool GetSellStatus() {
             return SellingActive;
         }

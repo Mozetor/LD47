@@ -12,13 +12,21 @@ namespace PlayerBuilding.Tower {
         private const int GROUNDED = 8;
         private const int AIRBORNE = 9;
 
+        /// <summary> Building name </summary>
         public new string name;
+        /// <summary> Building Cost </summary>
         public int cost;
+        /// <summary> Tower damage </summary>
         public int damage;
+        /// <summary> Tower range </summary>
         public float range;
+        /// <summary> Time between attacks </summary>
         public float attackCooldown;
+        /// <summary> Enemys </summary>
         public List<EnemyType> targets;
+        /// <summary> Projectile type </summary>
         public TowerProjectile projectile;
+        /// <summary> Tower head </summary>
         public Transform turretHead;
 
         private float currentAttackCooldown = 0;
@@ -81,6 +89,7 @@ namespace PlayerBuilding.Tower {
             proj.gameObject.layer = targets.Contains(EnemyType.GROUNDED) ? GROUNDED : AIRBORNE;
         }
 
+        #region IPlaceableImplementation
         public int GetCost() {
             return cost;
         }
@@ -92,5 +101,17 @@ namespace PlayerBuilding.Tower {
         public void FinishPlacement(GameObject placedObject) {
             PlayerBuildingPlacer.AddBuilding(placedObject);
         }
+
+        public void PrepareRemoval() {
+        }
+
+        public bool CanUpgrade() {
+            throw new System.NotImplementedException();
+        }
+
+        public void Upgrade() {
+            throw new System.NotImplementedException();
+        }
+        #endregion
     }
 }

@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 6875826029171155473}
   - component: {fileID: -1405958160402452516}
   m_Layer: 12
-  m_Name: Placeholder EcoBuilding
+  m_Name: Placeholder EcoMoneyBuilding
   m_TagString: Tower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -237,6 +237,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: placeholderEco
   cost: 10
+  resourceAmount: 10
+  resourceType: 0
 --- !u!114 &-1405958160402452516
 MonoBehaviour:
   m_ObjectHideFlags: 0
