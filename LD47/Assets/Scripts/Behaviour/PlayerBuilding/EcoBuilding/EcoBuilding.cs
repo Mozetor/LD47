@@ -9,29 +9,14 @@ namespace PlayerBuilding.EcoBuilding {
         /// <summary> Building name </summary>
         public new string name;
         /// <summary> Building Cost </summary>
-        public int cost;
+        public BuildResource[] cost;
 
-        /// <summary> Amount of resources </summary>
-        public int resourceAmount;
-        /// <summary> Type of resource </summary>
-        public ResourceType resourceType;
+        /// <summary> Amount of resources added by this building </summary>
+        public BuildResource resourceGenerated;
 
-        private void Produce(int amount) {
-
-            switch (resourceType) {
-                case ResourceType.MONEY:
-                    FindObjectOfType<CityController>().UpgradeIncome(amount);
-                    break;
-                case ResourceType.WOOD:
-                    Debug.LogWarning("Wood not implemented!");
-                    break;
-                default:
-                    throw new System.ArgumentException("ResourceType " + resourceType + " not found");
-            }
-        }
 
         #region IPlaceableImplementation
-        public int GetCost() {
+        public BuildResource[] GetCost() {
             return cost;
         }
 
@@ -41,10 +26,10 @@ namespace PlayerBuilding.EcoBuilding {
 
         public void FinishPlacement(GameObject placedObject) {
             PlayerBuildingPlacer.AddBuilding(placedObject);
-            Produce(resourceAmount);
+            FindObjectOfType<CityController>().IncreaseIncome(resourceGenerated);
         }
         public void PrepareRemoval() {
-            Produce(-resourceAmount);
+            FindObjectOfType<CityController>().DecreaseIncome(resourceGenerated);
         }
 
         public bool CanUpgrade() {

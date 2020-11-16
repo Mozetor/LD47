@@ -80,7 +80,7 @@ namespace PlayerBuilding {
         /// <returns> If building ca be placed</returns>
         private bool CanPlaceTower(Vector3 screenPosition) {
             if (TestPosition(screenPosition)) {
-                if (city.CanBuy(objectToPlace.GetCost())) {
+                if (city.CanBuyByCost(objectToPlace.GetCost())) {
                     ChangeSilhouetteColour(Color.green);
                     return true;
                 }
@@ -117,7 +117,7 @@ namespace PlayerBuilding {
                 for (int i = 0; i < playerBuildings.Count; i++) {
                     if (playerBuildings[i].transform.position == targetPosition) {
                         IPlaceable buildingToSell = playerBuildings[i].GetComponent<IPlaceable>();
-                        city.Buy(Mathf.RoundToInt(-buildingToSell.GetCost() * refundOnSell));
+                        city.AddResource(buildingToSell.GetCost(), refundOnSell);
                         buildingToSell.PrepareRemoval();
                         GameObject buildingToRemove = playerBuildings[i];
                         playerBuildings.Remove(buildingToRemove);

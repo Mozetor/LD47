@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Economy;
 
 namespace PlayerBuilding {
     public interface IPlaceable {
@@ -8,7 +9,7 @@ namespace PlayerBuilding {
         /// Returns cost.
         /// </summary>
         /// <returns>Cost</returns>
-        int GetCost();
+        BuildResource[] GetCost();
         /// <summary>
         /// Returns the gameObject from this building.
         /// </summary>

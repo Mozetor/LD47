@@ -236,9 +236,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: placeholderEco
-  cost: 10
-  resourceAmount: 10
-  resourceType: 0
+  cost:
+  - resourceAmount: 10
+    resourceType: 0
+  resourceGenerated:
+    resourceAmount: 10
+    resourceType: 0
 --- !u!114 &-1405958160402452516
 MonoBehaviour:
   m_ObjectHideFlags: 0

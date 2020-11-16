@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using Utils;
+using Economy;
 
 namespace PlayerBuilding.Tower {
     public class Tower : MonoBehaviour, IPlaceable {
@@ -15,7 +16,7 @@ namespace PlayerBuilding.Tower {
         /// <summary> Building name </summary>
         public new string name;
         /// <summary> Building Cost </summary>
-        public int cost;
+        public BuildResource[] cost;
         /// <summary> Tower damage </summary>
         public int damage;
         /// <summary> Tower range </summary>
@@ -90,7 +91,7 @@ namespace PlayerBuilding.Tower {
         }
 
         #region IPlaceableImplementation
-        public int GetCost() {
+        public BuildResource[] GetCost() {
             return cost;
         }
 

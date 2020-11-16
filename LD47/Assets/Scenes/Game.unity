@@ -5477,9 +5477,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1c94b4ad3624ca4fb4045cc78b5cfe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  money: 350
   health: 100
-  moneyIncome: 80
+  resources:
+  - resourceAmount: 300
+    resourceType: 0
+  - resourceAmount: 0
+    resourceType: 1
+  resourceIncome:
+  - resourceAmount: 80
+    resourceType: 0
+  - resourceAmount: 0
+    resourceType: 1
   moneyText: {fileID: 951613156}
   incomeText: {fileID: 611426194}
   healthText: {fileID: 1238998284}
