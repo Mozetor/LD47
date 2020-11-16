@@ -91,6 +91,11 @@ namespace PlayerBuilding.Tower {
         }
 
         #region IPlaceableImplementation
+
+        public string GetName() {
+            return name;
+        }
+
         public BuildResource[] GetCost() {
             return cost;
         }

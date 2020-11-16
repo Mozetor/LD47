@@ -1,6 +1,8 @@
 ﻿using Assets.WaveSpawner.Implementation;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace PlayerBuilding {
     public class TowerUiController : MonoBehaviour {
@@ -13,8 +15,15 @@ namespace PlayerBuilding {
         /// <summary> Ui of building placement selection </summary>
         public GameObject canvasTurretBuildMenue;
 
-        /// <summary> Activeley selected turret </summary>
-        private GameObject selectedTurret;
+        /// <summary> Ui of selected turret </summary>
+        public GameObject canvasTurretSelection;
+        /// <summary> If turret ui is already updated </summary>
+        private bool updatedTowerUi;
+
+        /// <summary> Activeley selected building </summary>
+        private GameObject selectedBuilding;
+        /// <summary> Contains info and methods to manipulate selected building </summary>
+        private IPlaceable selectedPlaceable;
 
         private void Awake() {
             var spawner = FindObjectOfType<BuildBattleSpawner>();
@@ -29,18 +38,21 @@ namespace PlayerBuilding {
 
         // Update is called once per frame
         void Update() {
-            if (Input.GetMouseButtonDown(0) && !towerPlacer.GetTurretPlaceStatus()) {
+            if (Input.GetMouseButtonDown(0) && !towerPlacer.GetTurretPlaceStatus() && !EventSystem.current.IsPointerOverGameObject()) {
                 SelectTurret();
             }
             if (Input.GetMouseButtonDown(1) && canvasTurretBuildMenue.transform.GetChild(1).gameObject.activeInHierarchy) {
                 CloseBuildUi();
+            }
+            if (selectedBuilding != null) {
+                UpdateTowerUi();
             }
 
         }
 
 
         public void SelectTurret() {
-            if (selectedTurret != null) {
+            if (selectedBuilding != null) {
                 UnSelectTurret();
             }
             Ray mouseRay = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -48,9 +60,11 @@ namespace PlayerBuilding {
             Vector3 positionOnZ0 = mouseRay.origin - Camera.main.transform.position.z * mouseRay.direction / mouseRay.direction.z;
             if (!EventSystem.current.IsPointerOverGameObject() && (hit = Physics2D.Linecast(positionOnZ0, positionOnZ0, LayerMask.GetMask("Tower")))) {
                 if (hit.transform.CompareTag("Tower")) {
-                    selectedTurret = hit.transform.gameObject;
-                    if (selectedTurret.GetComponent<Tower.Tower>() != null) {
-                        Tower.Tower selecedTurretInformation = selectedTurret.GetComponent<Tower.Tower>();
+                    selectedBuilding = hit.transform.gameObject;
+                    canvasTurretSelection.SetActive(true);
+                    selectedPlaceable = selectedBuilding.GetComponent<IPlaceable>();
+                    if (selectedBuilding.GetComponent<Tower.Tower>() != null) {
+                        Tower.Tower selecedTurretInformation = selectedBuilding.GetComponent<Tower.Tower>();
                         // Range indicator
                         SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.range, 0.15f, new Color32(0, 191, 255, 255));
                     }
@@ -62,13 +76,16 @@ namespace PlayerBuilding {
 
 
         private void UnSelectTurret() {
-            if (selectedTurret.GetComponent<LineRenderer>() != null) {
-                selectedTurret.GetComponent<LineRenderer>().enabled = false;
+            if (selectedBuilding.GetComponent<LineRenderer>() != null) {
+                selectedBuilding.GetComponent<LineRenderer>().enabled = false;
             }
-            if (selectedTurret.transform.GetChild(0).GetComponent<LineRenderer>() != null) {
-                selectedTurret.transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
+            if (selectedBuilding.transform.GetChild(0).GetComponent<LineRenderer>() != null) {
+                selectedBuilding.transform.GetChild(0).GetComponent<LineRenderer>().enabled = false;
             }
-            selectedTurret = null;
+            updatedTowerUi = false;
+            selectedBuilding = null;
+            selectedPlaceable = null;
+            canvasTurretSelection.SetActive(false);
         }
 
         private void SetCircleHighlight(GameObject go, float radius, float lineWidth, Color color) {
@@ -100,6 +117,22 @@ namespace PlayerBuilding {
                     circlePoints[i] = new Vector3(Mathf.Sin(Mathf.Deg2Rad * i * 2) * radius, Mathf.Cos(Mathf.Deg2Rad * i * 2) * radius, -0.1f);
                 }
                 line.SetPositions(circlePoints);
+            }
+        }
+
+        private void UpdateTowerUi() {
+            if (!updatedTowerUi) {
+                canvasTurretSelection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = selectedPlaceable.GetName();
+                // show tower stats here
+                updatedTowerUi = true;
+            }
+            // !!! CAN BE IMPROVED !!!
+            // CanUpgrade should be called only once per day, not on update
+            if (selectedPlaceable.CanUpgrade()) {
+                canvasTurretSelection.transform.GetChild(2).GetComponent<Image>().color = Color.green;
+            }
+            else {
+                canvasTurretSelection.transform.GetChild(2).GetComponent<Image>().color = Color.red;
             }
         }
 
@@ -145,6 +178,13 @@ namespace PlayerBuilding {
             canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(false);
             canvasTurretBuildMenue.transform.GetChild(3).gameObject.SetActive(false);
             towerPlacer.StartSellMode();
+        }
+
+        /// <summary> Upgrades selected building if possible </summary>
+        public void UpgradeSelectedBuilding() {
+            if (selectedPlaceable.CanUpgrade()) {
+                selectedPlaceable.Upgrade();
+            }
         }
 
         #endregion

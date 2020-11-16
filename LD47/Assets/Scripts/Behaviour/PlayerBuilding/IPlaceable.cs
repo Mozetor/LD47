@@ -6,6 +6,11 @@ using Economy;
 namespace PlayerBuilding {
     public interface IPlaceable {
         /// <summary>
+        /// Returns building name.
+        /// </summary>
+        /// <returns>Cost</returns>
+        string GetName();
+        /// <summary>
         /// Returns cost.
         /// </summary>
         /// <returns>Cost</returns>

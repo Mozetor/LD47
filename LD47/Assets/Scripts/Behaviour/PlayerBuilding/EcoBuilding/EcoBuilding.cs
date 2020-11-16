@@ -4,20 +4,28 @@ using UnityEngine;
 using Economy;
 using City;
 
+
+
 namespace PlayerBuilding.EcoBuilding {
     public class EcoBuilding : MonoBehaviour, IPlaceable {
         /// <summary> Building name </summary>
         public new string name;
         /// <summary> Building Cost </summary>
-        public BuildResource[] cost;
+        public BuildCost[] cost;
+        /// <summary> Amount of resources added by this building, by level </summary>
+        public BuildResource[] resourceGenerated;
 
-        /// <summary> Amount of resources added by this building </summary>
-        public BuildResource resourceGenerated;
-
+        /// <summary> Current level of building </summary>
+        private int buildingLevel;
 
         #region IPlaceableImplementation
+
+        public string GetName() {
+            return name;
+        }
+
         public BuildResource[] GetCost() {
-            return cost;
+            return cost[buildingLevel].ResourceCost;
         }
 
         public GameObject GetObject() {
@@ -26,18 +34,32 @@ namespace PlayerBuilding.EcoBuilding {
 
         public void FinishPlacement(GameObject placedObject) {
             PlayerBuildingPlacer.AddBuilding(placedObject);
-            FindObjectOfType<CityController>().IncreaseIncome(resourceGenerated);
+            FindObjectOfType<CityController>().IncreaseIncome(resourceGenerated[buildingLevel]);
         }
         public void PrepareRemoval() {
-            FindObjectOfType<CityController>().DecreaseIncome(resourceGenerated);
+            FindObjectOfType<CityController>().DecreaseIncome(resourceGenerated[buildingLevel]);
         }
 
         public bool CanUpgrade() {
-            throw new System.NotImplementedException();
+            if (buildingLevel + 1 < cost.Length) {
+                if (FindObjectOfType<CityController>().CanBuyByCost(cost[buildingLevel + 1].ResourceCost)) {
+                    return true;
+                }
+                else return false;
+            }
+            else return false;
         }
 
         public void Upgrade() {
-            throw new System.NotImplementedException();
+            if (buildingLevel + 1 >= cost.Length) {
+                throw new System.ArgumentException("Tried to upgrade past maximum building level");
+            }
+            // change spirte
+            CityController city = FindObjectOfType<CityController>();
+            city.Buy(cost[buildingLevel + 1].ResourceCost);
+            city.DecreaseIncome(resourceGenerated[buildingLevel]);
+            buildingLevel++;
+            city.IncreaseIncome(resourceGenerated[buildingLevel]);
         }
         #endregion
     }
