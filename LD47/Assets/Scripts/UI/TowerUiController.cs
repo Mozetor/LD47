@@ -128,11 +128,17 @@ namespace PlayerBuilding {
             }
             // !!! CAN BE IMPROVED !!!
             // CanUpgrade should be called only once per day, not on update
-            if (selectedPlaceable.CanUpgrade()) {
-                canvasTurretSelection.transform.GetChild(2).GetComponent<Image>().color = Color.green;
+            if (!selectedPlaceable.IsMaxUpgrade()) {
+                canvasTurretSelection.transform.GetChild(2).gameObject.SetActive(true);
+                if (selectedPlaceable.CanUpgrade()) {
+                    canvasTurretSelection.transform.GetChild(2).GetComponent<Image>().color = Color.green;
+                }
+                else {
+                    canvasTurretSelection.transform.GetChild(2).GetComponent<Image>().color = Color.red;
+                }
             }
             else {
-                canvasTurretSelection.transform.GetChild(2).GetComponent<Image>().color = Color.red;
+                canvasTurretSelection.transform.GetChild(2).gameObject.SetActive(false);
             }
         }
 

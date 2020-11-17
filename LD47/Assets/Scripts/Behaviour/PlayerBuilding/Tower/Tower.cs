@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using Utils;
 using Economy;
+using City;
 
 namespace PlayerBuilding.Tower {
     public class Tower : MonoBehaviour, IPlaceable {
@@ -16,7 +17,7 @@ namespace PlayerBuilding.Tower {
         /// <summary> Building name </summary>
         public new string name;
         /// <summary> Building Cost </summary>
-        public BuildResource[] cost;
+        public BuildCost[] cost;
         /// <summary> Tower damage </summary>
         public int damage;
         /// <summary> Tower range </summary>
@@ -29,6 +30,9 @@ namespace PlayerBuilding.Tower {
         public TowerProjectile projectile;
         /// <summary> Tower head </summary>
         public Transform turretHead;
+
+        /// <summary> Current level of building </summary>
+        private int buildingLevel;
 
         private float currentAttackCooldown = 0;
 
@@ -97,7 +101,7 @@ namespace PlayerBuilding.Tower {
         }
 
         public BuildResource[] GetCost() {
-            return cost;
+            return cost[buildingLevel].ResourceCost;
         }
 
         public GameObject GetObject() {
@@ -112,11 +116,30 @@ namespace PlayerBuilding.Tower {
         }
 
         public bool CanUpgrade() {
-            throw new System.NotImplementedException();
+            if (buildingLevel + 1 < cost.Length) {
+                if (FindObjectOfType<CityController>().CanBuyByCost(cost[buildingLevel + 1].ResourceCost)) {
+                    return true;
+                }
+                else return false;
+            }
+            else return false;
         }
 
         public void Upgrade() {
-            throw new System.NotImplementedException();
+            if (buildingLevel + 1 >= cost.Length) {
+                throw new System.ArgumentException("Tried to upgrade past maximum building level");
+            }
+            // change spirte
+            CityController city = FindObjectOfType<CityController>();
+            city.Buy(cost[buildingLevel + 1].ResourceCost);
+            buildingLevel++;
+        }
+
+        public bool IsMaxUpgrade() {
+            if (buildingLevel + 1 == cost.Length) {
+                return true;
+            }
+            else return false;
         }
         #endregion
     }

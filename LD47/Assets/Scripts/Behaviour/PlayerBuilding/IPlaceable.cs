@@ -36,5 +36,9 @@ namespace PlayerBuilding {
         /// Upgrades Building to next level.
         /// </summary>
         void Upgrade();
+        /// <summary>
+        /// Returns true if Building can no longer be upgraded.
+        /// </summary>
+        bool IsMaxUpgrade();
     }
 }

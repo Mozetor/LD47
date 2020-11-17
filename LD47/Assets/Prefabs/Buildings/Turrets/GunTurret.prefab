@@ -212,8 +212,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Gun Turret
   cost:
-  - resourceAmount: 120
-    resourceType: 0
+  - ResourceCost:
+    - resourceAmount: 120
+      resourceType: 0
+  - ResourceCost:
+    - resourceAmount: 40
+      resourceType: 0
+  - ResourceCost:
+    - resourceAmount: 60
+      resourceType: 0
   damage: 3
   range: 6
   attackCooldown: 0.2

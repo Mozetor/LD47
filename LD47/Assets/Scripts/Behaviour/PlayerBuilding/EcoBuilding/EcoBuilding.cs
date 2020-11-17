@@ -36,6 +36,7 @@ namespace PlayerBuilding.EcoBuilding {
             PlayerBuildingPlacer.AddBuilding(placedObject);
             FindObjectOfType<CityController>().IncreaseIncome(resourceGenerated[buildingLevel]);
         }
+
         public void PrepareRemoval() {
             FindObjectOfType<CityController>().DecreaseIncome(resourceGenerated[buildingLevel]);
         }
@@ -60,6 +61,13 @@ namespace PlayerBuilding.EcoBuilding {
             city.DecreaseIncome(resourceGenerated[buildingLevel]);
             buildingLevel++;
             city.IncreaseIncome(resourceGenerated[buildingLevel]);
+        }
+
+        public bool IsMaxUpgrade() {
+            if (buildingLevel + 1 == cost.Length) {
+                return true;
+            }
+            else return false;
         }
         #endregion
     }
