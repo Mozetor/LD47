@@ -40,5 +40,9 @@ namespace PlayerBuilding {
         /// Returns true if Building can no longer be upgraded.
         /// </summary>
         bool IsMaxUpgrade();
+        /// <summary>
+        /// Returns current Building upgrade level.
+        /// </summary>
+        int GetBuildingLevel();
     }
 }

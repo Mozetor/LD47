@@ -66,7 +66,7 @@ namespace PlayerBuilding {
                     if (selectedBuilding.GetComponent<Tower.Tower>() != null) {
                         Tower.Tower selecedTurretInformation = selectedBuilding.GetComponent<Tower.Tower>();
                         // Range indicator
-                        SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.range, 0.15f, new Color32(0, 191, 255, 255));
+                        SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.towerDamageData[selecedTurretInformation.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
                     }
                     // Turret highlight
                     SetCircleHighlight(hit.transform.GetChild(0).gameObject, hit.transform.lossyScale.x / 2, 0.2f, Color.yellow);
@@ -171,7 +171,8 @@ namespace PlayerBuilding {
         public void StartTowerPlacement(GameObject silhouette) {
             // Range indicator
             if (silhouette.GetComponent<Tower.Tower>() != null) {
-                SetCircleHighlight(silhouette, silhouette.GetComponent<Tower.Tower>().range, 0.15f, new Color32(0, 191, 255, 255));
+                var tower = silhouette.GetComponent<Tower.Tower>();
+                SetCircleHighlight(silhouette, tower.towerDamageData[tower.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
             }
             towerPlacer.StartTowerPlacement(silhouette.GetComponent<IPlaceable>());
         }
@@ -190,6 +191,11 @@ namespace PlayerBuilding {
         public void UpgradeSelectedBuilding() {
             if (selectedPlaceable.CanUpgrade()) {
                 selectedPlaceable.Upgrade();
+                if (selectedBuilding.GetComponent<Tower.Tower>() != null) {
+                    Tower.Tower selecedTurretInformation = selectedBuilding.GetComponent<Tower.Tower>();
+                    // Range indicator
+                    SetCircleHighlight(selecedTurretInformation.transform.gameObject, selecedTurretInformation.towerDamageData[selecedTurretInformation.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
+                }
             }
         }
 

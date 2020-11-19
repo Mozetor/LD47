@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Economy;
 using City;
-
-
+using Utils;
+using UnityEngine.Experimental.Rendering.Universal;
 
 namespace PlayerBuilding.EcoBuilding {
     public class EcoBuilding : MonoBehaviour, IPlaceable {
@@ -17,6 +17,13 @@ namespace PlayerBuilding.EcoBuilding {
 
         /// <summary> Current level of building </summary>
         private int buildingLevel;
+
+        private void Awake() {
+            FindObjectOfType<DayNightCycleController>().AddNightLight(gameObject.GetComponent<Light2D>());
+            if (cost.Length != resourceGenerated.Length) {
+                throw new System.ArgumentException("Upgrade arrays must have same lenght!");
+            }
+        }
 
         #region IPlaceableImplementation
 
@@ -68,6 +75,10 @@ namespace PlayerBuilding.EcoBuilding {
                 return true;
             }
             else return false;
+        }
+
+        public int GetBuildingLevel() {
+            return buildingLevel;
         }
         #endregion
     }

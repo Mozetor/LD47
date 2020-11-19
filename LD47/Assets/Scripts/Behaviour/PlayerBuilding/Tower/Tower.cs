@@ -18,12 +18,8 @@ namespace PlayerBuilding.Tower {
         public new string name;
         /// <summary> Building Cost </summary>
         public BuildCost[] cost;
-        /// <summary> Tower damage </summary>
-        public int damage;
-        /// <summary> Tower range </summary>
-        public float range;
-        /// <summary> Time between attacks </summary>
-        public float attackCooldown;
+        /// <summary> Contains tower damage, range and cooldown </summary>
+        public TowerDamageData[] towerDamageData;
         /// <summary> Enemys </summary>
         public List<EnemyType> targets;
         /// <summary> Projectile type </summary>
@@ -38,6 +34,9 @@ namespace PlayerBuilding.Tower {
 
         private void Awake() {
             FindObjectOfType<DayNightCycleController>().AddNightLight(gameObject.GetComponent<Light2D>());
+            if (cost.Length != towerDamageData.Length) {
+                throw new System.ArgumentException("Upgrade arrays must have same lenght!");
+            }
         }
 
         private void Update() {
@@ -60,7 +59,7 @@ namespace PlayerBuilding.Tower {
 
         private bool HasValidType(Enemy enemy) => targets.Contains(enemy.enemyType);
 
-        private bool IsInRange(Enemy enemy) => Vector3.Distance(enemy.transform.position, this.transform.position) <= range;
+        private bool IsInRange(Enemy enemy) => Vector3.Distance(enemy.transform.position, this.transform.position) <= towerDamageData[buildingLevel].range;
 
         private Vector3 GetPositionInFrontOfChildWithName(Enemy enemy, string name) {
             for (int i = 0; i < enemy.transform.childCount; i++) {
@@ -73,7 +72,7 @@ namespace PlayerBuilding.Tower {
         }
 
         private IEnumerator Attack(Enemy target) {
-            currentAttackCooldown = attackCooldown;
+            currentAttackCooldown = towerDamageData[buildingLevel].attackCooldown;
             var forward = GetPositionInFrontOfChildWithName(target, "Graphics") - this.transform.position;
 
             var startQuat = this.turretHead.rotation;
@@ -84,11 +83,11 @@ namespace PlayerBuilding.Tower {
                 yield return new WaitForSeconds(0.001f);
             }
 
-            var lifetime = 1.5f * range / projectile.speed;
+            var lifetime = 1.5f * towerDamageData[buildingLevel].range / projectile.speed;
 
             var proj = Instantiate(projectile, this.transform.position, Quaternion.identity);
             proj.direction = forward;
-            proj.damage = damage;
+            proj.damage = towerDamageData[buildingLevel].damage;
             proj.lifeTime = lifetime;
             proj.enemyTypes = this.targets;
             proj.gameObject.layer = targets.Contains(EnemyType.GROUNDED) ? GROUNDED : AIRBORNE;
@@ -140,6 +139,10 @@ namespace PlayerBuilding.Tower {
                 return true;
             }
             else return false;
+        }
+
+        public int GetBuildingLevel() {
+            return buildingLevel;
         }
         #endregion
     }

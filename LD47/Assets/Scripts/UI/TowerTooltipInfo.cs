@@ -26,9 +26,9 @@ namespace Assets.ToolTip.Implementation {
                     tower.name,
                     tower.cost,
                     TargetsAsString(tower.targets),
-                    tower.range,
-                    tower.damage,
-                    1 / tower.attackCooldown,
+                    tower.towerDamageData[0].range,
+                    tower.towerDamageData[0].damage,
+                    1 / tower.towerDamageData[0].attackCooldown,
                     rocket.explosionRange
                 );
             }
@@ -43,9 +43,9 @@ namespace Assets.ToolTip.Implementation {
                     tower.name,
                     tower.cost,
                     TargetsAsString(tower.targets),
-                    tower.range,
-                    tower.damage,
-                    1 / tower.attackCooldown
+                    tower.towerDamageData[0].range,
+                    tower.towerDamageData[0].damage,
+                    1 / tower.towerDamageData[0].attackCooldown
                 );
             }
 
