@@ -50,8 +50,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Rocket Launcher
   cost:
-  - ResourceCost: []
-  - ResourceCost: []
+  - ResourceCost:
+    - resourceAmount: 400
+      resourceType: 0
+    - resourceAmount: 100
+      resourceType: 1
+  - ResourceCost:
+    - resourceAmount: 500
+      resourceType: 0
+    - resourceAmount: 150
+      resourceType: 1
   towerDamageData:
   - damage: 10
     range: 5

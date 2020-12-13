@@ -44,9 +44,6 @@ namespace PlayerBuilding {
             if (Input.GetMouseButtonDown(1) && canvasTurretBuildMenue.transform.GetChild(1).gameObject.activeInHierarchy) {
                 CloseBuildUi();
             }
-            if (selectedBuilding != null) {
-                UpdateTowerUi();
-            }
 
         }
 
@@ -70,6 +67,7 @@ namespace PlayerBuilding {
                     }
                     // Turret highlight
                     SetCircleHighlight(hit.transform.GetChild(0).gameObject, hit.transform.lossyScale.x / 2, 0.2f, Color.yellow);
+                    UpdateTowerUi();
                 }
             }
         }
@@ -192,10 +190,12 @@ namespace PlayerBuilding {
             if (selectedPlaceable.CanUpgrade()) {
                 selectedPlaceable.Upgrade();
                 if (selectedBuilding.GetComponent<Tower.Tower>() != null) {
-                    Tower.Tower selecedTurretInformation = selectedBuilding.GetComponent<Tower.Tower>();
+                    Tower.Tower selectedTurretInformation = selectedBuilding.GetComponent<Tower.Tower>();
                     // Range indicator
-                    SetCircleHighlight(selecedTurretInformation.transform.gameObject, selecedTurretInformation.towerDamageData[selecedTurretInformation.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
+                    SetCircleHighlight(selectedTurretInformation.transform.gameObject, selectedTurretInformation.towerDamageData[selectedTurretInformation.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
+
                 }
+                UpdateTowerUi();
             }
         }
 

@@ -71,10 +71,7 @@ namespace PlayerBuilding.EcoBuilding {
         }
 
         public bool IsMaxUpgrade() {
-            if (buildingLevel + 1 == cost.Length) {
-                return true;
-            }
-            else return false;
+            return (buildingLevel + 1 == cost.Length) ? true : false;
         }
 
         public int GetBuildingLevel() {

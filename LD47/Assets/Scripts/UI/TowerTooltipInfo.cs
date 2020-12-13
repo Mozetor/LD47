@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Economy;
 
 namespace Assets.ToolTip.Implementation {
     public class TowerTooltipInfo : ToolTipInfo {
@@ -17,14 +18,14 @@ namespace Assets.ToolTip.Implementation {
             if (tower.projectile is RocketTowerProjectile rocket) {
                 return string.Format(
                     "<b>{0}</b>\n" +
-                    "cost:  {1}\n" +
+                    "cost:\n{1}" +
                     "targets: {2}\n" +
                     "range: {3}\n" +
                     "damage: {4}\n" +
                     "firerate: {5:F2}\n" +
                     "explosion radius: {6}",
                     tower.name,
-                    tower.cost,
+                    CostArrayToString(tower.cost[0].ResourceCost),
                     TargetsAsString(tower.targets),
                     tower.towerDamageData[0].range,
                     tower.towerDamageData[0].damage,
@@ -35,13 +36,13 @@ namespace Assets.ToolTip.Implementation {
             else {
                 return string.Format(
                     "<b>{0}</b>\n" +
-                    "cost:  {1}\n" +
+                    "cost:\n{1}" +
                     "targets: {2}\n" +
                     "range: {3}\n" +
                     "damage: {4}\n" +
                     "firerate: {5:F2}",
                     tower.name,
-                    tower.cost,
+                    CostArrayToString(tower.cost[0].ResourceCost),
                     TargetsAsString(tower.targets),
                     tower.towerDamageData[0].range,
                     tower.towerDamageData[0].damage,
@@ -68,5 +69,15 @@ namespace Assets.ToolTip.Implementation {
                 default: throw new ArgumentException($"Unknown enemy type '{type}'");
             }
         }
+
+        private string CostArrayToString(BuildResource[] cost) {
+            string s = "";
+            for (int i = 0; i < cost.Length; i++) {
+                s += cost[i].resourceType + ": ";
+                s += cost[i].resourceAmount + "\n";
+            }
+            return s;
+        }
+
     }
 }

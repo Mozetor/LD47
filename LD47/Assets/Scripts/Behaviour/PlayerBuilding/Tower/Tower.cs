@@ -40,6 +40,7 @@ namespace PlayerBuilding.Tower {
         }
 
         private void Update() {
+            // Can improve performance
             if (currentAttackCooldown > 0) {
                 currentAttackCooldown -= Time.deltaTime;
                 return;
@@ -135,10 +136,7 @@ namespace PlayerBuilding.Tower {
         }
 
         public bool IsMaxUpgrade() {
-            if (buildingLevel + 1 == cost.Length) {
-                return true;
-            }
-            else return false;
+            return (buildingLevel + 1 == cost.Length) ? true : false;
         }
 
         public int GetBuildingLevel() {
