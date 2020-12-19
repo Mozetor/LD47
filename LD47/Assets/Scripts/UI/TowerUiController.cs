@@ -3,6 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Assets.Towers;
+using Assets.Enemies;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayerBuilding {
     public class TowerUiController : MonoBehaviour {
@@ -120,12 +125,10 @@ namespace PlayerBuilding {
 
         private void UpdateTowerUi() {
             if (!updatedTowerUi) {
-                canvasTurretSelection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = selectedPlaceable.GetName();
-                // show tower stats here
+                //canvasTurretSelection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = selectedPlaceable.GetName();
                 updatedTowerUi = true;
             }
-            // !!! CAN BE IMPROVED !!!
-            // CanUpgrade should be called only once per day, not on update
+            canvasTurretSelection.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = FormatBuildingInformation(selectedPlaceable);
             if (!selectedPlaceable.IsMaxUpgrade()) {
                 canvasTurretSelection.transform.GetChild(2).gameObject.SetActive(true);
                 if (selectedPlaceable.CanUpgrade()) {
@@ -139,6 +142,78 @@ namespace PlayerBuilding {
                 canvasTurretSelection.transform.GetChild(2).gameObject.SetActive(false);
             }
         }
+
+        #region TextFormat
+        /// <summary> Generates formatted text of important building information </summary>
+        /// <param name="building"></param>
+        /// <returns></returns>
+        private string FormatBuildingInformation(IPlaceable building) {
+            int towerLevel = building.GetBuildingLevel();
+            if (building is Tower.Tower) {
+                Tower.Tower tower = building.GetObject().GetComponent<Tower.Tower>();
+                string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(tower.cost[towerLevel + 1].ResourceCost);
+                string special = "";
+                if (tower.projectile is RocketTowerProjectile rocket) {
+                    special = "explosion radius:" + rocket.explosionRange + "\n";
+                }
+                return string.Format(
+                    "<b>{0}</b>\n" +
+                    "targets: {1}\n" +
+                    "range: {2}\n" +
+                    "damage: {3}\n" +
+                    "firerate: {4:F2}\n" +
+                    "{5}" +
+                    "{6}",
+                    tower.name,
+                    TargetsAsString(tower.targets),
+                    tower.towerDamageData[towerLevel].range,
+                    tower.towerDamageData[towerLevel].damage,
+                    1 / tower.towerDamageData[towerLevel].attackCooldown,
+                    special,
+                    cost
+                );
+            }
+            else if (building is EcoBuilding.EcoBuilding) {
+                EcoBuilding.EcoBuilding ecoBuilding = building.GetObject().GetComponent<EcoBuilding.EcoBuilding>();
+                string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(ecoBuilding.cost[towerLevel + 1].ResourceCost);
+                return string.Format(
+                      "<b>{0}</b>\n" +
+                      "Generates:\n{1}" +
+                      "{2}",
+                      ecoBuilding.name,
+                      ecoBuilding.resourceGenerated[towerLevel].resourceType + ": " +
+                      ecoBuilding.resourceGenerated[towerLevel].resourceAmount + "\n",
+                      cost
+                  ); ;
+            }
+            throw new System.NotImplementedException("Building ui of type " + building.GetType() + "not implemented");
+        }
+
+        private string TargetsAsString(List<EnemyType> targets) =>
+           targets
+               .Distinct()
+               .Select(TypeToString)
+               .Aggregate((f, s) => $"{f}, {s}");
+
+        private string TypeToString(EnemyType type) {
+            switch (type) {
+                case EnemyType.GROUNDED:
+                    return "Grounded";
+                case EnemyType.AIRBORN:
+                    return "Airborne";
+                default: throw new ArgumentException($"Unknown enemy type '{type}'");
+            }
+        }
+
+        private string CostArrayToString(Economy.BuildResource[] cost) {
+            string s = "";
+            for (int i = 0; i < cost.Length; i++) {
+                s += cost[i].resourceType + ": ";
+                s += cost[i].resourceAmount + "\n";
+            }
+            return s;
+        }
+        #endregion
 
         #region UiInteractions
         /// <summary> Expands build menue </summary>

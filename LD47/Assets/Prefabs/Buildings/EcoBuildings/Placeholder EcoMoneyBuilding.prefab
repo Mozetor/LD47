@@ -238,16 +238,16 @@ MonoBehaviour:
   name: placeholderEco
   cost:
   - ResourceCost:
-    - resourceAmount: 10
-      resourceType: 0
-  - ResourceCost:
     - resourceAmount: 20
       resourceType: 0
   - ResourceCost:
     - resourceAmount: 30
       resourceType: 0
   - ResourceCost:
-    - resourceAmount: 50
+    - resourceAmount: 60
+      resourceType: 0
+  - ResourceCost:
+    - resourceAmount: 120
       resourceType: 0
   resourceGenerated:
   - resourceAmount: 10
