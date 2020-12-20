@@ -8,9 +8,9 @@ using UnityEngine;
 using Economy;
 
 namespace Assets.ToolTip.Implementation {
-    public class EcoBuildingTooltipInfo : ToolTipInfo {
+    public class BalanceBuildingTooltipInfo : ToolTipInfo {
 
-        public PlayerBuilding.EcoBuilding.EcoBuilding building;
+        public PlayerBuilding.ProviderBuilding.ProviderBuilding building;
 
 
         public override Color GetColor() => Color.white;

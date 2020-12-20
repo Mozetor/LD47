@@ -1,5 +1,5 @@
 ﻿namespace Economy {
-    public enum ResourceType {
+    public enum BuildResourceType {
         MONEY,
         WOOD
     }

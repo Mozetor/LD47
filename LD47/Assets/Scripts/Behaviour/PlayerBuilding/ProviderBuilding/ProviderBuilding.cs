@@ -1,42 +1,28 @@
-﻿using Assets.Enemies;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
-using Utils;
 using Economy;
 using City;
+using Utils;
+using UnityEngine.Experimental.Rendering.Universal;
 
-namespace PlayerBuilding.Tower {
-    public class Tower : MonoBehaviour, IPlaceable {
-
-        private const int GROUNDED = 8;
-        private const int AIRBORNE = 9;
-
+namespace PlayerBuilding.ProviderBuilding {
+    public class ProviderBuilding : MonoBehaviour, IPlaceable {
         /// <summary> Building name </summary>
         public new string name;
         /// <summary> Cost to sontruct and upgrade a building </summary>
         public BuildCost[] buildCost;
         /// <summary> Cost maintain functionality of a building </summary>
         public UpkeepCost[] upkeepCost;
-        /// <summary> Contains tower damage, range and cooldown </summary>
-        public TowerDamageData[] towerDamageData;
-        /// <summary> Enemys </summary>
-        public List<EnemyType> targets;
-        /// <summary> Projectile type </summary>
-        public TowerProjectile projectile;
-        /// <summary> Tower head </summary>
-        public Transform turretHead;
+        /// <summary> Amount of resources added by this building, by level </summary>
+        public BalanceResource[] resourceGenerated;
 
         /// <summary> Current level of building </summary>
         private int buildingLevel;
 
-        private float currentAttackCooldown = 0;
-
         private void Awake() {
             FindObjectOfType<DayNightCycleController>().AddNightLight(gameObject.GetComponent<Light2D>());
-            if (buildCost.Length != towerDamageData.Length) {
+            if (buildCost.Length != resourceGenerated.Length) {
                 throw new System.ArgumentException("Upgrade arrays must have same lenght!");
             }
             if (upkeepCost.Length != 0) {
@@ -44,61 +30,6 @@ namespace PlayerBuilding.Tower {
                     throw new System.ArgumentException("Upgrade arrays must have same lenght!");
                 }
             }
-        }
-
-        private void Update() {
-            // Can improve performance
-            if (currentAttackCooldown > 0) {
-                currentAttackCooldown -= Time.deltaTime;
-                return;
-            }
-
-            var enemies = FindObjectsOfType<Enemy>()
-                .Where(HasValidType)
-                .Where(IsInRange)
-                .ToList();
-
-            if (enemies.Count == 0)
-                return;
-
-            var target = enemies[0];
-            StartCoroutine(Attack(target));
-        }
-
-        private bool HasValidType(Enemy enemy) => targets.Contains(enemy.enemyType);
-
-        private bool IsInRange(Enemy enemy) => Vector3.Distance(enemy.transform.position, this.transform.position) <= towerDamageData[buildingLevel].range;
-
-        private Vector3 GetPositionInFrontOfChildWithName(Enemy enemy, string name) {
-            for (int i = 0; i < enemy.transform.childCount; i++) {
-                if (enemy.transform.GetChild(i).name == name) {
-                    var tran = enemy.transform.GetChild(i);
-                    return tran.position + 0.5f * tran.up;
-                }
-            }
-            return enemy.transform.position;
-        }
-
-        private IEnumerator Attack(Enemy target) {
-            currentAttackCooldown = towerDamageData[buildingLevel].attackCooldown;
-            var forward = GetPositionInFrontOfChildWithName(target, "Graphics") - this.transform.position;
-
-            var startQuat = this.turretHead.rotation;
-            var targetQuat = Quaternion.FromToRotation(Vector3.down, forward);
-
-            for (int i = 0; i < 10; i++) {
-                this.turretHead.rotation = Quaternion.Lerp(startQuat, targetQuat, (i + 1) / 9f);
-                yield return new WaitForSeconds(0.001f);
-            }
-
-            var lifetime = 1.5f * towerDamageData[buildingLevel].range / projectile.speed;
-
-            var proj = Instantiate(projectile, this.transform.position, Quaternion.identity);
-            proj.direction = forward;
-            proj.damage = towerDamageData[buildingLevel].damage;
-            proj.lifeTime = lifetime;
-            proj.enemyTypes = this.targets;
-            proj.gameObject.layer = targets.Contains(EnemyType.GROUNDED) ? GROUNDED : AIRBORNE;
         }
 
         #region IPlaceableImplementation
@@ -117,9 +48,14 @@ namespace PlayerBuilding.Tower {
 
         public void FinishPlacement(GameObject placedObject) {
             PlayerBuildingPlacer.AddBuilding(placedObject);
+            FindObjectOfType<CityController>().IncreaseBalance(resourceGenerated[buildingLevel]);
+            for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
+                FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost[i]);
+            }
         }
 
         public void PrepareRemoval() {
+            FindObjectOfType<CityController>().DecreaseBalance(resourceGenerated[buildingLevel]);
             for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
                 BalanceResource bal = upkeepCost[buildingLevel].BalanceCost[i];
                 bal.resourceAmount = -bal.resourceAmount;
@@ -144,12 +80,14 @@ namespace PlayerBuilding.Tower {
             // change spirte
             CityController city = FindObjectOfType<CityController>();
             city.Buy(buildCost[buildingLevel + 1].ResourceCost);
+            city.DecreaseBalance(resourceGenerated[buildingLevel]);
             for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
                 BalanceResource bal = upkeepCost[buildingLevel].BalanceCost[i];
                 bal.resourceAmount = -bal.resourceAmount;
                 FindObjectOfType<CityController>().StrainBalance(bal);
             }
             buildingLevel++;
+            city.IncreaseBalance(resourceGenerated[buildingLevel]);
             FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost);
         }
 

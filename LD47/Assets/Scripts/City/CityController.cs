@@ -17,10 +17,16 @@ namespace City {
         private int health = 100;
         [SerializeField]
         [Tooltip("Current resource amount")]
-        private BuildResource[] resources = new BuildResource[Enum.GetNames(typeof(ResourceType)).Length];
+        private BuildResource[] resources = new BuildResource[Enum.GetNames(typeof(BuildResourceType)).Length];
         [SerializeField]
         [Tooltip("Current resource income")]
-        private BuildResource[] resourceIncome = new BuildResource[Enum.GetNames(typeof(ResourceType)).Length];
+        private BuildResource[] resourceIncome = new BuildResource[Enum.GetNames(typeof(BuildResourceType)).Length];
+        [SerializeField]
+        [Tooltip("Current balance available")]
+        private BalanceResource[] balanceAvailable = new BalanceResource[Enum.GetNames(typeof(BalanceResourceType)).Length];
+        [SerializeField]
+        [Tooltip("Current balance expense")]
+        private BalanceResource[] balanceStrain = new BalanceResource[Enum.GetNames(typeof(BalanceResourceType)).Length];
 
         [Header("UI")]
         [Tooltip("Text to display money")]
@@ -29,6 +35,8 @@ namespace City {
         public TextMeshProUGUI incomeText;
         [Tooltip("Text to display health")]
         public TextMeshProUGUI healthText;
+        [Tooltip("Text to display energy")]
+        public TextMeshProUGUI energyText;
         [Tooltip("Text to display upgrade income increase")]
         public TextMeshProUGUI upgradeIncomeIncreaseText;
         [Tooltip("Text to display upgrade cost")]
@@ -38,8 +46,11 @@ namespace City {
             var spawner = FindObjectOfType<BuildBattleSpawner>();
             spawner.AddOnBuildPhaseStart(() => AddResource(resourceIncome));
             spawner.AddOnBuildPhaseStart(() => StatsController.stats.roundsSurvived++);
-            UpdateUI();
             StatsController.ResetStats();
+        }
+
+        private void Start() {
+            UpdateUI();
         }
 
 
@@ -50,11 +61,10 @@ namespace City {
             for (int i = 0; i < resourceIncome.Length; i++) {
                 if (increaseIncome.resourceType == resourceIncome[i].resourceType) {
                     resourceIncome[i].resourceAmount += increaseIncome.resourceAmount;
-                    UpdateUI();
                     break;
                 }
             }
-
+            UpdateUI();
         }
 
         /// <summary>
@@ -64,12 +74,54 @@ namespace City {
             for (int i = 0; i < resourceIncome.Length; i++) {
                 if (decreseIncome.resourceType == resourceIncome[i].resourceType) {
                     resourceIncome[i].resourceAmount -= decreseIncome.resourceAmount;
-                    UpdateUI();
                     break;
                 }
             }
-
+            UpdateUI();
         }
+
+        /// <summary>
+        /// Increses balance.
+        /// </summary>
+        public void IncreaseBalance(BalanceResource increaseIncome) {
+            for (int i = 0; i < balanceAvailable.Length; i++) {
+                if (increaseIncome.resourceType == balanceAvailable[i].resourceType) {
+                    balanceAvailable[i].resourceAmount += increaseIncome.resourceAmount;
+                    break;
+                }
+            }
+            UpdateUI();
+        }
+
+        /// <summary>
+        /// Reduces balance. Use StrainBalance for non provider buildings 
+        /// </summary>
+        public void DecreaseBalance(BalanceResource decreseIncome) {
+            for (int i = 0; i < balanceAvailable.Length; i++) {
+                if (decreseIncome.resourceType == balanceAvailable[i].resourceType) {
+                    balanceAvailable[i].resourceAmount -= decreseIncome.resourceAmount;
+                    break;
+                }
+            }
+            UpdateUI();
+        }
+
+        public int GetBalanceSummaryByType(BalanceResourceType balType) {
+            for (int i = 0; i < balanceAvailable.Length; i++) {
+                if (balanceAvailable[i].resourceType == balType) {
+                    return balanceAvailable[i].resourceAmount - balanceStrain[i].resourceAmount;
+                }
+            }
+            throw new System.NotImplementedException("BalanceType " + balType + " not found");
+        }
+        public BalanceResource[] GetBalanceSummary() {
+            BalanceResource[] bal = new BalanceResource[balanceAvailable.Length];
+            for (int i = 0; i < balanceAvailable.Length; i++) {
+                bal[i].resourceAmount = balanceAvailable[i].resourceAmount - balanceStrain[i].resourceAmount;
+            }
+            return bal;
+        }
+
         #region ResourceManagement
 
         /// <summary>
@@ -220,6 +272,28 @@ namespace City {
             }
             throw new System.NotImplementedException("resource " + resource.resourceType + " not found");
         }
+
+        /// <summary>
+        /// Puts additional load on available ballance
+        /// </summary>
+        /// <param name="decreseBalance"></param>
+        public void StrainBalance(BalanceResource decreseBalance) {
+            for (int i = 0; i < balanceAvailable.Length; i++) {
+                if (decreseBalance.resourceType == balanceAvailable[i].resourceType) {
+                    balanceStrain[i].resourceAmount += decreseBalance.resourceAmount;
+                    break;
+                }
+            }
+            UpdateUI();
+        }
+
+        public void StrainBalance(BalanceResource[] decreseBalance) {
+            for (int i = 0; i < decreseBalance.Length; i++) {
+                StrainBalance(decreseBalance[i]);
+            }
+        }
+
+
         #endregion
         /// <summary>
         /// Damages the city with given amount.
@@ -239,9 +313,10 @@ namespace City {
             if (!moneyText || !incomeText || !healthText) {
                 throw new ArgumentNullException("Some UI text components are not assigned!");
             }
-            moneyText.text = resources[(int)ResourceType.MONEY].resourceAmount.ToString();
-            incomeText.text = resourceIncome[(int)ResourceType.MONEY].resourceAmount.ToString();
+            moneyText.text = resources[(int)BuildResourceType.MONEY].resourceAmount.ToString();
+            incomeText.text = resourceIncome[(int)BuildResourceType.MONEY].resourceAmount.ToString();
             healthText.text = health.ToString();
+            energyText.text = GetBalanceSummaryByType(BalanceResourceType.ENERGY) + " / " + balanceAvailable[(int)BalanceResourceType.ENERGY].resourceAmount.ToString();
         }
     }
 }

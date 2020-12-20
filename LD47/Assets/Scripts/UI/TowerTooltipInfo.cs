@@ -25,7 +25,7 @@ namespace Assets.ToolTip.Implementation {
                     "firerate: {5:F2}\n" +
                     "explosion radius: {6}",
                     tower.name,
-                    CostArrayToString(tower.cost[0].ResourceCost),
+                    CostArrayToString(tower.buildCost[0].ResourceCost),
                     TargetsAsString(tower.targets),
                     tower.towerDamageData[0].range,
                     tower.towerDamageData[0].damage,
@@ -42,7 +42,7 @@ namespace Assets.ToolTip.Implementation {
                     "damage: {4}\n" +
                     "firerate: {5:F2}",
                     tower.name,
-                    CostArrayToString(tower.cost[0].ResourceCost),
+                    CostArrayToString(tower.buildCost[0].ResourceCost),
                     TargetsAsString(tower.targets),
                     tower.towerDamageData[0].range,
                     tower.towerDamageData[0].damage,

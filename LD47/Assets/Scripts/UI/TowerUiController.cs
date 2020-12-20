@@ -151,7 +151,7 @@ namespace PlayerBuilding {
             int towerLevel = building.GetBuildingLevel();
             if (building is Tower.Tower) {
                 Tower.Tower tower = building.GetObject().GetComponent<Tower.Tower>();
-                string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(tower.cost[towerLevel + 1].ResourceCost);
+                string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(tower.buildCost[towerLevel + 1].ResourceCost);
                 string special = "";
                 if (tower.projectile is RocketTowerProjectile rocket) {
                     special = "explosion radius:" + rocket.explosionRange + "\n";
@@ -175,7 +175,7 @@ namespace PlayerBuilding {
             }
             else if (building is EcoBuilding.EcoBuilding) {
                 EcoBuilding.EcoBuilding ecoBuilding = building.GetObject().GetComponent<EcoBuilding.EcoBuilding>();
-                string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(ecoBuilding.cost[towerLevel + 1].ResourceCost);
+                string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(ecoBuilding.buildCost[towerLevel + 1].ResourceCost);
                 return string.Format(
                       "<b>{0}</b>\n" +
                       "Generates:\n{1}" +
@@ -183,6 +183,19 @@ namespace PlayerBuilding {
                       ecoBuilding.name,
                       ecoBuilding.resourceGenerated[towerLevel].resourceType + ": " +
                       ecoBuilding.resourceGenerated[towerLevel].resourceAmount + "\n",
+                      cost
+                  ); ;
+            }
+            else if (building is ProviderBuilding.ProviderBuilding) {
+                ProviderBuilding.ProviderBuilding balanceBuilding = building.GetObject().GetComponent<ProviderBuilding.ProviderBuilding>();
+                string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(balanceBuilding.buildCost[towerLevel + 1].ResourceCost);
+                return string.Format(
+                      "<b>{0}</b>\n" +
+                      "Generates:\n{1}" +
+                      "{2}",
+                      balanceBuilding.name,
+                      balanceBuilding.resourceGenerated[towerLevel].resourceType + ": " +
+                      balanceBuilding.resourceGenerated[towerLevel].resourceAmount + "\n",
                       cost
                   ); ;
             }
