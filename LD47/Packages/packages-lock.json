@@ -1,10 +1,33 @@
 {
   "dependencies": {
+    "com.h8man.2d.navmeshplus": {
+      "version": "https://github.com/h8man/NavMeshPlus.git#master",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "86ceea0dfe7bcd8db2a486bd68c4c095ae4299e0"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
       "source": "builtin",
       "dependencies": {}
+    },
+    "com.unity.2d.tilemap": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {}
+    },
+    "com.unity.2d.tilemap.extras": {
+      "version": "https://github.com/Unity-Technologies/2d-extras.git#master",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.modules.tilemap": "1.0.0",
+        "com.unity.2d.tilemap": "1.0.0"
+      },
+      "hash": "32e84719498f1a0242c332eef786628a336a49bc"
     },
     "com.unity.collab-proxy": {
       "version": "1.2.16",
@@ -30,7 +53,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -72,7 +95,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.16",
+      "version": "1.1.18",
       "depth": 0,
       "source": "registry",
       "dependencies": {

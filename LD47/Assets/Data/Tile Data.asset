@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ee7dd515fda9641b87ce12fdd94b57, type: 3}
+  m_Name: Tile Data
+  m_EditorClassIdentifier: 
+  tileDefinitions:
+  - name: path
+    tile: {fileID: 11400000, guid: 8721704d1f2544744a5cd8724d017dad, type: 2}
+  - name: grass
+    tile: {fileID: 11400000, guid: 1c7391ee97880c440a437fc8beae6098, type: 2}
+  - name: tree
+    tile: {fileID: 11400000, guid: ed2fad9b5f4deeb42be83a8228d37845, type: 2}
