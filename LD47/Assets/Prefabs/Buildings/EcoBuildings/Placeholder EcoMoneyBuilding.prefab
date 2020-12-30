@@ -168,15 +168,7 @@ MonoBehaviour:
   - ResourceCost:
     - resourceAmount: 80
       resourceType: 0
-  upkeepCost:
-  - resourceAmount: 0
-    resourceType: 0
-  - resourceAmount: 0
-    resourceType: 0
-  - resourceAmount: 0
-    resourceType: 0
-  - resourceAmount: 0
-    resourceType: 0
+  upkeepCost: []
   resourceGenerated:
   - resourceAmount: 10
     resourceType: 0

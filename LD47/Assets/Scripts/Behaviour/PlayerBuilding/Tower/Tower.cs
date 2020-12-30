@@ -1,25 +1,16 @@
 ﻿using Assets.Enemies;
+using City;
+using Economy;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering.Universal;
-using Utils;
-using Economy;
-using City;
 
 namespace PlayerBuilding.Tower {
-    public class Tower : MonoBehaviour, IPlaceable {
+    public class Tower : Building {
 
         private const int GROUNDED = 8;
         private const int AIRBORNE = 9;
-
-        /// <summary> Building name </summary>
-        public new string name;
-        /// <summary> Cost to sontruct and upgrade a building </summary>
-        public BuildCost[] buildCost;
-        /// <summary> Cost maintain functionality of a building </summary>
-        public UpkeepCost[] upkeepCost;
         /// <summary> Contains tower damage, range and cooldown </summary>
         public TowerDamageData[] towerDamageData;
         /// <summary> Enemys </summary>
@@ -29,13 +20,9 @@ namespace PlayerBuilding.Tower {
         /// <summary> Tower head </summary>
         public Transform turretHead;
 
-        /// <summary> Current level of building </summary>
-        private int buildingLevel;
-
         private float currentAttackCooldown = 0;
 
         private void Awake() {
-            FindObjectOfType<DayNightCycleController>().AddNightLight(gameObject.GetComponent<Light2D>());
             if (buildCost.Length != towerDamageData.Length) {
                 throw new System.ArgumentException("Upgrade arrays must have same lenght!");
             }
@@ -101,65 +88,43 @@ namespace PlayerBuilding.Tower {
             proj.gameObject.layer = targets.Contains(EnemyType.GROUNDED) ? GROUNDED : AIRBORNE;
         }
 
-        #region IPlaceableImplementation
-
-        public string GetName() {
-            return name;
-        }
-
-        public BuildResource[] GetCost() {
-            return buildCost[buildingLevel].ResourceCost;
-        }
-
-        public GameObject GetObject() {
-            return this.gameObject;
-        }
-
-        public void FinishPlacement(GameObject placedObject) {
+        public override void FinishPlacement(GameObject placedObject) {
             PlayerBuildingPlacer.AddBuilding(placedObject);
-        }
-
-        public void PrepareRemoval() {
-            for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
-                BalanceResource bal = upkeepCost[buildingLevel].BalanceCost[i];
-                bal.resourceAmount = -bal.resourceAmount;
-                FindObjectOfType<CityController>().StrainBalance(bal);
-            }
-        }
-
-        public bool CanUpgrade() {
-            if (buildingLevel + 1 < buildCost.Length) {
-                if (FindObjectOfType<CityController>().CanBuyByCost(buildCost[buildingLevel + 1].ResourceCost)) {
-                    return true;
+            if (upkeepCost.Length != 0) {
+                for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
+                    FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost[i]);
                 }
-                else return false;
             }
-            else return false;
         }
 
-        public void Upgrade() {
+        public override void PrepareRemoval() {
+            if (upkeepCost.Length != 0) {
+                for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
+                    BalanceResource bal = upkeepCost[buildingLevel].BalanceCost[i];
+                    bal.resourceAmount = -bal.resourceAmount;
+                    FindObjectOfType<CityController>().StrainBalance(bal);
+                }
+            }
+        }
+
+        public override void Upgrade() {
             if (buildingLevel + 1 >= buildCost.Length) {
                 throw new System.ArgumentException("Tried to upgrade past maximum building level");
             }
             // change spirte
             CityController city = FindObjectOfType<CityController>();
             city.Buy(buildCost[buildingLevel + 1].ResourceCost);
-            for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
-                BalanceResource bal = upkeepCost[buildingLevel].BalanceCost[i];
-                bal.resourceAmount = -bal.resourceAmount;
-                FindObjectOfType<CityController>().StrainBalance(bal);
+            if (upkeepCost.Length != 0) {
+                for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
+                    BalanceResource bal = upkeepCost[buildingLevel].BalanceCost[i];
+                    bal.resourceAmount = -bal.resourceAmount;
+                    FindObjectOfType<CityController>().StrainBalance(bal);
+                }
             }
             buildingLevel++;
-            FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost);
+            if (upkeepCost.Length != 0) {
+                FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost);
+            }
         }
-
-        public bool IsMaxUpgrade() {
-            return (buildingLevel + 1 == buildCost.Length) ? true : false;
-        }
-
-        public int GetBuildingLevel() {
-            return buildingLevel;
-        }
-        #endregion
     }
 }
