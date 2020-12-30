@@ -19,3 +19,5 @@ MonoBehaviour:
     tile: {fileID: 11400000, guid: 1c7391ee97880c440a437fc8beae6098, type: 2}
   - name: tree
     tile: {fileID: 11400000, guid: ed2fad9b5f4deeb42be83a8228d37845, type: 2}
+  - name: iognbbioe
+    tile: {fileID: 11400000, guid: 44af2f0e75732ab4b82da806137d564e, type: 2}
