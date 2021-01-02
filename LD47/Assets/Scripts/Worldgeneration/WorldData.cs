@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Worldgeneration
@@ -8,26 +9,25 @@ namespace Worldgeneration
     [CreateAssetMenu(menuName = "Data/World Data")]
     public class WorldData : ScriptableObject
     {
-
-        [Tooltip("Width and height of the world")]
+        /// <summary> Size of the world </summary>
         public Vector2Int worldSize;
+        /// <summary> World Layers </summary>
         public List<WorldLayer> worldLayers = new List<WorldLayer>();
-        [Tooltip("The sprites that make the world.")]
-        public List<PixelDefinition> pixelDefinitions = new List<PixelDefinition>();
-
+        /// <summary> Tiles used for each pixel type </summary>
+        public List<Definition<Color32>> pixelDefinitions = new List<Definition<Color32>>();
+        /// <summary> Used for validation on data change. </summary>
         public Action OnValidation;
-
-        private List<string[,]> worldPixelTypes;
-        public List<string[,]> WorldPixelTypes => worldPixelTypes;
-
+        /// <summary> Types of each world layer. </summary>
+        public List<string[,]> WorldPixelTypes { get; private set; }
+        /// <summary> Number of Layers in this world. </summary>
         public int Layers => worldLayers.Count;
 
         private Dictionary<Color32, string> pixelDefDic;
 
         private void OnEnable()
         {
-            pixelDefDic = PixelDefinition.GetDictionary(pixelDefinitions);
-            worldPixelTypes = GetPixelTypes();
+            pixelDefDic = pixelDefinitions.ToDictionary(def => def.value, def => def.name);
+            WorldPixelTypes = GetPixelTypes();
         }
 
         private void OnValidate()
@@ -67,8 +67,10 @@ namespace Worldgeneration
                         pixelTypes[x, y] = "";
                         continue;
                     }
+#if UNITY_EDITOR
                     if (!pixelDefDic.ContainsKey(pixel))
                         throw new NotSupportedException($"Pixel of color {worldLayers[layer].texture.GetPixel(x, y)} was not found in dictionary!");
+#endif
                     pixelTypes[x, y] = pixelDefDic[pixel];
                 }
             }

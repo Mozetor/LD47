@@ -42,9 +42,9 @@ namespace Worldgeneration
 
         private void Start()
         {
-            if(worldData.worldLayers.Count == 0)
+            if (worldData.worldLayers.Count == 0)
                 throw new System.ArgumentOutOfRangeException("World data must have at least one layer!");
-            
+
             GenerateTilemaps();
             GetComponent<NavMeshSurface2d>().BuildNavMesh();
         }
@@ -58,7 +58,7 @@ namespace Worldgeneration
                 tilemap.GetComponent<NavMeshModifier>().area = worldData.worldLayers[i].NavMeshSelector;
                 tilemap.GetComponent<TilemapRenderer>().sortingOrder = i;
                 tilemaps.Add(tilemap);
-                tilemap.SetTiles(coords, tileData.GetTileBases(worldPixelTypes[i]));
+                tilemap.SetTiles(coords, tileData.ConvertToTiles(worldPixelTypes[i]));
             }
         }
     }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,12 +9,18 @@ namespace Worldgeneration
     [CreateAssetMenu(menuName = "Data/Tile Data")]
     public class TileData : ScriptableObject
     {
-        public List<TileDefinition> tileDefinitions;
+        /// <summary> Definition of the tileset </summary>
+        public List<Definition<TileBase>> tileDefinitions;
 
-        public TileBase[] GetTileBases(string[,] layer)
+        /// <summary>
+        /// Converts a type map to tile map
+        /// </summary>
+        /// <param name="layer">  </param>
+        /// <returns></returns>
+        public TileBase[] ConvertToTiles(string[,] layer)
         {
             var r = new TileBase[layer.GetLength(0) * layer.GetLength(1)];
-            var d = TileDefinition.GetTileDefDic(tileDefinitions);
+            var d = tileDefinitions.ToDictionary(def => def.name, def => def.value);
             for (int x = 0; x < layer.GetLength(0); x++)
             {
                 for (int y = 0; y < layer.GetLength(1); y++)

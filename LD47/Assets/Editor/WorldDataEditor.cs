@@ -41,8 +41,9 @@ public class WorldDataEditor : Editor
         data.worldSize = EditorGUILayout.Vector2IntField("World Size", data.worldSize);
 
         EditorGUILayout.PropertyField(layers);
-        
+
         colorDefinitionsFoldout = EditorGUILayout.BeginFoldoutHeaderGroup(colorDefinitionsFoldout, "Color Definitions");
+        EditorGUILayout.EndFoldoutHeaderGroup();
         if (colorDefinitionsFoldout)
         {
             if (layers.arraySize > 0 && GUILayout.Button(new GUIContent("Update Colors", "Pixels with alpha equal to 0 are ignored.")))
@@ -65,7 +66,6 @@ public class WorldDataEditor : Editor
 
         }
 
-        EditorGUILayout.EndFoldoutHeaderGroup();
 
         serializedObject.ApplyModifiedProperties();
     }
@@ -78,7 +78,7 @@ public class WorldDataEditor : Editor
 
         foreach (var c in colors.Except(alreadyExistingColors))
         {
-            data.pixelDefinitions.Add(new PixelDefinition("", c));
+            data.pixelDefinitions.Add(new Definition<Color32>("", c));
         }
     }
 
@@ -89,10 +89,10 @@ public class WorldDataEditor : Editor
         return colors;
     }
 
-    private HashSet<Color32> GetAllExistingColors(List<PixelDefinition> pixelDefinitions)
+    private HashSet<Color32> GetAllExistingColors(List<Definition<Color32>> pixelDefinitions)
     {
         HashSet<Color32> alreadyExistingColors = new HashSet<Color32>();
-        pixelDefinitions.ForEach(p => alreadyExistingColors.Add(p.color));
+        pixelDefinitions.ForEach(p => alreadyExistingColors.Add(p.value));
         return alreadyExistingColors;
     }
 
@@ -108,7 +108,7 @@ public class WorldDataEditor : Editor
         return s;
     }
 
-    private (HashSet<string> duplicateNames, HashSet<Color32> duplicateColors) GetDuplicates(List<PixelDefinition> pixelDefinitions)
+    private (HashSet<string> duplicateNames, HashSet<Color32> duplicateColors) GetDuplicates(List<Definition<Color32>> pixelDefinitions)
     {
         HashSet<string> duplicateNames = new HashSet<string>();
         HashSet<Color32> duplicateColors = new HashSet<Color32>();
@@ -122,9 +122,9 @@ public class WorldDataEditor : Editor
                 {
                     duplicateNames.Add(def.name);
                 }
-                if (def.color.Equals(other.color))
+                if (def.value.Equals(other.value))
                 {
-                    duplicateColors.Add(def.color);
+                    duplicateColors.Add(def.value);
                 }
             }
         }

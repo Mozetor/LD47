@@ -20,14 +20,14 @@ MonoBehaviour:
     NavMeshSelector: 1
   pixelDefinitions:
   - name: grass
-    color:
+    value:
       serializedVersion: 2
       rgba: 4283491737
   - name: path
-    color:
+    value:
       serializedVersion: 2
       rgba: 4284915929
   - name: tree
-    color:
+    value:
       serializedVersion: 2
       rgba: 4278255360
