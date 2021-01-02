@@ -11,8 +11,6 @@ namespace PlayerBuilding {
 
         /// <summary> Main city </summary>
         private CityController city;
-        /// <summary> World </summary>
-        private WorldController worldController;
         /// <summary> Information of to placed building </summary>
         private IPlaceable objectToPlace;
         /// <summary> Main camera </summary>
@@ -42,7 +40,6 @@ namespace PlayerBuilding {
         private void Start() {
             mainCamera = Camera.main;
             city = FindObjectOfType<CityController>();
-            worldController = FindObjectOfType<WorldController>();
         }
 
         private void Update() {
@@ -134,7 +131,7 @@ namespace PlayerBuilding {
         /// <param name="screenPosition"></param>
         /// <returns> Position is viable</returns>
         private bool TestPosition(Vector3 screenPosition) {
-            if (!worldController.IsPath(Mathf.RoundToInt(screenPosition.x), Mathf.RoundToInt(screenPosition.y))) {
+            if (true/*!worldController.IsPath(Mathf.RoundToInt(screenPosition.x), Mathf.RoundToInt(screenPosition.y))*/) {
                 Vector3 cursorTile = new Vector3(Mathf.Round(screenPosition.x), Mathf.Round(screenPosition.y), 0);
                 for (int i = 0; i < playerBuildings.Count; i++) {
                     if (playerBuildings[i].transform.position == cursorTile) {
