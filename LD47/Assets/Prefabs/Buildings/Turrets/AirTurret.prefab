@@ -49,7 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Air Defense Turret
-  cost: 250
+  cost:
+  - resourceAmount: 300
+    resourceType: 0
   damage: 15
   range: 8
   attackCooldown: 0.8

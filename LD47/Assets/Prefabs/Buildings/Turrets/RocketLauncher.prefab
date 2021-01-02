@@ -49,10 +49,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Rocket Launcher
-  cost: 500
-  damage: 10
-  range: 5
-  attackCooldown: 2
+  cost:
+  - ResourceCost:
+    - resourceAmount: 400
+      resourceType: 0
+  - ResourceCost:
+    - resourceAmount: 500
+      resourceType: 0
+  - ResourceCost:
+    - resourceAmount: 500
+      resourceType: 0
+    - resourceAmount: 150
+      resourceType: 1
+  towerDamageData:
+  - damage: 10
+    range: 5
+    attackCooldown: 2
+  - damage: 12
+    range: 7
+    attackCooldown: 2
+  - damage: 15
+    range: 8
+    attackCooldown: 2
   targets: 00000000
   projectile: {fileID: -3842044217624081177, guid: 90a36e0d71f77ed46b9ac881645a4728,
     type: 3}
