@@ -31,3 +31,11 @@ MonoBehaviour:
     value:
       serializedVersion: 2
       rgba: 4278255360
+  - name: bush
+    value:
+      serializedVersion: 2
+      rgba: 4279927108
+  - name: stone
+    value:
+      serializedVersion: 2
+      rgba: 4283387727

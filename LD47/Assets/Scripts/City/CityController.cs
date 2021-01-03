@@ -1,15 +1,17 @@
 ﻿using Assets.WaveSpawner.Implementation;
+using Economy;
+using PlayerBuilding;
 using Stats;
 using System;
 using TMPro;
 using UnityEngine;
 using Utils;
-using Economy;
 
+namespace City
+{
 
-namespace City {
-
-    public class CityController : MonoBehaviour {
+    public class CityController : MonoBehaviour, IDamageable
+    {
 
         [Header("Variables")]
         [SerializeField]
@@ -42,14 +44,16 @@ namespace City {
         [Tooltip("Text to display upgrade cost")]
         public TextMeshProUGUI upgradeCostText;
 
-        private void Awake() {
+        private void Awake()
+        {
             var spawner = FindObjectOfType<BuildBattleSpawner>();
             spawner.AddOnBuildPhaseStart(() => AddResource(resourceIncome));
             spawner.AddOnBuildPhaseStart(() => StatsController.stats.roundsSurvived++);
             StatsController.ResetStats();
         }
 
-        private void Start() {
+        private void Start()
+        {
             UpdateUI();
         }
 
@@ -57,9 +61,12 @@ namespace City {
         /// <summary>
         /// Increses income.
         /// </summary>
-        public void IncreaseIncome(BuildResource increaseIncome) {
-            for (int i = 0; i < resourceIncome.Length; i++) {
-                if (increaseIncome.resourceType == resourceIncome[i].resourceType) {
+        public void IncreaseIncome(BuildResource increaseIncome)
+        {
+            for (int i = 0; i < resourceIncome.Length; i++)
+            {
+                if (increaseIncome.resourceType == resourceIncome[i].resourceType)
+                {
                     resourceIncome[i].resourceAmount += increaseIncome.resourceAmount;
                     break;
                 }
@@ -70,9 +77,12 @@ namespace City {
         /// <summary>
         /// Reduces income.
         /// </summary>
-        public void DecreaseIncome(BuildResource decreseIncome) {
-            for (int i = 0; i < resourceIncome.Length; i++) {
-                if (decreseIncome.resourceType == resourceIncome[i].resourceType) {
+        public void DecreaseIncome(BuildResource decreseIncome)
+        {
+            for (int i = 0; i < resourceIncome.Length; i++)
+            {
+                if (decreseIncome.resourceType == resourceIncome[i].resourceType)
+                {
                     resourceIncome[i].resourceAmount -= decreseIncome.resourceAmount;
                     break;
                 }
@@ -83,9 +93,12 @@ namespace City {
         /// <summary>
         /// Increses balance.
         /// </summary>
-        public void IncreaseBalance(BalanceResource increaseIncome) {
-            for (int i = 0; i < balanceAvailable.Length; i++) {
-                if (increaseIncome.resourceType == balanceAvailable[i].resourceType) {
+        public void IncreaseBalance(BalanceResource increaseIncome)
+        {
+            for (int i = 0; i < balanceAvailable.Length; i++)
+            {
+                if (increaseIncome.resourceType == balanceAvailable[i].resourceType)
+                {
                     balanceAvailable[i].resourceAmount += increaseIncome.resourceAmount;
                     break;
                 }
@@ -96,9 +109,12 @@ namespace City {
         /// <summary>
         /// Reduces balance. Use StrainBalance for non provider buildings 
         /// </summary>
-        public void DecreaseBalance(BalanceResource decreseIncome) {
-            for (int i = 0; i < balanceAvailable.Length; i++) {
-                if (decreseIncome.resourceType == balanceAvailable[i].resourceType) {
+        public void DecreaseBalance(BalanceResource decreseIncome)
+        {
+            for (int i = 0; i < balanceAvailable.Length; i++)
+            {
+                if (decreseIncome.resourceType == balanceAvailable[i].resourceType)
+                {
                     balanceAvailable[i].resourceAmount -= decreseIncome.resourceAmount;
                     break;
                 }
@@ -106,17 +122,22 @@ namespace City {
             UpdateUI();
         }
 
-        public int GetBalanceSummaryByType(BalanceResourceType balType) {
-            for (int i = 0; i < balanceAvailable.Length; i++) {
-                if (balanceAvailable[i].resourceType == balType) {
+        public int GetBalanceSummaryByType(BalanceResourceType balType)
+        {
+            for (int i = 0; i < balanceAvailable.Length; i++)
+            {
+                if (balanceAvailable[i].resourceType == balType)
+                {
                     return balanceAvailable[i].resourceAmount - balanceStrain[i].resourceAmount;
                 }
             }
             throw new System.NotImplementedException("BalanceType " + balType + " not found");
         }
-        public BalanceResource[] GetBalanceSummary() {
+        public BalanceResource[] GetBalanceSummary()
+        {
             BalanceResource[] bal = new BalanceResource[balanceAvailable.Length];
-            for (int i = 0; i < balanceAvailable.Length; i++) {
+            for (int i = 0; i < balanceAvailable.Length; i++)
+            {
                 bal[i].resourceAmount = balanceAvailable[i].resourceAmount - balanceStrain[i].resourceAmount;
             }
             return bal;
@@ -129,20 +150,26 @@ namespace City {
         /// </summary>
         /// <param name="resourceCost"> Money cost </param>
         /// <returns> Whether is was possible to buy </returns>
-        public bool Buy(BuildResource[] resourceCost) {
+        public bool Buy(BuildResource[] resourceCost)
+        {
             bool canBuy = true;
-            for (int i = 0; i < resourceCost.Length; i++) {
-                if (!CanBuyByCost(resourceCost[i])) {
+            for (int i = 0; i < resourceCost.Length; i++)
+            {
+                if (!CanBuyByCost(resourceCost[i]))
+                {
                     canBuy = false;
                 }
             }
-            if (canBuy) {
-                for (int i = 0; i < resourceCost.Length; i++) {
+            if (canBuy)
+            {
+                for (int i = 0; i < resourceCost.Length; i++)
+                {
                     SubtractResource(resourceCost[i]);
                 }
                 return true;
             }
-            else {
+            else
+            {
                 return false;
             }
         }
@@ -151,13 +178,18 @@ namespace City {
         /// </summary>
         /// <param name="moneyCost"></param>
         /// <returns> Whether enought resources are avaible </returns>
-        public bool CanBuyByCost(BuildResource resourceCost) {
-            for (int i = 0; i < resources.Length; i++) {
-                if (resources[i].resourceType == resourceCost.resourceType) {
-                    if (resources[i].resourceAmount >= resourceCost.resourceAmount) {
+        public bool CanBuyByCost(BuildResource resourceCost)
+        {
+            for (int i = 0; i < resources.Length; i++)
+            {
+                if (resources[i].resourceType == resourceCost.resourceType)
+                {
+                    if (resources[i].resourceAmount >= resourceCost.resourceAmount)
+                    {
                         return true;
                     }
-                    else {
+                    else
+                    {
                         return false;
                     }
                 }
@@ -169,10 +201,13 @@ namespace City {
         /// </summary>
         /// <param name="resourceCost"></param>
         /// <returns> Whether enought resources are avaible </returns>
-        public bool CanBuyByCost(BuildResource[] resourceCost) {
+        public bool CanBuyByCost(BuildResource[] resourceCost)
+        {
             bool canBuy = true;
-            for (int i = 0; i < resourceCost.Length; i++) {
-                if (!CanBuyByCost(resourceCost[i])) {
+            for (int i = 0; i < resourceCost.Length; i++)
+            {
+                if (!CanBuyByCost(resourceCost[i]))
+                {
                     canBuy = false;
                 }
             }
@@ -183,12 +218,16 @@ namespace City {
         /// </summary>
         /// <param name="resource"> resource, that should be added </param>
         /// <returns> Return false if negative amount is given </returns>
-        public bool AddResource(BuildResource resource) {
-            if (resource.resourceAmount < 0) {
+        public bool AddResource(BuildResource resource)
+        {
+            if (resource.resourceAmount < 0)
+            {
                 return false;
             }
-            for (int i = 0; i < resources.Length; i++) {
-                if (resources[i].resourceType == resource.resourceType) {
+            for (int i = 0; i < resources.Length; i++)
+            {
+                if (resources[i].resourceType == resource.resourceType)
+                {
                     resources[i].resourceAmount += resource.resourceAmount;
                     UpdateUI();
                     return true;
@@ -201,16 +240,20 @@ namespace City {
         /// </summary>
         /// <param name="resource"> resource, that should be added </param>
         /// <returns> Return false if negative amount is given </returns>
-        public void AddResource(BuildResource[] resource) {
+        public void AddResource(BuildResource[] resource)
+        {
 #if UNITY_EDITOR
             // checks input value error, editor only
-            for (int i = 0; i < resource.Length; i++) {
-                if (resource[i].resourceAmount < 0) {
+            for (int i = 0; i < resource.Length; i++)
+            {
+                if (resource[i].resourceAmount < 0)
+                {
                     throw new System.ArgumentException("cant add negative values, use SubtractResource");
                 }
             }
 #endif
-            for (int i = 0; i < resource.Length; i++) {
+            for (int i = 0; i < resource.Length; i++)
+            {
                 AddResource(resource[i]);
             }
         }
@@ -220,12 +263,16 @@ namespace City {
         /// <param name="resource"> resource, that should be added </param>
         /// <param name="modifier"> multiplier added on resource amount, can be negative</param>
         /// <returns> Return false if negative amount is given </returns>
-        public bool AddResource(BuildResource resource, float modifier) {
-            if (resource.resourceAmount < 0) {
+        public bool AddResource(BuildResource resource, float modifier)
+        {
+            if (resource.resourceAmount < 0)
+            {
                 return false;
             }
-            for (int i = 0; i < resources.Length; i++) {
-                if (resources[i].resourceType == resource.resourceType) {
+            for (int i = 0; i < resources.Length; i++)
+            {
+                if (resources[i].resourceType == resource.resourceType)
+                {
                     resources[i].resourceAmount += (Mathf.RoundToInt(resource.resourceAmount * modifier));
                     UpdateUI();
                     return true;
@@ -239,16 +286,20 @@ namespace City {
         /// <param name="resource"> resource, that should be added </param>
         /// <param name="modifier"> multiplier added on resource amount, can be negative</param>
         /// <returns> Return false if negative amount is given </returns>
-        public void AddResource(BuildResource[] resource, float modifier) {
+        public void AddResource(BuildResource[] resource, float modifier)
+        {
 #if UNITY_EDITOR
             // checks input value error, editor only
-            for (int i = 0; i < resource.Length; i++) {
-                if (resource[i].resourceAmount < 0) {
+            for (int i = 0; i < resource.Length; i++)
+            {
+                if (resource[i].resourceAmount < 0)
+                {
                     throw new System.ArgumentException("cant add negative values, use SubtractResource");
                 }
             }
 #endif
-            for (int i = 0; i < resource.Length; i++) {
+            for (int i = 0; i < resource.Length; i++)
+            {
                 AddResource(resource[i], modifier);
             }
         }
@@ -257,15 +308,20 @@ namespace City {
         /// </summary>
         /// <param name="resource"> resource, that should be subtracted </param>
         /// <returns> Whether enought resources are avaible </returns>
-        public bool SubtractResource(BuildResource resource) {
-            for (int i = 0; i < resources.Length; i++) {
-                if (resources[i].resourceType == resource.resourceType) {
-                    if (resources[i].resourceAmount >= +resource.resourceAmount) {
+        public bool SubtractResource(BuildResource resource)
+        {
+            for (int i = 0; i < resources.Length; i++)
+            {
+                if (resources[i].resourceType == resource.resourceType)
+                {
+                    if (resources[i].resourceAmount >= +resource.resourceAmount)
+                    {
                         resources[i].resourceAmount -= resource.resourceAmount;
                         UpdateUI();
                         return true;
                     }
-                    else {
+                    else
+                    {
                         return false;
                     }
                 }
@@ -277,9 +333,12 @@ namespace City {
         /// Puts additional load on available ballance
         /// </summary>
         /// <param name="decreseBalance"></param>
-        public void StrainBalance(BalanceResource decreseBalance) {
-            for (int i = 0; i < balanceAvailable.Length; i++) {
-                if (decreseBalance.resourceType == balanceAvailable[i].resourceType) {
+        public void StrainBalance(BalanceResource decreseBalance)
+        {
+            for (int i = 0; i < balanceAvailable.Length; i++)
+            {
+                if (decreseBalance.resourceType == balanceAvailable[i].resourceType)
+                {
                     balanceStrain[i].resourceAmount += decreseBalance.resourceAmount;
                     break;
                 }
@@ -287,8 +346,10 @@ namespace City {
             UpdateUI();
         }
 
-        public void StrainBalance(BalanceResource[] decreseBalance) {
-            for (int i = 0; i < decreseBalance.Length; i++) {
+        public void StrainBalance(BalanceResource[] decreseBalance)
+        {
+            for (int i = 0; i < decreseBalance.Length; i++)
+            {
                 StrainBalance(decreseBalance[i]);
             }
         }
@@ -299,18 +360,25 @@ namespace City {
         /// Damages the city with given amount.
         /// </summary>
         /// <param name="damage"> Amount of damage </param>
-        public void Damage(int damage) {
+        public void Damage(int damage)
+        {
             health -= damage;
             UpdateUI();
-            if (health <= 0) {
+            if (health <= 0)
+            {
                 FindObjectOfType<SceneController>().ChangeScene("GameOver");
             }
         }
+        
+        public int GetHp() => health;
+
         /// <summary>
         /// Update all values displayed in the UI.
         /// </summary>
-        private void UpdateUI() {
-            if (!moneyText || !incomeText || !healthText) {
+        private void UpdateUI()
+        {
+            if (!moneyText || !incomeText || !healthText)
+            {
                 throw new ArgumentNullException("Some UI text components are not assigned!");
             }
             moneyText.text = resources[(int)BuildResourceType.MONEY].resourceAmount.ToString();
@@ -318,5 +386,6 @@ namespace City {
             healthText.text = health.ToString();
             energyText.text = GetBalanceSummaryByType(BalanceResourceType.ENERGY) + " / " + balanceAvailable[(int)BalanceResourceType.ENERGY].resourceAmount.ToString();
         }
+
     }
 }

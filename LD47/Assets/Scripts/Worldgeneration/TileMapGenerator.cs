@@ -38,10 +38,7 @@ namespace Worldgeneration
                     coords[y * worldData.worldSize.y + x] = new Vector3Int(x, y, 0) - offset;
                 }
             }
-        }
 
-        private void Start()
-        {
             if (worldData.worldLayers.Count == 0)
                 throw new System.ArgumentOutOfRangeException("World data must have at least one layer!");
 

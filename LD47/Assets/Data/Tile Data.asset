@@ -21,3 +21,5 @@ MonoBehaviour:
     value: {fileID: 11400000, guid: ed2fad9b5f4deeb42be83a8228d37845, type: 2}
   - name: stone
     value: {fileID: 11400000, guid: 44af2f0e75732ab4b82da806137d564e, type: 2}
+  - name: bush
+    value: {fileID: 11400000, guid: 4bc51891794c2c84ab4c1b9bac59435b, type: 2}
