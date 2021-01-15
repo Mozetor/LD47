@@ -51,7 +51,9 @@ namespace Worldgeneration
             List<string[,]> worldPixelTypes = worldData.WorldPixelTypes;
             for (int i = 0; i < worldPixelTypes.Count; i++)
             {
-                var tilemap = Instantiate(tilemapPrefab, grid.transform).GetComponent<Tilemap>();
+                var g = Instantiate(tilemapPrefab, grid.transform);
+                g.name = "TilemapLayer_" + i;
+                var tilemap = g.GetComponent<Tilemap>();
                 tilemap.GetComponent<NavMeshModifier>().area = worldData.worldLayers[i].NavMeshSelector;
                 tilemap.GetComponent<TilemapRenderer>().sortingOrder = i;
                 tilemaps.Add(tilemap);

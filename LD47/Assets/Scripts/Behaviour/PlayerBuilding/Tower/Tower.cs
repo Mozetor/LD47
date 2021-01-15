@@ -40,7 +40,7 @@ namespace PlayerBuilding.Tower {
                 return;
             }
 
-            var enemies = FindObjectsOfType<Enemy>()
+            var enemies = FindObjectsOfType<NavEnemy2D>()
                 .Where(HasValidType)
                 .Where(IsInRange)
                 .ToList();
@@ -52,11 +52,11 @@ namespace PlayerBuilding.Tower {
             StartCoroutine(Attack(target));
         }
 
-        private bool HasValidType(Enemy enemy) => targets.Contains(enemy.enemyType);
+        private bool HasValidType(NavEnemy2D enemy) => targets.Contains(enemy.settings.enemyType);
 
-        private bool IsInRange(Enemy enemy) => Vector3.Distance(enemy.transform.position, this.transform.position) <= towerDamageData[buildingLevel].range;
+        private bool IsInRange(NavEnemy2D enemy) => Vector3.Distance(enemy.transform.position, this.transform.position) <= towerDamageData[buildingLevel].range;
 
-        private Vector3 GetPositionInFrontOfChildWithName(Enemy enemy, string name) {
+        private Vector3 GetPositionInFrontOfChildWithName(NavEnemy2D enemy, string name) {
             for (int i = 0; i < enemy.transform.childCount; i++) {
                 if (enemy.transform.GetChild(i).name == name) {
                     var tran = enemy.transform.GetChild(i);
@@ -66,7 +66,7 @@ namespace PlayerBuilding.Tower {
             return enemy.transform.position;
         }
 
-        private IEnumerator Attack(Enemy target) {
+        private IEnumerator Attack(NavEnemy2D target) {
             currentAttackCooldown = towerDamageData[buildingLevel].attackCooldown;
             var forward = GetPositionInFrontOfChildWithName(target, "Graphics") - this.transform.position;
 

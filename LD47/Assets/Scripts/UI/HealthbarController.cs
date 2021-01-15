@@ -8,8 +8,8 @@ public class HealthbarController : MonoBehaviour {
     public Slider healthBar;
 
     private void Awake() {
-        var enemy = GetComponentInParent<Enemy>();
-        enemy.AddOnHealthUpdated(UpdateHealthBar);
+        var enemy = GetComponentInParent<NavEnemy2D>();
+        enemy.settings.AddOnHealthUpdated(UpdateHealthBar);
     }
 
     private void UpdateHealthBar(int health, int maxHealth, int _) {

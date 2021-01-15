@@ -1,8 +1,9 @@
 ﻿namespace Assets.Enemies {
-    public class BomberEnemy : Enemy {
+    public class BomberEnemy : NavEnemy2D
+    {
         protected override void Attack() {
-            cityController.Damage(damage);
-            TakeDamage(maxHealth);
+            target.damageable.Damage(settings.damage);
+            settings.TakeDamage(settings.maxHealth);
         }
     }
 }

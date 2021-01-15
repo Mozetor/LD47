@@ -25,9 +25,9 @@ namespace Stats {
         }
 
         private void AddEnemyKill(Spawnable spawnable) {
-            Enemy e = (Enemy)spawnable;
+            NavEnemy2D e = (NavEnemy2D)spawnable;
             stats.enemiesKilled++;
-            switch (e.enemyName) {
+            switch (e.settings.enemyName) {
                 case "melee":
                     stats.meleeEnemiesKilled++;
                     break;
@@ -41,7 +41,7 @@ namespace Stats {
                     stats.suicideEnemiesKilled++;
                     break;
                 default:
-                    throw new NotImplementedException("Enemy name: " + e.enemyName + " not implemented!");
+                    throw new NotImplementedException("Enemy name: " + e.settings.enemyName + " not implemented!");
             }
         }
     }

@@ -10,6 +10,7 @@ public class WorldDataEditor : Editor
     private WorldData data;
     private SerializedProperty layers;
     private SerializedProperty pixelDefs;
+    private bool worldMapFoldout = true;
     private bool colorDefinitionsFoldout = true;
     private IEnumerable<Color32> unusedColors;
     private (HashSet<string> duplicateNames, HashSet<Color32> duplicateColors) duplicates;
@@ -38,9 +39,13 @@ public class WorldDataEditor : Editor
         serializedObject.Update();
         data = (WorldData)target;
 
-        data.worldSize = EditorGUILayout.Vector2IntField("World Size", data.worldSize);
-
-        EditorGUILayout.PropertyField(layers);
+        worldMapFoldout = EditorGUILayout.BeginFoldoutHeaderGroup(worldMapFoldout, "World Map");
+        EditorGUILayout.EndFoldoutHeaderGroup();
+        if(worldMapFoldout)
+        {
+            data.worldSize = EditorGUILayout.Vector2IntField("World Size", data.worldSize);
+            EditorGUILayout.PropertyField(layers);
+        }
 
         colorDefinitionsFoldout = EditorGUILayout.BeginFoldoutHeaderGroup(colorDefinitionsFoldout, "Color Definitions");
         EditorGUILayout.EndFoldoutHeaderGroup();
@@ -65,6 +70,7 @@ public class WorldDataEditor : Editor
             }
 
         }
+
 
 
         serializedObject.ApplyModifiedProperties();

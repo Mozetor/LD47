@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Assets.Enemies {
-    public class ProjectileEnemy : Enemy {
+namespace Assets.Enemies
+{
+    public class ProjectileEnemy : NavEnemy2D
+    {
 
         public EnemyProjectile projectile;
 
-        protected override void Attack() {
-            var forward = cityController.transform.position - this.transform.position;
-            var lifetime = range / projectile.speed * 2;
+        protected override void Attack()
+        {
+            var forward = target.pos - transform.position;
+            var lifetime = settings.range / projectile.speed * 2;
 
-            var proj = Instantiate(projectile, this.transform.position, Quaternion.identity);
+            var proj = Instantiate(projectile, transform.position, Quaternion.identity);
             proj.direction = forward;
-            proj.damage = damage;
+            proj.damage = settings.damage;
             proj.lifeTime = lifetime;
         }
     }
