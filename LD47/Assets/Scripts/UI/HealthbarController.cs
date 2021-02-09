@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Enemies;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class HealthbarController : MonoBehaviour {

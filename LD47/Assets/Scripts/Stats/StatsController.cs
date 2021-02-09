@@ -1,6 +1,6 @@
-﻿using Assets.Enemies;
-using Assets.WaveSpawner;
+﻿using Assets.WaveSpawner;
 using Assets.WaveSpawner.Implementation;
+using Enemies;
 using System;
 using UnityEngine;
 

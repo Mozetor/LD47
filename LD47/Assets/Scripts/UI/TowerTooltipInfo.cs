@@ -1,15 +1,15 @@
-﻿using Assets.Enemies;
-using Assets.Towers;
+﻿using Buildings.Resources;
+using Buildings.Towers;
+using Enemies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Economy;
 
 namespace Assets.ToolTip.Implementation {
     public class TowerTooltipInfo : ToolTipInfo {
 
-        public PlayerBuilding.Towers.Tower tower;
+        public Tower tower;
 
 
         public override Color GetColor() => Color.white;
@@ -66,7 +66,8 @@ namespace Assets.ToolTip.Implementation {
                     return "Grounded";
                 case EnemyType.AIRBORN:
                     return "Airborne";
-                default: throw new ArgumentException($"Unknown enemy type '{type}'");
+                default:
+                    throw new ArgumentException($"Unknown enemy type '{type}'");
             }
         }
 

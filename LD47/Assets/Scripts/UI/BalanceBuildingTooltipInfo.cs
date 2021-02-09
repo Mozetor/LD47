@@ -1,16 +1,11 @@
-﻿using Assets.Enemies;
-using Assets.Towers;
-using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
+﻿using Buildings.Economy;
+using Buildings.Resources;
 using UnityEngine;
-using Economy;
 
 namespace Assets.ToolTip.Implementation {
     public class BalanceBuildingTooltipInfo : ToolTipInfo {
 
-        public PlayerBuilding.ProviderBuilding.ProviderBuilding building;
+        public ProviderBuilding building;
 
 
         public override Color GetColor() => Color.white;
@@ -25,7 +20,8 @@ namespace Assets.ToolTip.Implementation {
                 CostArrayToString(building.buildCost[0].ResourceCost),
                 building.resourceGenerated[0].resourceType + ": " +
                 building.resourceGenerated[0].resourceAmount + "\n"
-            ); ;
+            );
+            ;
         }
 
         private string CostArrayToString(BuildResource[] cost) {

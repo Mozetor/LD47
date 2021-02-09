@@ -1,7 +1,9 @@
-﻿using Assets.Enemies;
-using Assets.Towers;
-using Assets.WaveSpawner.Implementation;
-using PlayerBuilding.Towers;
+﻿using Assets.WaveSpawner.Implementation;
+using Buildings;
+using Buildings.Economy;
+using Buildings.Resources;
+using Buildings.Towers;
+using Enemies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,8 +66,8 @@ namespace PlayerBuilding {
                     selectedBuilding = hit.transform.gameObject;
                     canvasTurretSelection.SetActive(true);
                     selectedPlaceable = selectedBuilding.GetComponent<Tower>();
-                    if (selectedBuilding.GetComponent<Towers.Tower>() != null) {
-                        Towers.Tower selecedTurretInformation = selectedBuilding.GetComponent<Towers.Tower>();
+                    if (selectedBuilding.GetComponent<Tower>() != null) {
+                        Tower selecedTurretInformation = selectedBuilding.GetComponent<Tower>();
                         // Range indicator
                         SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.towerDamageData[selecedTurretInformation.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
                     }
@@ -172,8 +174,8 @@ namespace PlayerBuilding {
                     cost
                 );
             }
-            else if (building is EcoBuilding.EcoBuilding) {
-                EcoBuilding.EcoBuilding ecoBuilding = building.GetObject().GetComponent<EcoBuilding.EcoBuilding>();
+            else if (building is EcoBuilding) {
+                EcoBuilding ecoBuilding = building.GetObject().GetComponent<EcoBuilding>();
                 string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(ecoBuilding.buildCost[towerLevel + 1].ResourceCost);
                 return string.Format(
                       "<b>{0}</b>\n" +
@@ -186,8 +188,8 @@ namespace PlayerBuilding {
                   );
                 ;
             }
-            else if (building is ProviderBuilding.ProviderBuilding) {
-                ProviderBuilding.ProviderBuilding balanceBuilding = building.GetObject().GetComponent<ProviderBuilding.ProviderBuilding>();
+            else if (building is ProviderBuilding) {
+                ProviderBuilding balanceBuilding = building.GetObject().GetComponent<ProviderBuilding>();
                 string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(balanceBuilding.buildCost[towerLevel + 1].ResourceCost);
                 return string.Format(
                       "<b>{0}</b>\n" +
@@ -220,7 +222,7 @@ namespace PlayerBuilding {
             }
         }
 
-        private string CostArrayToString(Economy.BuildResource[] cost) {
+        private string CostArrayToString(BuildResource[] cost) {
             string s = "";
             for (int i = 0; i < cost.Length; i++) {
                 s += cost[i].resourceType + ": ";
@@ -253,8 +255,8 @@ namespace PlayerBuilding {
         /// <param name="newTower"></param>
         public void StartTowerPlacement(GameObject silhouette) {
             // Range indicator
-            if (silhouette.GetComponent<Towers.Tower>() != null) {
-                var tower = silhouette.GetComponent<Towers.Tower>();
+            if (silhouette.GetComponent<Tower>() != null) {
+                var tower = silhouette.GetComponent<Tower>();
                 SetCircleHighlight(silhouette, tower.towerDamageData[tower.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
             }
             constructionController.StartPlacement(silhouette.GetComponent<IPlaceable<Building>>());
@@ -274,8 +276,8 @@ namespace PlayerBuilding {
         public void UpgradeSelectedBuilding() {
             if (selectedPlaceable.CanUpgrade()) {
                 selectedPlaceable.Upgrade();
-                if (selectedBuilding.GetComponent<Towers.Tower>() != null) {
-                    Towers.Tower selectedTurretInformation = selectedBuilding.GetComponent<Towers.Tower>();
+                if (selectedBuilding.GetComponent<Tower>() != null) {
+                    Tower selectedTurretInformation = selectedBuilding.GetComponent<Tower>();
                     // Range indicator
                     SetCircleHighlight(selectedTurretInformation.transform.gameObject, selectedTurretInformation.towerDamageData[selectedTurretInformation.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
 

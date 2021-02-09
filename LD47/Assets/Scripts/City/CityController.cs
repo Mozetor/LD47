@@ -1,6 +1,6 @@
 ﻿using Assets.WaveSpawner.Implementation;
-using Economy;
-using PlayerBuilding;
+using Buildings;
+using Buildings.Resources;
 using Stats;
 using System;
 using TMPro;
@@ -156,7 +156,7 @@ namespace City {
                     }
                 }
             }
-            throw new System.NotImplementedException("resource " + resourceCost.resourceType + " not found");
+            throw new NotImplementedException("resource " + resourceCost.resourceType + " not found");
         }
         /// <summary>
         /// Whether resource is enough to buy something.
@@ -188,7 +188,7 @@ namespace City {
                     return true;
                 }
             }
-            throw new System.NotImplementedException("resource " + resource.resourceType + " not found");
+            throw new NotImplementedException("resource " + resource.resourceType + " not found");
         }
         /// <summary>
         /// Adds given amount of resources, use other method to subtract
@@ -200,7 +200,7 @@ namespace City {
             // checks input value error, editor only
             for (int i = 0; i < resource.Length; i++) {
                 if (resource[i].resourceAmount < 0) {
-                    throw new System.ArgumentException("cant add negative values, use SubtractResource");
+                    throw new ArgumentException("cant add negative values, use SubtractResource");
                 }
             }
 #endif
@@ -225,7 +225,7 @@ namespace City {
                     return true;
                 }
             }
-            throw new System.NotImplementedException("resource " + resource.resourceType + " not found");
+            throw new NotImplementedException("resource " + resource.resourceType + " not found");
         }
         /// <summary>
         /// Adds given amount of resource, use other method to subtract
@@ -238,7 +238,7 @@ namespace City {
             // checks input value error, editor only
             for (int i = 0; i < resource.Length; i++) {
                 if (resource[i].resourceAmount < 0) {
-                    throw new System.ArgumentException("cant add negative values, use SubtractResource");
+                    throw new ArgumentException("cant add negative values, use SubtractResource");
                 }
             }
 #endif
@@ -264,7 +264,7 @@ namespace City {
                     }
                 }
             }
-            throw new System.NotImplementedException("resource " + resource.resourceType + " not found");
+            throw new NotImplementedException("resource " + resource.resourceType + " not found");
         }
 
         /// <summary>
