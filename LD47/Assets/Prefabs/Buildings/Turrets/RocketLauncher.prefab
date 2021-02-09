@@ -49,27 +49,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Rocket Launcher
-  cost:
+  buildCost:
   - ResourceCost:
-    - resourceAmount: 400
+    - resourceAmount: 250
       resourceType: 0
-  - ResourceCost:
-    - resourceAmount: 500
-      resourceType: 0
-  - ResourceCost:
-    - resourceAmount: 500
-      resourceType: 0
-    - resourceAmount: 150
-      resourceType: 1
+  upkeepCost:
+  - BalanceCost: []
+  HpMax: 0
   towerDamageData:
   - damage: 10
     range: 5
-    attackCooldown: 2
-  - damage: 12
-    range: 7
-    attackCooldown: 2
-  - damage: 15
-    range: 8
     attackCooldown: 2
   targets: 00000000
   projectile: {fileID: -3842044217624081177, guid: 90a36e0d71f77ed46b9ac881645a4728,
@@ -157,6 +146,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -472,6 +462,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -553,6 +544,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

@@ -53,10 +53,18 @@ namespace Buildings {
             switch (state) {
                 case ConstructionState.Placing:
                     UpdatePlacing();
+                    ListenCancel();
                     break;
                 case ConstructionState.Selling:
                     UpdateSelling();
+                    ListenCancel();
                     break;
+            }
+        }
+
+        private void ListenCancel() {
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1)) {
+                CleanUp();
             }
         }
         /// <summary>

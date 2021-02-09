@@ -49,12 +49,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: Air Defense Turret
-  cost:
-  - resourceAmount: 300
-    resourceType: 0
-  damage: 15
-  range: 8
-  attackCooldown: 0.8
+  buildCost:
+  - ResourceCost:
+    - resourceAmount: 50
+      resourceType: 0
+  upkeepCost:
+  - BalanceCost: []
+  HpMax: 0
+  towerDamageData:
+  - damage: 0
+    range: 0
+    attackCooldown: 0
   targets: 01000000
   projectile: {fileID: 8319754320604176883, guid: 7dbb3409a7bee934581806806f3ed47d,
     type: 3}
@@ -141,6 +146,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -456,6 +462,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -537,6 +544,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
