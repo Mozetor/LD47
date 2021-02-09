@@ -9,7 +9,7 @@ using Economy;
 namespace Assets.ToolTip.Implementation {
     public class TowerTooltipInfo : ToolTipInfo {
 
-        public PlayerBuilding.Tower.Tower tower;
+        public PlayerBuilding.Towers.Tower tower;
 
 
         public override Color GetColor() => Color.white;

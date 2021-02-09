@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace PlayerBuilding.Tower {
+namespace PlayerBuilding.Towers {
     public class Tower : Building {
 
         private const int GROUNDED = 8;
@@ -31,6 +31,15 @@ namespace PlayerBuilding.Tower {
                     throw new System.ArgumentException("Upgrade arrays must have same lenght!");
                 }
             }
+        }
+
+        private void Start() {
+            if (upkeepCost.Length != 0) {
+                for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
+                    FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost[i]);
+                }
+            }
+            GetComponent<LineRenderer>().enabled = false;
         }
 
         private void Update() {
@@ -86,15 +95,6 @@ namespace PlayerBuilding.Tower {
             proj.lifeTime = lifetime;
             proj.enemyTypes = this.targets;
             proj.gameObject.layer = targets.Contains(EnemyType.GROUNDED) ? GROUNDED : AIRBORNE;
-        }
-
-        public override void FinishPlacement(GameObject placedObject) {
-            PlayerBuildingPlacer.AddBuilding(placedObject);
-            if (upkeepCost.Length != 0) {
-                for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
-                    FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost[i]);
-                }
-            }
         }
 
         public override void PrepareRemoval() {

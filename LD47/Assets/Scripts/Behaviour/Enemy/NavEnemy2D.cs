@@ -46,6 +46,10 @@ public class NavEnemy2D : Spawnable, IDamageable
 
     private void Update()
     {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.K))
+            Die();
+#endif
         settings.UpdateAttackCooldown(Time.deltaTime);
         Rotate();
         switch (state)
@@ -78,7 +82,7 @@ public class NavEnemy2D : Spawnable, IDamageable
                 {
                     if (settings.Attack())
                     {
-                        int healthLeft = target.damageable.GetHp() - settings.damage;
+                        int healthLeft = target.damageable.GetHealth() - settings.damage;
                         Attack();
                         if (healthLeft <= 0)
                         {
@@ -143,7 +147,7 @@ public class NavEnemy2D : Spawnable, IDamageable
 
     public void Damage(int damage) => settings.TakeDamage(damage);
 
-    public int GetHp() => settings.Health;
+    public int GetHealth() => settings.Health;
 
     protected virtual void Attack() => target.damageable.Damage(settings.damage);
 }

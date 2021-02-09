@@ -1,21 +1,22 @@
-﻿using Assets.WaveSpawner.Implementation;
+﻿using Assets.Enemies;
+using Assets.Towers;
+using Assets.WaveSpawner.Implementation;
+using PlayerBuilding.Towers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Assets.Towers;
-using Assets.Enemies;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace PlayerBuilding {
     public class TowerUiController : MonoBehaviour {
 
         /// <summary> Main Camera </summary>
         private Camera mainCamera;
-        /// <summary> Tower placer controller </summary>
-        private PlayerBuildingPlacer towerPlacer;
+        /// <summary> building construction controller </summary>
+        private ConstructionController constructionController;
 
         /// <summary> Ui of building placement selection </summary>
         public GameObject canvasTurretBuildMenue;
@@ -28,22 +29,20 @@ namespace PlayerBuilding {
         /// <summary> Activeley selected building </summary>
         private GameObject selectedBuilding;
         /// <summary> Contains info and methods to manipulate selected building </summary>
-        private IPlaceable selectedPlaceable;
+        private Tower selectedPlaceable;
 
         private void Awake() {
             var spawner = FindObjectOfType<BuildBattleSpawner>();
             spawner.AddOnBuildPhaseEnd(CloseBuildUi);
         }
 
-        // Start is called before the first frame update
         void Start() {
             mainCamera = Camera.main;
-            towerPlacer = FindObjectOfType<PlayerBuildingPlacer>();
+            constructionController = FindObjectOfType<ConstructionController>();
         }
 
-        // Update is called once per frame
         void Update() {
-            if (Input.GetMouseButtonDown(0) && !towerPlacer.GetTurretPlaceStatus() && !EventSystem.current.IsPointerOverGameObject()) {
+            if (Input.GetMouseButtonDown(0) && constructionController.State == ConstructionController.ConstructionState.None && !EventSystem.current.IsPointerOverGameObject()) {
                 SelectTurret();
             }
             if (Input.GetMouseButtonDown(1) && canvasTurretBuildMenue.transform.GetChild(1).gameObject.activeInHierarchy) {
@@ -64,9 +63,9 @@ namespace PlayerBuilding {
                 if (hit.transform.CompareTag("Tower")) {
                     selectedBuilding = hit.transform.gameObject;
                     canvasTurretSelection.SetActive(true);
-                    selectedPlaceable = selectedBuilding.GetComponent<IPlaceable>();
-                    if (selectedBuilding.GetComponent<Tower.Tower>() != null) {
-                        Tower.Tower selecedTurretInformation = selectedBuilding.GetComponent<Tower.Tower>();
+                    selectedPlaceable = selectedBuilding.GetComponent<Tower>();
+                    if (selectedBuilding.GetComponent<Towers.Tower>() != null) {
+                        Towers.Tower selecedTurretInformation = selectedBuilding.GetComponent<Towers.Tower>();
                         // Range indicator
                         SetCircleHighlight(hit.transform.gameObject, selecedTurretInformation.towerDamageData[selecedTurretInformation.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
                     }
@@ -87,7 +86,7 @@ namespace PlayerBuilding {
             }
             updatedTowerUi = false;
             selectedBuilding = null;
-            selectedPlaceable = null;
+            selectedPlaceable = default;
             canvasTurretSelection.SetActive(false);
         }
 
@@ -147,10 +146,10 @@ namespace PlayerBuilding {
         /// <summary> Generates formatted text of important building information </summary>
         /// <param name="building"></param>
         /// <returns></returns>
-        private string FormatBuildingInformation(IPlaceable building) {
+        private string FormatBuildingInformation<T>(T building) where T : IPlaceable<Building>, IUpgradeable {
             int towerLevel = building.GetBuildingLevel();
-            if (building is Tower.Tower) {
-                Tower.Tower tower = building.GetObject().GetComponent<Tower.Tower>();
+            if (building is Tower) {
+                Tower tower = building.GetObject().GetComponent<Tower>();
                 string cost = building.IsMaxUpgrade() ? "" : "upgrade cost:\n" + CostArrayToString(tower.buildCost[towerLevel + 1].ResourceCost);
                 string special = "";
                 if (tower.projectile is RocketTowerProjectile rocket) {
@@ -184,7 +183,8 @@ namespace PlayerBuilding {
                       ecoBuilding.resourceGenerated[towerLevel].resourceType + ": " +
                       ecoBuilding.resourceGenerated[towerLevel].resourceAmount + "\n",
                       cost
-                  ); ;
+                  );
+                ;
             }
             else if (building is ProviderBuilding.ProviderBuilding) {
                 ProviderBuilding.ProviderBuilding balanceBuilding = building.GetObject().GetComponent<ProviderBuilding.ProviderBuilding>();
@@ -197,7 +197,8 @@ namespace PlayerBuilding {
                       balanceBuilding.resourceGenerated[towerLevel].resourceType + ": " +
                       balanceBuilding.resourceGenerated[towerLevel].resourceAmount + "\n",
                       cost
-                  ); ;
+                  );
+                ;
             }
             throw new System.NotImplementedException("Building ui of type " + building.GetType() + "not implemented");
         }
@@ -214,7 +215,8 @@ namespace PlayerBuilding {
                     return "Grounded";
                 case EnemyType.AIRBORN:
                     return "Airborne";
-                default: throw new ArgumentException($"Unknown enemy type '{type}'");
+                default:
+                    throw new ArgumentException($"Unknown enemy type '{type}'");
             }
         }
 
@@ -237,12 +239,7 @@ namespace PlayerBuilding {
         /// <summary> Closes build menue and cancels building prozess </summary>
         public void CloseBuildUi() {
             BuildUI(false);
-            if (towerPlacer.GetTurretPlaceStatus()) {
-                towerPlacer.CancelTowerPlacement();
-            }
-            if (towerPlacer.GetSellStatus()) {
-                towerPlacer.CancelSellMode();
-            }
+            constructionController.Stop();
         }
 
         private void BuildUI(bool expand) {
@@ -256,11 +253,11 @@ namespace PlayerBuilding {
         /// <param name="newTower"></param>
         public void StartTowerPlacement(GameObject silhouette) {
             // Range indicator
-            if (silhouette.GetComponent<Tower.Tower>() != null) {
-                var tower = silhouette.GetComponent<Tower.Tower>();
+            if (silhouette.GetComponent<Towers.Tower>() != null) {
+                var tower = silhouette.GetComponent<Towers.Tower>();
                 SetCircleHighlight(silhouette, tower.towerDamageData[tower.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
             }
-            towerPlacer.StartTowerPlacement(silhouette.GetComponent<IPlaceable>());
+            constructionController.StartPlacement(silhouette.GetComponent<IPlaceable<Building>>());
         }
 
         /// <summary> Starts placing of a new tower </summary>
@@ -270,15 +267,15 @@ namespace PlayerBuilding {
             canvasTurretBuildMenue.transform.GetChild(1).gameObject.SetActive(true);
             canvasTurretBuildMenue.transform.GetChild(2).gameObject.SetActive(false);
             canvasTurretBuildMenue.transform.GetChild(3).gameObject.SetActive(false);
-            towerPlacer.StartSellMode();
+            constructionController.StartSelling();
         }
 
         /// <summary> Upgrades selected building if possible </summary>
         public void UpgradeSelectedBuilding() {
             if (selectedPlaceable.CanUpgrade()) {
                 selectedPlaceable.Upgrade();
-                if (selectedBuilding.GetComponent<Tower.Tower>() != null) {
-                    Tower.Tower selectedTurretInformation = selectedBuilding.GetComponent<Tower.Tower>();
+                if (selectedBuilding.GetComponent<Towers.Tower>() != null) {
+                    Towers.Tower selectedTurretInformation = selectedBuilding.GetComponent<Towers.Tower>();
                     // Range indicator
                     SetCircleHighlight(selectedTurretInformation.transform.gameObject, selectedTurretInformation.towerDamageData[selectedTurretInformation.GetBuildingLevel()].range, 0.15f, new Color32(0, 191, 255, 255));
 

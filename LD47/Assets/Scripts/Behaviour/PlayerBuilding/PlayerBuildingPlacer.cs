@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using Assets.WaveSpawner.Implementation;
 using City;
-using Assets.WaveSpawner.Implementation;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
-using Stats;
-using Worldgeneration;
 
 namespace PlayerBuilding {
     public class PlayerBuildingPlacer : MonoBehaviour {
@@ -12,7 +10,7 @@ namespace PlayerBuilding {
         /// <summary> Main city </summary>
         private CityController city;
         /// <summary> Information of to placed building </summary>
-        private IPlaceable objectToPlace;
+        private IPlaceable<Building> objectToPlace;
         /// <summary> Main camera </summary>
         private Camera mainCamera;
         /// <summary> Ghost blueprint to indicate placing position </summary>
@@ -29,6 +27,7 @@ namespace PlayerBuilding {
 
         /// <summary> Percentage of money, that will be returned on building selling, 1=100% </summary>
         [Tooltip("Percentage of what will be returned on turret selling, 1=100%")]
+        [Range(0f, 1f)]
         public float refundOnSell;
 
         private void Awake() {
@@ -101,7 +100,7 @@ namespace PlayerBuilding {
             if (newObject.GetComponent<LineRenderer>() != null) {
                 newObject.GetComponent<LineRenderer>().enabled = false;
             }
-            objectToPlace.FinishPlacement(newObject);
+            //objectToPlace.FinishPlacement(newObject);
             city.Buy(objectToPlace.GetCost());
         }
 
@@ -113,7 +112,7 @@ namespace PlayerBuilding {
             if (!(targetPosition == Vector3.zero)) {
                 for (int i = 0; i < playerBuildings.Count; i++) {
                     if (playerBuildings[i].transform.position == targetPosition) {
-                        IPlaceable buildingToSell = playerBuildings[i].GetComponent<IPlaceable>();
+                        IPlaceable<Building> buildingToSell = playerBuildings[i].GetComponent<IPlaceable<Building>>();
                         city.AddResource(buildingToSell.GetCost(), refundOnSell);
                         buildingToSell.PrepareRemoval();
                         GameObject buildingToRemove = playerBuildings[i];
@@ -165,7 +164,7 @@ namespace PlayerBuilding {
         /// Creates building Silhouette and starts placement
         /// </summary>
         /// <param name="toPlaceObject"></param>
-        public void StartTowerPlacement(IPlaceable toPlaceObject) {
+        public void StartTowerPlacement(IPlaceable<Building> toPlaceObject) {
             if (inBuildPhase) {
                 CancelTowerPlacement();
                 placingActive = true;

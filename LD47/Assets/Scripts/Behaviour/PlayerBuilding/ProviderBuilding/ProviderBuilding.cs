@@ -1,6 +1,5 @@
 ﻿using City;
 using Economy;
-using UnityEngine;
 
 namespace PlayerBuilding.ProviderBuilding {
     public class ProviderBuilding : Building {
@@ -18,8 +17,7 @@ namespace PlayerBuilding.ProviderBuilding {
             }
         }
 
-        public override void FinishPlacement(GameObject placedObject) {
-            PlayerBuildingPlacer.AddBuilding(placedObject);
+        private void Start() {
             FindObjectOfType<CityController>().IncreaseBalance(resourceGenerated[buildingLevel]);
             if (upkeepCost.Length != 0) {
                 for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {

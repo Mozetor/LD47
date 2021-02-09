@@ -236,13 +236,13 @@ MonoBehaviour:
       resourceType: 0
   HpMax: 5
   towerDamageData:
-  - damage: 3
+  - damage: 1
     range: 6
     attackCooldown: 0.2
-  - damage: 4
+  - damage: 2
     range: 7
     attackCooldown: 0.2
-  - damage: 5
+  - damage: 3
     range: 8
     attackCooldown: 0.2
   targets: 00000000
@@ -355,7 +355,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Positions:
   - {x: 0, y: 6, z: -0.1}
   - {x: 0.20939697, y: 5.996345, z: -0.1}

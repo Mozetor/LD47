@@ -15,6 +15,7 @@ namespace Stats {
         public T rangedEnemiesKilled;
         public T suicideEnemiesKilled;
         public T flyingEnemiesKilled;
+        public T tankEnemiesKilled;
 
     }
     [System.Serializable]

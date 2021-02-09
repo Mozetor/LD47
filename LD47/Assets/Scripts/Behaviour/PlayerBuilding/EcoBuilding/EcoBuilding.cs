@@ -1,6 +1,5 @@
 ﻿using City;
 using Economy;
-using UnityEngine;
 
 namespace PlayerBuilding.EcoBuilding {
     public class EcoBuilding : Building {
@@ -18,8 +17,7 @@ namespace PlayerBuilding.EcoBuilding {
             }
         }
 
-        public override void FinishPlacement(GameObject placedObject) {
-            PlayerBuildingPlacer.AddBuilding(placedObject);
+        private void Start() {
             FindObjectOfType<CityController>().IncreaseIncome(resourceGenerated[buildingLevel]);
             if (upkeepCost.Length != 0) {
                 for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {

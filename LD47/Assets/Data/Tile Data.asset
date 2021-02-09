@@ -18,7 +18,7 @@ MonoBehaviour:
   - name: grass
     value: {fileID: 11400000, guid: 1c7391ee97880c440a437fc8beae6098, type: 2}
   - name: tree
-    value: {fileID: 11400000, guid: ed2fad9b5f4deeb42be83a8228d37845, type: 2}
+    value: {fileID: 11400000, guid: 716c89ccbb4a90c458cad5fe48cc4085, type: 2}
   - name: stone
     value: {fileID: 11400000, guid: 44af2f0e75732ab4b82da806137d564e, type: 2}
   - name: bush

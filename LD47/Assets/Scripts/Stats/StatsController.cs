@@ -40,6 +40,9 @@ namespace Stats {
                 case "suicide":
                     stats.suicideEnemiesKilled++;
                     break;
+                case "tank":
+                    stats.tankEnemiesKilled++;
+                    break;
                 default:
                     throw new NotImplementedException("Enemy name: " + e.settings.enemyName + " not implemented!");
             }

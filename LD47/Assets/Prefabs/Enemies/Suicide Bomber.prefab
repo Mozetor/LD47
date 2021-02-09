@@ -412,7 +412,7 @@ MonoBehaviour:
   settings:
     enemyName: suicide
     enemyType: 0
-    maxHealth: 5
+    maxHealth: 4
     range: 2
     speed: 5
     damage: 20

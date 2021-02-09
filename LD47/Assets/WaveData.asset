@@ -25,8 +25,8 @@ MonoBehaviour:
     spawnDelay: 0
   - name: Ranged Attack
     spawnGroups:
-    - name: Tanks
-      spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
+    - name: Infantry
+      spawnable: {fileID: 2882906650913054335, guid: 6f6dfb33e68a3c041bad60b3c9c5cd57,
         type: 3}
       amount: 4
     minSimultaneousSpawns: 1
@@ -36,7 +36,7 @@ MonoBehaviour:
   - name: Combined Power
     spawnGroups:
     - name: Infantery
-      spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
+      spawnable: {fileID: 2882906650913054335, guid: 6f6dfb33e68a3c041bad60b3c9c5cd57,
         type: 3}
       amount: 6
     - name: Tanks
@@ -59,8 +59,8 @@ MonoBehaviour:
     spawnDelay: 0
   - name: Air Surveillance
     spawnGroups:
-    - name: Drone
-      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+    - name: Drones
+      spawnable: {fileID: 2285080228727564840, guid: 4e392f214999a5a40b09dd813f139398,
         type: 3}
       amount: 3
     minSimultaneousSpawns: 1
@@ -70,11 +70,11 @@ MonoBehaviour:
   - name: Air Support
     spawnGroups:
     - name: Infantery
-      spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
+      spawnable: {fileID: 2882906650913054335, guid: 6f6dfb33e68a3c041bad60b3c9c5cd57,
         type: 3}
       amount: 12
-    - name: Air Support
-      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+    - name: Drones
+      spawnable: {fileID: 2285080228727564840, guid: 4e392f214999a5a40b09dd813f139398,
         type: 3}
       amount: 3
     minSimultaneousSpawns: 1
@@ -94,10 +94,10 @@ MonoBehaviour:
   - name: Frontal Attack
     spawnGroups:
     - name: Infantery
-      spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
+      spawnable: {fileID: 2882906650913054335, guid: 6f6dfb33e68a3c041bad60b3c9c5cd57,
         type: 3}
       amount: 15
-    - name: Artillery
+    - name: Tanks
       spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
         type: 3}
       amount: 10
@@ -107,11 +107,15 @@ MonoBehaviour:
     spawnDelay: 0
   - name: Full Loadout
     spawnGroups:
+    - name: Scouts
+      spawnable: {fileID: 2285080228727564840, guid: b55ef83da1102414d8839e190ebcae82,
+        type: 3}
+      amount: 6
     - name: Infantery
-      spawnable: {fileID: 52187214168185951, guid: ddaa567edd27f4a4e89ead64fb90d654,
+      spawnable: {fileID: 2882906650913054335, guid: 6f6dfb33e68a3c041bad60b3c9c5cd57,
         type: 3}
       amount: 8
-    - name: Artillery
+    - name: Tanks
       spawnable: {fileID: 2882906650913054335, guid: 1e35d6c6941f0ab41ad886a823fa6e6e,
         type: 3}
       amount: 6
@@ -119,18 +123,18 @@ MonoBehaviour:
       spawnable: {fileID: 7939490381341572151, guid: 727f3a35ad21ba54ca8bff8833db50f3,
         type: 3}
       amount: 4
-    - name: Air Support
-      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+    - name: Drones
+      spawnable: {fileID: 2285080228727564840, guid: 4e392f214999a5a40b09dd813f139398,
         type: 3}
       amount: 6
     minSimultaneousSpawns: 1
-    maxSimultaneousSpawns: 2
-    timeBetweenSpawns: 0.3
+    maxSimultaneousSpawns: 4
+    timeBetweenSpawns: 0.2
     spawnDelay: 0
   - name: Drone Strike
     spawnGroups:
     - name: Drones
-      spawnable: {fileID: 52187214168185951, guid: 2ea0eedbf216b2040896569dec362e05,
+      spawnable: {fileID: 2285080228727564840, guid: 4e392f214999a5a40b09dd813f139398,
         type: 3}
       amount: 12
     minSimultaneousSpawns: 1

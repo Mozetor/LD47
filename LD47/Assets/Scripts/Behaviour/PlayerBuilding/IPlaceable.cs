@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using Economy;
 using System.Collections.Generic;
 using UnityEngine;
-using Economy;
 
-namespace PlayerBuilding {
-    public interface IPlaceable {
+namespace PlayerBuilding
+{
+    public interface IPlaceable<T>
+    {
         /// <summary>
         /// Returns building name.
         /// </summary>
@@ -20,29 +21,23 @@ namespace PlayerBuilding {
         /// </summary>
         /// <returns>Object</returns>
         GameObject GetObject();
-        /// <summary>
-        /// Finish up placement preperations, works as controlled start.
-        /// </summary>
-        void FinishPlacement(GameObject placedObject);
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //void FinishPlacement();
         /// <summary>
         /// Prepare object Removal, works as controlled onDestroy.
         /// </summary>
         void PrepareRemoval();
         /// <summary>
-        /// Checks if building can be upgraded.
+        /// Returns a list of all position offsets this building will be placed on.
         /// </summary>
-        bool CanUpgrade();
+        /// <returns> List of offsets </returns>
+        List<Vector2Int> GetOffsetPositions();
         /// <summary>
-        /// Upgrades Building to next level.
+        /// Returns the thing to place.
         /// </summary>
-        void Upgrade();
-        /// <summary>
-        /// Returns true if Building can no longer be upgraded.
-        /// </summary>
-        bool IsMaxUpgrade();
-        /// <summary>
-        /// Returns current Building upgrade level.
-        /// </summary>
-        int GetBuildingLevel();
+        /// <returns></returns>
+        T GetT();
     }
 }

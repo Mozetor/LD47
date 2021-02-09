@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Worldgeneration
-{
+namespace Worldgeneration {
 
     [CreateAssetMenu(menuName = "Data/World Data")]
-    public class WorldData : ScriptableObject
-    {
+    public class WorldData : ScriptableObject {
         /// <summary> Size of the world </summary>
         public Vector2Int worldSize;
         /// <summary> World Layers </summary>
@@ -24,14 +22,12 @@ namespace Worldgeneration
 
         private Dictionary<Color32, string> pixelDefDic;
 
-        private void OnEnable()
-        {
+        private void OnEnable() {
             pixelDefDic = pixelDefinitions.ToDictionary(def => def.value, def => def.name);
             WorldPixelTypes = GetPixelTypes();
         }
 
-        private void OnValidate()
-        {
+        private void OnValidate() {
             OnValidation?.Invoke();
         }
 
@@ -39,11 +35,9 @@ namespace Worldgeneration
         /// Calculate all sprite name layers.
         /// </summary>
         /// <returns> List of all layers sprite names </returns>
-        private List<string[,]> GetPixelTypes()
-        {
+        private List<string[,]> GetPixelTypes() {
             var r = new List<string[,]>();
-            for (int i = 0; i < Layers; i++)
-            {
+            for (int i = 0; i < Layers; i++) {
                 r.Add(GetPixelTypes(i));
             }
             return r;
@@ -53,17 +47,13 @@ namespace Worldgeneration
         /// </summary>
         /// <param name="layer"> Layer of this world data </param>
         /// <returns> All sprite names of this layer </returns>
-        private string[,] GetPixelTypes(int layer)
-        {
+        private string[,] GetPixelTypes(int layer) {
             string[,] pixelTypes = new string[worldSize.x, worldSize.y];
 
-            for (int y = 0; y < worldSize.y; y++)
-            {
-                for (int x = 0; x < worldSize.x; x++)
-                {
+            for (int y = 0; y < worldSize.y; y++) {
+                for (int x = 0; x < worldSize.x; x++) {
                     var pixel = worldLayers[layer].texture.GetPixel(x, y);
-                    if (pixel.a == 0)
-                    {
+                    if (pixel.a == 0) {
                         pixelTypes[x, y] = "";
                         continue;
                     }

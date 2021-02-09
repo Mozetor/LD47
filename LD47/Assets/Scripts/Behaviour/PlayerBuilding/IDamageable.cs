@@ -8,6 +8,6 @@
         /// Return current health points.
         /// </summary>
         /// <returns></returns>
-        int GetHp();
+        int GetHealth();
     }
 }

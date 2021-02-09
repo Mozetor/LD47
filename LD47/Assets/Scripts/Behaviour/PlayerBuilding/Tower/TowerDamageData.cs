@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PlayerBuilding.Tower {
+namespace PlayerBuilding.Towers {
     [System.Serializable]
     public class TowerDamageData {
         /// <summary> Tower damage </summary>
