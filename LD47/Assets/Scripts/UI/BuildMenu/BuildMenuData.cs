@@ -28,6 +28,7 @@ namespace UI.BuildMenu {
 
         public string name;
         public Sprite sprite;
+        public BuildMenuRowType type;
         public Color spriteColor;
         public List<BuildMenuItem> items;
 
@@ -40,5 +41,10 @@ namespace UI.BuildMenu {
         public Sprite icon;
         public GameObject prefab;
 
+    }
+
+    public enum BuildMenuRowType {
+        Normal,
+        Demolish
     }
 }

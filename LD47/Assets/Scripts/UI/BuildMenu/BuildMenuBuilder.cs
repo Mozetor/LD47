@@ -12,12 +12,17 @@ namespace UI.BuildMenu {
 
         [SerializeField]
         private BuildMenuData buildMenuData;
+        [SerializeField]
+        private Color normalColor;
+        [SerializeField]
+        private Color demolishColor;
 
         private ConstructionController constructionController;
         private List<GameObject> rows;
         private Transform menuRows;
         private Transform menuBar;
         private Image menuBarImage;
+        private Image menuRowImage;
 
         private void Start() {
             GenerateUI();
@@ -30,6 +35,7 @@ namespace UI.BuildMenu {
                 menuBar.gameObject.SetActive(true);
                 menuRows.gameObject.SetActive(true);
             });
+            constructionController.onStateChanged += UpdateUI;
         }
 
         private void GenerateUI() {
@@ -37,7 +43,8 @@ namespace UI.BuildMenu {
             menuRows = transform.Find("MenuRows");
             menuBar = transform.Find("MenuBar");
             menuBarImage = menuBar.GetComponent<Image>();
-            float size = menuBar.GetComponent<RectTransform>().position.y * 2 - 20;
+            menuRowImage = menuRows.GetComponent<Image>();
+            float size = menuBar.GetComponent<RectTransform>().position.y * 2 - 30;
             GenerateMenuBar(buildMenuData.buildMenu.rows, size);
             rows = new List<GameObject>();
             foreach (var row in buildMenuData.buildMenu.rows) {
@@ -50,7 +57,9 @@ namespace UI.BuildMenu {
             for (int i = 0; i < rows.Count; i++) {
                 var row = rows[i];
                 int j = i;
-                GenerateItem(""/*row.name*/, row.sprite, buildMenuData.menuRowSlotSprite, () => ActivateRow(j), menuBar, size, row.spriteColor);
+                Action normalButtonPress = () => ActivateRow(j);
+                Action buttonPress = row.type == BuildMenuRowType.Normal ? normalButtonPress : constructionController.StartSelling;
+                GenerateItem(""/*row.name*/, row.sprite, buildMenuData.menuRowSlotSprite, buttonPress, menuBar, size, row.spriteColor);
             }
         }
 
@@ -91,6 +100,21 @@ namespace UI.BuildMenu {
             }
             menuRows.gameObject.SetActive(isExtended);
             menuBarImage.sprite = isExtended ? buildMenuData.menuSpriteConnected : buildMenuData.menuSpriteSimple;
+        }
+
+        private void UpdateUI() {
+            switch (constructionController.State) {
+                case ConstructionController.ConstructionState.Selling:
+                    menuBarImage.color = demolishColor;
+                    menuRowImage.color = demolishColor;
+                    break;
+                case ConstructionController.ConstructionState.None:
+                case ConstructionController.ConstructionState.Placing:
+                default:
+                    menuBarImage.color = normalColor;
+                    menuRowImage.color = normalColor;
+                    break;
+            }
         }
     }
 }

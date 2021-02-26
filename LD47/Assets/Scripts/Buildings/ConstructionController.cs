@@ -34,6 +34,7 @@ namespace Buildings {
         private SpriteRenderer[] spriteRenderers;
 
         public ConstructionState State => state;
+        public Action onStateChanged;
 
         private void Start() {
             worldData = FindObjectOfType<TileMapGenerator>().worldData;
@@ -65,6 +66,7 @@ namespace Buildings {
         private void ListenCancel() {
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(1)) {
                 CleanUp();
+                onStateChanged?.Invoke();
             }
         }
         /// <summary>
@@ -125,6 +127,7 @@ namespace Buildings {
             for (int i = 0; i < spriteRenderers.Length; i++) {
                 spriteRenderers[i].sortingOrder += 20;
             }
+            onStateChanged?.Invoke();
         }
         /// <summary>
         /// Start selling mode.
@@ -132,12 +135,14 @@ namespace Buildings {
         public void StartSelling() {
             CleanUp();
             state = ConstructionState.Selling;
+            onStateChanged?.Invoke();
         }
         /// <summary>
         /// Stops current mode and resets.
         /// </summary>
         public void Stop() {
             CleanUp();
+            onStateChanged?.Invoke();
         }
         /// <summary>
         /// Removes a placeable from the map.
