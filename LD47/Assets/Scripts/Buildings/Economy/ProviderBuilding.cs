@@ -1,0 +1,62 @@
+﻿using Buildings.Resources;
+using City;
+
+namespace Buildings.Economy {
+    public class ProviderBuilding : Building {
+        /// <summary> Amount of resources added by this building, by level </summary>
+        public BalanceResource[] resourceGenerated;
+
+        private void Awake() {
+            if (buildCost.Length != resourceGenerated.Length) {
+                throw new System.ArgumentException("Upgrade arrays must have same lenght!");
+            }
+            if (upkeepCost.Length != 0) {
+                if (upkeepCost.Length != buildCost.Length) {
+                    throw new System.ArgumentException("Upgrade arrays must have same lenght!");
+                }
+            }
+        }
+
+        private void Start() {
+            FindObjectOfType<CityController>().IncreaseBalance(resourceGenerated[buildingLevel]);
+            if (upkeepCost.Length != 0) {
+                for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
+                    FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost[i]);
+                }
+            }
+        }
+
+        public override void PrepareRemoval() {
+            FindObjectOfType<CityController>().DecreaseBalance(resourceGenerated[buildingLevel]);
+            if (upkeepCost.Length != 0) {
+                for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
+                    BalanceResource bal = upkeepCost[buildingLevel].BalanceCost[i];
+                    bal.resourceAmount = -bal.resourceAmount;
+                    FindObjectOfType<CityController>().StrainBalance(bal);
+                }
+            }
+        }
+
+        public override void Upgrade() {
+            if (buildingLevel + 1 >= buildCost.Length) {
+                throw new System.ArgumentException("Tried to upgrade past maximum building level");
+            }
+            // change spirte
+            CityController city = FindObjectOfType<CityController>();
+            city.Buy(buildCost[buildingLevel + 1].ResourceCost);
+            city.DecreaseBalance(resourceGenerated[buildingLevel]);
+            if (upkeepCost.Length != 0) {
+                for (int i = 0; i < upkeepCost[buildingLevel].BalanceCost.Length; i++) {
+                    BalanceResource bal = upkeepCost[buildingLevel].BalanceCost[i];
+                    bal.resourceAmount = -bal.resourceAmount;
+                    FindObjectOfType<CityController>().StrainBalance(bal);
+                }
+            }
+            buildingLevel++;
+            city.IncreaseBalance(resourceGenerated[buildingLevel]);
+            if (upkeepCost.Length != 0) {
+                FindObjectOfType<CityController>().StrainBalance(upkeepCost[buildingLevel].BalanceCost);
+            }
+        }
+    }
+}

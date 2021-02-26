@@ -1,5 +1,4 @@
-﻿using Assets.Enemies;
-using Assets.WaveSpawner;
+﻿using Assets.WaveSpawner;
 using Assets.WaveSpawner.Implementation;
 using System.Linq;
 using TMPro;

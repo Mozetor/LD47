@@ -11,9 +11,9 @@ public class CameraController : MonoBehaviour {
     [Tooltip("speed of Sidescroll by mouse")]
     public float mouseSidescrollSpeed = 0.1f;
     [Tooltip("speed of Depthscroll")]
-    public float depthSidescrollSpeed = 150f;
+    public float zoomSpeed = 150f;
     [Tooltip("limit how far can be scrolled: x=close, y=far")]
-    public Vector2 depthSidescrollLimit;
+    public Vector2 zoomHeightLimit;
 
     private void Update() {
         Vector3 pos = transform.position;
@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour {
         pos += ScreenSideScrolling();
         pos.x = Mathf.Clamp(pos.x + Input.GetAxis("Horizontal") * Time.deltaTime * cameraSpeed, -25, 25);
         pos.y = Mathf.Clamp(pos.y + Input.GetAxis("Vertical") * Time.deltaTime * cameraSpeed, -25, 25);
-        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - Input.mouseScrollDelta.y * Time.deltaTime * depthSidescrollSpeed, depthSidescrollLimit.x, depthSidescrollLimit.y);
+        Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize - Input.mouseScrollDelta.y * Time.deltaTime * zoomSpeed, zoomHeightLimit.x, zoomHeightLimit.y);
 
         transform.position = pos;
     }

@@ -1,6 +1,6 @@
-﻿using Assets.Enemies;
-using Assets.WaveSpawner;
+﻿using Assets.WaveSpawner;
 using Assets.WaveSpawner.Implementation;
+using Enemies;
 using System;
 using UnityEngine;
 
@@ -25,9 +25,9 @@ namespace Stats {
         }
 
         private void AddEnemyKill(Spawnable spawnable) {
-            Enemy e = (Enemy)spawnable;
+            NavEnemy2D e = (NavEnemy2D)spawnable;
             stats.enemiesKilled++;
-            switch (e.enemyName) {
+            switch (e.settings.enemyName) {
                 case "melee":
                     stats.meleeEnemiesKilled++;
                     break;
@@ -40,8 +40,11 @@ namespace Stats {
                 case "suicide":
                     stats.suicideEnemiesKilled++;
                     break;
+                case "tank":
+                    stats.tankEnemiesKilled++;
+                    break;
                 default:
-                    throw new NotImplementedException("Enemy name: " + e.enemyName + " not implemented!");
+                    throw new NotImplementedException("Enemy name: " + e.settings.enemyName + " not implemented!");
             }
         }
     }

@@ -842,6 +842,96 @@ TextureImporter:
   - first:
       213: -3610362497323581586
     second: E11
+  - first:
+      213: 2818415227679610127
+    second: G10
+  - first:
+      213: 774397507195319065
+    second: G11
+  - first:
+      213: -1445845504097273618
+    second: G12
+  - first:
+      213: -51393379528580744
+    second: G13
+  - first:
+      213: -4209850995119045424
+    second: Nature_11
+  - first:
+      213: -2983527598420250960
+    second: Nature_12
+  - first:
+      213: 320718511915410576
+    second: Nature_13
+  - first:
+      213: 4459730780077678949
+    second: Nature_18
+  - first:
+      213: 8397913543547017013
+    second: Nature_19
+  - first:
+      213: 3723237229163100423
+    second: Nature_20
+  - first:
+      213: 1468316987086516594
+    second: Nature_25
+  - first:
+      213: -4787169287630943387
+    second: Nature_26
+  - first:
+      213: -4896471918478663071
+    second: Nature_27
+  - first:
+      213: 6557710581984439702
+    second: Nature_122
+  - first:
+      213: -2691961301807280645
+    second: Nature_123
+  - first:
+      213: 486376854976894955
+    second: Nature_124
+  - first:
+      213: -7247639149724900530
+    second: Nature_125
+  - first:
+      213: -3993151321106170503
+    second: Nature_127
+  - first:
+      213: 1112438512674956787
+    second: Nature_128
+  - first:
+      213: -6208078666731277802
+    second: Nature_129
+  - first:
+      213: 4301494677929674427
+    second: Nature_130
+  - first:
+      213: 6870607809770396309
+    second: Nature_134
+  - first:
+      213: -2728343140694673283
+    second: Nature_135
+  - first:
+      213: 9007383068022571237
+    second: Nature_136
+  - first:
+      213: -2858899254334850632
+    second: Nature_137
+  - first:
+      213: -3348244614644630735
+    second: Nature_139
+  - first:
+      213: -7957626013234560267
+    second: Nature_140
+  - first:
+      213: -5590202790590055151
+    second: Nature_141
+  - first:
+      213: 5556864516775170687
+    second: Nature_142
+  - first:
+      213: 7654045372742480973
+    second: Nature_143
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -3886,6 +3976,90 @@ TextureImporter:
       bones: []
       spriteID: e6fb2acef6a65edc0800000000000000
       internalID: -3610362497323581586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: G10
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f05156b87b50d1720800000000000000
+      internalID: 2818415227679610127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: G11
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 416
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 913335b0e663fba00800000000000000
+      internalID: 774397507195319065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: G12
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee8bf28ac235febe0800000000000000
+      internalID: -1445845504097273618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: G13
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 384
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 871646d5ef9694ff0800000000000000
+      internalID: -51393379528580744
       vertices: []
       indices: 
       edges: []
